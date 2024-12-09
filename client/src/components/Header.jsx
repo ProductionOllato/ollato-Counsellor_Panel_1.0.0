@@ -166,7 +166,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
   };
 
   const handleProfileClick = () => {
-    navigate("/profile");
+    navigate("/account-settings");
   };
 
   const handleLogout = () => {

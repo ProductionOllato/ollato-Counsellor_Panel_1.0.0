@@ -152,7 +152,7 @@ const RevenueDetails = () => {
         {/* Revenue Summary Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Total Revenue Card */}
-          <div className="flex items-center justify-between p-6 bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+          <div className="flex items-center justify-between p-6 bg-white border  rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out border-[#387478]">
             <div>
               <h3 className="text-xl font-semibold text-[#387478]">
                 Total Revenue
@@ -167,7 +167,7 @@ const RevenueDetails = () => {
           </div>
 
           {/* Dispatched Amount Card */}
-          <div className="flex items-center justify-between p-6 bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+          <div className="flex items-center justify-between p-6 bg-white border border-[#8174A0] rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
             <div>
               <h3 className="text-xl font-semibold text-[#8174A0]">
                 Dispatched Amount
@@ -182,7 +182,7 @@ const RevenueDetails = () => {
           </div>
 
           {/* Pending Amount Card */}
-          <div className="flex items-center justify-between p-6 bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+          <div className="flex items-center justify-between p-6 bg-white border border-[#AA5486] rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
             <div>
               <h3 className="text-xl font-semibold text-[#AA5486]">
                 Pending Amount
@@ -240,38 +240,38 @@ const RevenueDetails = () => {
           <div className="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
             <div className="overflow-x-auto px-6 py-4">
               <table className="min-w-full table-auto text-sm text-gray-600">
-                <thead className="text-xs text-gray-700 uppercase bg-slate-50 border-b border-[#243642]">
+                <thead className="text-xs text-gray-700 uppercase border-b border-[#243642] bg-[#A6AEBF]">
                   <tr>
-                    <th className="px-4 py-3 text-center font-medium text-slate-500">
+                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
                       Sr. No
                     </th>
-                    <th className="px-4 py-3 text-center font-medium text-slate-500">
+                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
                       Session ID
                     </th>
-                    <th className="px-4 py-3 text-center font-medium text-slate-500">
+                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
                       Student ID
                     </th>
-                    <th className="px-4 py-3 text-center font-medium text-slate-500">
+                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
                       Payment Date
                     </th>
-                    <th className="px-4 py-3 text-center font-medium text-slate-500">
+                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
                       Payment Amount
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-[#C5D3E8]">
                   {filteredPaymentDetails.map((payment, index) => (
                     <tr key={index} className="hover:bg-slate-50">
-                      <td className="px-4 py-3 text-sm text-slate-800 text-center">
+                      <td className="px-4 py-3 text-sm text-[#1A1A1D] text-center">
                         {payment.srNo}
                       </td>
-                      <td className="px-4 py-3 text-sm text-slate-500 text-center">
+                      <td className="px-4 py-3 text-sm text-[#1A1A1D] text-center">
                         {payment.sessionId}
                       </td>
-                      <td className="px-4 py-3 text-sm text-slate-500 text-center">
+                      <td className="px-4 py-3 text-sm text-[#1A1A1D] text-center">
                         {payment.studentId}
                       </td>
-                      <td className="px-4 py-3 text-sm text-slate-500 text-center">
+                      <td className="px-4 py-3 text-sm text-[#1A1A1D] text-center">
                         {payment.paymentDate}
                       </td>
                       <td className="px-4 py-3 text-sm font-semibold text-slate-800 text-center">

@@ -18,7 +18,6 @@ import AvailabilityManagements from "./pages/AvailabilityManagements.jsx";
 import SessionManagement from "./pages/SessionManagement.jsx";
 import MyActivity from "./pages/MyActivity.jsx";
 import RevenueDetails from "./pages/RevenueDetails.jsx";
-import ProfileEdit from "./pages/ProfileEdit.jsx";
 import AccountSettings from "./pages/AccountSettings.jsx";
 import ResetPassword from "./components/ResetPassword.jsx";
 function App() {
@@ -141,17 +140,6 @@ function App() {
                 <PrivateRoute>
                   <Layout>
                     <AccountSettings />
-                  </Layout>
-                </PrivateRoute>
-              }
-              errorElement={<ErrorPage />}
-            />
-            <Route
-              path="/profile"
-              element={
-                <PrivateRoute>
-                  <Layout>
-                    <ProfileEdit />
                   </Layout>
                 </PrivateRoute>
               }

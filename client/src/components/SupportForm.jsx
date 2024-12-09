@@ -37,7 +37,7 @@ const SupportForm = () => {
     // }
 
     // try {
-    //   const response = await fetch("http://localhost:5001/support", {
+    //   const response = await fetch(`${process.env.VITE_APP_API_ENDPOINT_URL}/support`, {
     //     method: "POST",
     //     body: formDataObj,
     //   });
@@ -191,23 +191,36 @@ const SupportForm = () => {
             </div>
           </div>
 
-          <div className="formbold-input-radio-wrapper">
-            <label htmlFor="queryType" className="formbold-form-label">
-              Query Type
-            </label>
-            <select
-              name="queryType"
-              value={formData.queryType}
-              onChange={handleChange}
-              className="formbold-form-input"
-            >
-              <option value="" disabled>
-                Select
-              </option>
-              <option value="Technical Issue">Technical Issue</option>
-              <option value="Billing Query">Billing Query</option>
-              <option value="Other">Other</option>
-            </select>
+          <div className="formbold-input-flex">
+            <div className="formbold-input-radio-wrapper">
+              <label htmlFor="queryType" className="formbold-form-label">
+                Query Type
+              </label>
+              <select
+                name="queryType"
+                value={formData.queryType}
+                onChange={handleChange}
+                className="formbold-form-input"
+              >
+                <option value="" disabled>
+                  Select
+                </option>
+                <option value="Technical Issue">Technical Issue</option>
+                <option value="Billing Query">Billing Query</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="file" className="formbold-form-label">
+                Upload File (Optional)
+              </label>
+              <input
+                type="file"
+                name="file"
+                onChange={handleChange}
+                className="formbold-form-input"
+              />
+            </div>
           </div>
 
           <div>
@@ -222,18 +235,6 @@ const SupportForm = () => {
               placeholder="Type your message"
               className="formbold-form-input"
             ></textarea>
-          </div>
-
-          <div>
-            <label htmlFor="file" className="formbold-form-label">
-              Upload File (Optional)
-            </label>
-            <input
-              type="file"
-              name="file"
-              onChange={handleChange}
-              className="formbold-form-input"
-            />
           </div>
 
           <button
