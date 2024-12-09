@@ -249,7 +249,7 @@ const Registration = () => {
       <div className="w-full h-full md:w-2/4 p-6 md:p-4 flex flex-col bg-[#FFEADB]">
         {/* Header */}
         <div className="bg-[#FFEADB] p-8 rounded-lg shadow-lg mx-auto w-full">
-          <h1 className="text-2xl text-[#ff9a3c] font-semibold mb-4 text-center">
+          <h1 className="text-2xl text-[#ff9a3c] font-semibold mb-4 text-center pt-7">
             Welcome to Registration
           </h1>
 
@@ -440,7 +440,7 @@ const Registration = () => {
         </div>
 
         {/* Login Link */}
-        <div className="absolute top-2 right-12 flex justify-center items-center mt-4">
+        <div className="absolute top-60 md:top-1  right-10 flex justify-center items-center mt-0 md:mt-4">
           <p className="text-sm text-[#ff9a3c]">Already have an account?</p>
           <button
             onClick={() => navigate("/")}

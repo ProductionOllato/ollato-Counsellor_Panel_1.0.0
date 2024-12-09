@@ -9,7 +9,7 @@ import { TbReportMoney } from "react-icons/tb";
 import { FaBuildingUser } from "react-icons/fa6";
 import { FaUserCog } from "react-icons/fa";
 import { CgLogOut } from "react-icons/cg";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward, IoIosClose, IoIosMenu } from "react-icons/io";
 import { BiSupport } from "react-icons/bi";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
 
@@ -65,78 +65,73 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   };
 
   return (
-    <Card
-      className={`h-[calc(100vh)] ${
-        sidebarOpen ? "w-64" : "w-20"
-      } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#584976] rounded-none`}
-    >
-      {/* Sidebar Logo Section */}
-      <div className="bg-[#827397] p-4 flex justify-center ">
-        <Link to="/dashboard" className="flex items-center">
-          <img
-            src={LOGO}
-            alt="Logo"
-            className={`h-16 w-28 transition-transform duration-300 ${
-              sidebarOpen ? "scale-100" : "scale-75"
-            }`}
-          />
-        </Link>
-      </div>
+    <>
+  {/* Hamburger Menu for Small Screens */}
+  <button
+    className="fixed top-4 left-4 z-50 p-3 bg-[#423554] text-[#E1F1DD]  hover:bg-[#B9B4C7] hover:text-[#3E3B4B] rounded-full shadow-md sm:hidden"
+    onClick={() => setSidebarOpen((prev) => !prev)}
+  >
+    {sidebarOpen ? <IoIosClose size={28} /> : <IoIosMenu size={28} />}
+  </button>
 
-      <hr className="mb-4 border-gray-300 opacity-40" />
+  {/* Sidebar */}
+  <Card
+    className={`h-screen fixed mt-24 top-0 left-0 z-40 shadow-lg bg-[#584976] rounded-none transition-transform duration-300 ${
+      sidebarOpen
+        ? "translate-x-0 w-64"
+        : "-translate-x-full w-0"
+    } sm:w-20 lg:translate-x-0 lg:${sidebarOpen ? "w-64" : "w-20"}`}
+  >
+    <hr className="mb-4 border-gray-300 opacity-40" />
 
-      {/* Sidebar Items */}
-      <List>
-        {sidebarItems.map(({ label, icon, path }) => (
-          <NavLink
-            key={path}
-            to={profileComplete ? path : "#"}
-            onClick={(e) => {
-              if (!profileComplete) e.preventDefault();
-            }}
-            className={({ isActive }) =>
-              `block rounded-md ${
-                isActive
-                  ? "bg-[#F0D9DA] text-gray-900"
-                  : "hover:bg-[#EDE3F0] hover:text-gray-900 text-[#F0D9DA]"
-              } text-lg font-base transition-all duration-300`
-            }
-          >
-            <ListItem className="flex items-center gap-4 px-1 py-3">
-              <ListItemPrefix className="text-xl">{icon}</ListItemPrefix>
-              {sidebarOpen && (
-                <Typography className="text-base font-semibold">
-                  {label}
-                </Typography>
-              )}
-            </ListItem>
-          </NavLink>
-        ))}
-      </List>
-
-      <hr className="my-4 border-gray-300 opacity-40" />
-
-      {/* Logout Button */}
-      <div className="px-4">
-        <button
-          className="flex items-center w-full px-4 py-3 text-left rounded-md text-[#E1F1DD] hover:bg-[#B9B4C7] hover:text-[#3E3B4B] transition-all duration-300"
-          onClick={handleLogout}
+    {/* Sidebar Items */}
+    <List>
+      {sidebarItems.map(({ label, icon, path }) => (
+        <NavLink
+          key={path}
+          to={profileComplete ? path : "#"}
+          onClick={(e) => {
+            if (!profileComplete) e.preventDefault();
+          }}
+          className={({ isActive }) =>
+            `block rounded-md ${
+              isActive
+                ? "bg-[#F0D9DA] text-gray-900"
+                : "hover:bg-[#EDE3F0] hover:text-gray-900 text-[#F0D9DA]"
+            } text-lg font-base transition-all duration-300`
+          }
         >
-          <CgLogOut className="text-lg" />
-          {sidebarOpen && (
-            <Typography className="ml-4 text-md font-medium">Logout</Typography>
-          )}
-        </button>
-      </div>
+          <ListItem className="flex items-center gap-4 px-1 py-3">
+            <ListItemPrefix className="text-xl">{icon}</ListItemPrefix>
+            {sidebarOpen && (
+              <Typography className="hidden lg:block text-base font-semibold">
+                {label}
+              </Typography>
+            )}
+          </ListItem>
+        </NavLink>
+      ))}
+    </List>
 
-      {/* Sidebar Toggle Button */}
+    <hr className="my-4 border-gray-300 opacity-40" />
+
+    {/* Logout Button */}
+    <div className="px-4">
       <button
-        onClick={() => setSidebarOpen((prev) => !prev)}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 p-3 bg-[#423554] text-[#E1F1DD] hover:bg-[#B9B4C7] hover:text-[#3E3B4B] rounded-full shadow-md transition-all duration-300"
+        className="flex items-center w-full px-4 py-3 text-left rounded-md text-[#E1F1DD] hover:bg-[#B9B4C7] hover:text-[#3E3B4B] transition-all duration-300"
+        onClick={handleLogout}
       >
-        {sidebarOpen ? <IoIosArrowBack /> : <IoIosArrowForward />}
+        <CgLogOut className="text-lg" />
+        {sidebarOpen && (
+          <Typography className="hidden lg:block ml-4 text-md font-medium">
+            Logout
+          </Typography>
+        )}
       </button>
-    </Card>
+    </div>
+  </Card>
+</>
+
   );
 };
 

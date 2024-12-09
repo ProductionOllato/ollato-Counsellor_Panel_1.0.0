@@ -472,12 +472,12 @@ function Login() {
   const handleForgotPassword = () => navigate("/forgot-password");
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[#FFEADB] h-full">
-      <div className="w-2/4 md:w-2/4 bg-[#406882] flex items-center justify-center p-14">
+    <div className="min-h-screen flex flex-col md:flex-row bg-[#FFEADB] h-full ">
+      <div className=" md:w-2/4 bg-[#406882] flex items-center justify-center p-14">
         <img src={LOGO} alt="Logo" className="w-1/2 md:w-3/4 h-auto " />
       </div>
 
-      <div className=" w-2/4 md:w-2/4 p-8 mt-20 h-full ">
+      <div className=" md:w-2/4 p-8 mt-20 h-full ">
         <div className="bg-[#FFEADB] p-8 border border-[#ff9a3c] rounded-lg shadow-lg w-full max-w-md mx-auto ">
           <h1 className="text-2xl text-[#ff9a3c] font-semibold mb-6 text-center">
             {showOtpLogin ? "Login with OTP" : "Welcome Back"}
