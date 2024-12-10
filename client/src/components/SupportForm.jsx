@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNotification } from "../context/NotificationContext";
 import "../styles/SupportForm.css";
+import { useAuth } from "../context/UserContext";
 
 const SupportForm = () => {
   const [formData, setFormData] = useState({
@@ -9,9 +10,11 @@ const SupportForm = () => {
     queryType: "",
     description: "",
     file: null,
+    sessionId: "",
   });
   const [loading, setLoading] = useState(false);
   const { triggerNotification } = useNotification();
+  const { user } = useAuth();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -28,139 +31,57 @@ const SupportForm = () => {
       "Your query has been submitted successfully!",
       "success"
     );
-    console.log("Form data:", formData);
+    // console.log("Form data:", formData);
     setLoading(false);
 
-    // const formDataObj = new FormData();
-    // for (const key in formData) {
-    //   formDataObj.append(key, formData[key]);
-    // }
+    const userId = user.user_id;
+    const payload = {
+      counsellor_id: userId,
+      session_id: formData.sessionId,
+      name: formData.name,
+      email: formData.email,
+      query_type: formData.queryType,
+      // description: formData.description,
+    };
+    console.log(payload);
 
-    // try {
-    //   const response = await fetch(`${process.env.VITE_APP_API_ENDPOINT_URL}/support`, {
-    //     method: "POST",
-    //     body: formDataObj,
-    //   });
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/help/support-form`,
+        {
+          method: "POST",
+          body: JSON.stringify(payload),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-    //   if (response.ok) {
-    //     // setMessage("Your query has been submitted successfully!");
-    //     triggerNotification(
-    //       "Your query has been submitted successfully!",
-    //       "success"
-    //     );
-    //     setFormData({
-    //       name: "",
-    //       email: "",
-    //       queryType: "",
-    //       description: "",
-    //       file: null,
-    //     });
-    //   } else {
-    //     setMessage("An error occurred. Please try again.");
-    //   }
-    // } catch (error) {
-    //   setMessage("Network error. Please try again later.");
-    // } finally {
-    //   setLoading(false);
-    // }
+      if (response.ok) {
+        triggerNotification(
+          "Your query has been submitted successfully!",
+          "success"
+        );
+        setFormData({
+          name: "",
+          email: "",
+          queryType: "",
+          description: "",
+          file: null,
+          sessionId: "",
+        });
+      } else {
+        triggerNotification("An error occurred. Please try again.", "error");
+      }
+    } catch (error) {
+      triggerNotification("Network error. Please try again later.", "error");
+    } finally {
+      setLoading(false);
+    }
   };
-
-  // return (
-  //   <form
-  //     onSubmit={handleSubmit}
-  //     className="max-w-4xl mx-auto p bg-white rounded-lg min-w-fit w-1/2 shadow-1"
-  //   >
-  //     <h2 className="text-2xl font-semibold mb-3 text-center">Support Form</h2>
-  //     <div className="mb-4">
-  //       <label
-  //         htmlFor="name"
-  //         className="block text-sm text-gray-700 font-semibold"
-  //       >
-  //         Name
-  //       </label>
-  //       <input
-  //         type="text"
-  //         name="name"
-  //         value={formData.name}
-  //         onChange={handleChange}
-  //         required
-  //         className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-  //       />
-  //     </div>
-  //     <div>
-  //       <label>Email</label>
-  //       <input
-  //         type="email"
-  //         name="email"
-  //         value={formData.email}
-  //         onChange={handleChange}
-  //         required
-  //         className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-  //       />
-  //     </div>
-  //     <div className="mb-3">
-  //       <label htmlFor="queryType" className="block text-sm font-semibold">
-  //         Query Type
-  //       </label>
-  //       <select
-  //         name="queryType"
-  //         value={formData.queryType}
-  //         onChange={handleChange}
-  //         required
-  //         className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-  //       >
-  //         <option value="" disabled>
-  //           Select
-  //         </option>
-  //         <option value="Technical Issue">Technical Issue</option>
-  //         <option value="Billing Query">Billing Query</option>
-  //         <option value="Other">Other</option>
-  //       </select>
-  //     </div>
-  //     <div className="mb-3">
-  //       <label
-  //         htmlFor="description"
-  //         className="block text-sm font-medium text-grey-700"
-  //       >
-  //         Description
-  //       </label>
-  //       <textarea
-  //         name="description"
-  //         value={formData.description}
-  //         onChange={handleChange}
-  //         required
-  //         className="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-  //       />
-  //     </div>
-  //     <div className="mb-3">
-  //       <label
-  //         htmlFor="file"
-  //         className="block text-sm font-medium text-grey-700"
-  //       >
-  //         Upload File (Optional)
-  //       </label>
-  //       <input
-  //         type="file"
-  //         name="file"
-  //         onChange={handleChange}
-  //         className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold file:bg-gray-50 hover:file:bg-gray-100"
-  //       />
-  //     </div>
-  //     <button
-  //       type="submit"
-  //       disabled={loading}
-  //       className={`w-full py-3 px-4 text-white font-semibold rounded-md ${
-  //         loading ? "bg-gray-400" : "bg-[#605678] hover:bg-[#8967B3]"
-  //       } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50`}
-  //     >
-  //       {loading ? "Submitting..." : "Submit"}
-  //     </button>
-  //   </form>
-  // );
 
   return (
     <div className="formbold-main-wrapper">
       <div className="formbold-form-wrapper">
+        <h2 className="form-title">Help & Support</h2>
         <form onSubmit={handleSubmit}>
           <div className="formbold-input-flex">
             <div>
@@ -207,6 +128,7 @@ const SupportForm = () => {
                 </option>
                 <option value="Technical Issue">Technical Issue</option>
                 <option value="Billing Query">Billing Query</option>
+                <option value="Session Query">Session Query</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -222,6 +144,22 @@ const SupportForm = () => {
               />
             </div>
           </div>
+
+          {formData.queryType === "Session Query" && (
+            <div>
+              <label htmlFor="sessionId" className="formbold-form-label">
+                Session Query Details
+              </label>
+              <input
+                type="text"
+                name="sessionId"
+                value={formData.sessionId}
+                onChange={handleChange}
+                placeholder="Enter session Id"
+                className="formbold-form-input"
+              />
+            </div>
+          )}
 
           <div>
             <label htmlFor="description" className="formbold-form-label">
