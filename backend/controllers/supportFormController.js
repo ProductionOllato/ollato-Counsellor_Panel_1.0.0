@@ -176,6 +176,7 @@ exports.supportForm = async (req, res) => {
     name = "",
     email = "",
     query_type = "",
+    description = "",
   } = req.body;
 
   const screenshot = req.file; // Uploaded file information
@@ -210,8 +211,8 @@ exports.supportForm = async (req, res) => {
 
     // Insert data into the database, saving only the file path
     const query = `
-      INSERT INTO support_form (counsellor_id, session_id, name, email, query_type, screenshot)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO support_form (counsellor_id, session_id, name, email, query_type, screenshot, description)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     await db.query(query, [
@@ -221,6 +222,7 @@ exports.supportForm = async (req, res) => {
       email,
       query_type,
       screenshotPath, // Save the file path as a string
+      description,
     ]);
 
     res.status(201).json({ msg: "Support form submitted successfully" });
