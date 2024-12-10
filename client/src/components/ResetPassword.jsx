@@ -14,10 +14,23 @@ function ResetPassword() {
   const location = useLocation();
 
   // Get token from URL query parameters
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   setToken(params.get("token"));
+  // }, [location]);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    setToken(params.get("token"));
-  }, [location]);
+    const tokenValue = params.get("token");
+    if (!tokenValue) {
+      triggerNotification("Invalid or missing token.", "error");
+      navigate("/forgot-password");
+    } else {
+      setToken(tokenValue);
+    }
+  }, [location, navigate, triggerNotification]);
+
+  const isPasswordStrong = (password) => password.length >= 8;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +41,14 @@ function ResetPassword() {
   // Submit Reset Password
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isPasswordStrong(password)) {
+      triggerNotification(
+        "Password must be at least 8 characters long.",
+        "error"
+      );
+      return;
+    }
 
     if (password !== confirmPassword) {
       triggerNotification("Passwords do not match.", "error");
@@ -47,7 +68,7 @@ function ResetPassword() {
 
       if (response.ok) {
         triggerNotification("Password reset successfully.", "success");
-        navigate("/login");
+        navigate("/");
       } else {
         const errorData = await response.json();
         triggerNotification(
@@ -82,6 +103,7 @@ function ResetPassword() {
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded-md"
               required
+              aria-label="New Password"
             />
           </div>
           <div className="mb-4">
@@ -96,6 +118,7 @@ function ResetPassword() {
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded-md"
               required
+              aria-label="Confirm New Password"
             />
           </div>
           <div className="mt-4 flex justify-center">

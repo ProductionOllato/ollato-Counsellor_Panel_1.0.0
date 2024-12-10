@@ -39,9 +39,30 @@ const Registration = () => {
 
   const API_URL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
+    return emailRegex.test(email);
+  };
+
+  const isValidPhoneNumber = (phoneNumber) => {
+    const phoneRegex = /^\d{10}$/; //  Validates 10-digit phone numbers
+    return phoneRegex.test(phoneNumber);
+  };
+
   // Utility Functions
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // real-time validation for email
+    if (name === "email" && value && !isValidEmail(value)) {
+      triggerNotification("Invalid email format.", "error");
+    }
+
+    // real-time validation for phone number
+    if (name === "phone_number" && !/^\d*$/.test(value)) {
+      triggerNotification("Phone number can only contain digits.", "error");
+      return;
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -67,6 +88,11 @@ const Registration = () => {
       triggerNotification("Please enter an email address.", "error");
       return;
     }
+    if (!isValidEmail(formData.email)) {
+      triggerNotification("Please enter a valid email address.", "error");
+      return;
+    }
+
     sendEmailOtp(formData.email);
     setOtpType("email");
   };
@@ -76,6 +102,15 @@ const Registration = () => {
       triggerNotification("Please enter a phone number.", "error");
       return;
     }
+
+    if (!isValidPhoneNumber(formData.phone_number)) {
+      triggerNotification(
+        "Please enter a valid 10-digit phone number.",
+        "error"
+      );
+      return;
+    }
+
     sendPhoneOtp(formData.phone_number);
     setOtpType("phone");
   };
@@ -104,6 +139,13 @@ const Registration = () => {
   };
 
   const sendPhoneOtp = async (phoneNumber) => {
+    if (!isValidPhoneNumber(formData.phone_number)) {
+      triggerNotification(
+        "Please enter a valid 10-digit phone number.",
+        "error"
+      );
+      return;
+    }
     try {
       const response = await fetch(`${API_URL}/otp/mobile-otp`, {
         method: "POST",
@@ -171,12 +213,63 @@ const Registration = () => {
 
   const handlePersonalDetailsSubmit = async (e) => {
     e.preventDefault();
-    // const user = JSON.parse(localStorage.getItem("user"));
-    // const user_id = user?.user_id || "user123";
+
+    if (
+      !formData.first_name ||
+      !formData.last_name ||
+      !formData.email ||
+      !formData.phone_number ||
+      !formData.gender ||
+      !formData.date_of_birth ||
+      !formData.state ||
+      !formData.district ||
+      !formData.password ||
+      !formData.confirm_password
+    ) {
+      triggerNotification("Please fill in all the required fields.", "error");
+      return;
+    }
+
+    // Validate email
+    if (!isValidEmail(formData.email)) {
+      triggerNotification("Please enter a valid email address.", "error");
+      return; // Early return
+    }
+
+    // Validate phone number
+    if (!isValidPhoneNumber(formData.phone_number)) {
+      triggerNotification(
+        "Please enter a valid 10-digit phone number.",
+        "error"
+      );
+      return;
+    }
+
+    if (formData.password !== formData.confirm_password) {
+      triggerNotification("Passwords do not match.", "error");
+      return;
+    }
+
+    if (!isEmailVerified) {
+      triggerNotification(
+        "Please verify your email address before registering.",
+        "error"
+      );
+      return;
+    }
+
+    if (!isPhoneVerified) {
+      triggerNotification(
+        "Please verify your phone number before registering.",
+        "error"
+      );
+      return;
+    }
 
     const payload = {
       ...formData,
     };
+
     // console.log("Payload:", payload);
 
     try {
@@ -199,41 +292,6 @@ const Registration = () => {
       }
     } catch (error) {
       console.error("Error submitting details:", error);
-      triggerNotification("An error occurred during registration.", "error");
-    }
-  };
-  // Handle Personal Details Submission
-  const handlepersonalDetailsSubmit = async (e) => {
-    e.preventDefault();
-
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user?.user_id || "user123"; // Replace with dynamic user ID
-
-    const payload = {
-      ...formData,
-      user_id: userId,
-      district: formData.district,
-    };
-
-    try {
-      const response = await fetch(`${API_URL}/auth/upload-personal-details`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        triggerNotification("Registration successful!", "success");
-        navigate("/");
-      } else {
-        const errorData = await response.json();
-        triggerNotification(
-          errorData.message || "Registration failed.",
-          "error"
-        );
-      }
-    } catch (error) {
-      console.error("Error submitting personal details:", error);
       triggerNotification("An error occurred during registration.", "error");
     }
   };

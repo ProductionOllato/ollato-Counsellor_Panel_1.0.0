@@ -71,7 +71,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#584976] rounded-none`}
     >
       {/* Sidebar Logo Section */}
-      <div className="bg-[#827397] p-4 flex justify-center ">
+      <div className="bg-[#f2d9da] p-4 flex justify-center">
         <Link to="/dashboard" className="flex items-center">
           <img
             src={LOGO}
