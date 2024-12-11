@@ -7,10 +7,10 @@ const AccountSettings = () => {
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
     phone: "",
-    password: "",
-    confirmPassword: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
     profilePicture: "",
     licenseNumber: "",
     qualification: "",
@@ -19,11 +19,17 @@ const AccountSettings = () => {
   });
 
   const [profilePreview, setProfilePreview] = useState(null);
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [activeSection, setActiveSection] = useState("Profile");
+  const [passwordVisibility, setPasswordVisibility] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
   const { triggerNotification } = useNotification();
   const { user } = useAuth();
+  const userId = user?.user_id;
+  console.log("user-id", userId);
+
+  const [progressStep, setProgressStep] = useState(1);
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -31,71 +37,43 @@ const AccountSettings = () => {
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const togglePasswordVisibility = (field) => {
+    setPasswordVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
   // Handle profile picture upload
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
-    // if (file) {
-    //   setProfileData((prev) => ({ ...prev, profilePicture: file }));
-    //   const reader = new FileReader();
-    //   reader.onload = () => setProfilePreview(reader.result);
-    //   reader.readAsDataURL(file);
-    // }
     if (file) {
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!allowedTypes.includes(file.type)) {
         triggerNotification("Please upload a JPEG, PNG, or JPG file.", "error");
+        return;
       }
+      if (file.size > 2 * 1024 * 1024) {
+        triggerNotification("File size must be less than 2MB.", "error");
+        return;
+      }
+      setProfileData((prev) => ({ ...prev, profilePicture: file }));
+      const reader = new FileReader();
+      reader.onload = () => setProfilePreview(reader.result);
+      reader.readAsDataURL(file);
     }
-
-    if (file.size > 2 * 1024 * 1024) {
-      // 2MB limit
-      alert("File size must be less than 2MB.");
-      return;
-    }
-    setProfileData((prev) => ({ ...prev, profilePicture: file }));
-    const reader = new FileReader();
-    reader.onload = () => setProfilePreview(reader.result);
-    reader.readAsDataURL(file);
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // API call for updating profile picture
+  const updateProfilePicture = async () => {
+    if (!profileData.profilePicture) return;
 
-    
-    
-    // Validate password and confirm password
-    if (profileData.password !== profileData.confirmPassword) {
-      triggerNotification("Passwords do not match.", "error");
-      return;
-    }
-
-    // Create FormData and append all profile data
     const formData = new FormData();
-    Object.entries(profileData).forEach(([key, value]) => {
-      // Convert non-file data to string before appending
-      if (key === "profilePicture" && value) {
-        formData.append(key, value); // For file upload
-      } else {
-        formData.append(key, value?.toString() || ""); // Ensure values are strings
-      }
-    });
-
-    if (profileData.profilePicture) {
-      try {
-        
-      } catch (error) {
-        triggerNotification(
-          "An unexpected error occurred. Please try again.",
-          "error"
-        )
-      }
-      
-    }
+    formData.append("profilePicture", profileData.profilePicture);
+    console.log("user-id", user.user_id);
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/update-profile`,
+        `${
+          import.meta.env.VITE_APP_API_ENDPOINT_URL
+        }/update/documents-details/profile-pic/${user.user_id}`,
         {
           method: "POST",
           body: formData,
@@ -103,217 +81,339 @@ const AccountSettings = () => {
       );
 
       if (response.ok) {
-        triggerNotification("Profile updated successfully!", "success");
+        triggerNotification("Profile picture updated successfully!", "success");
       } else {
-        const errorMessage = await response.text(); // Get detailed error message from response
-        console.error("Failed to update profile:", errorMessage);
-        triggerNotification(
-          `Failed to update profile: ${errorMessage}`,
-          "error"
-        );
+        triggerNotification("Failed to update profile picture.", "error");
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
       triggerNotification(
-        "An unexpected error occurred. Please try again.",
+        "An error occurred while updating the picture.",
         "error"
       );
     }
   };
 
+  // API call for updating personal details
+  const updatePersonalDetails = async () => {
+    const {
+      firstName,
+      lastName,
+      phone,
+      currentPassword,
+      newPassword,
+      confirmNewPassword,
+    } = profileData;
+
+    if (newPassword !== confirmNewPassword) {
+      triggerNotification("New passwords do not match.", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/update/personal-details/${
+          user.user_id
+        }`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            phone,
+            currentPassword,
+            newPassword,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        triggerNotification(
+          "Personal details updated successfully!",
+          "success"
+        );
+      } else {
+        triggerNotification("Failed to update personal details.", "error");
+      }
+    } catch (error) {
+      triggerNotification(
+        "An error occurred while updating personal details.",
+        "error"
+      );
+    }
+  };
+
+  // API call for updating professional details
+  const updateProfessionalDetails = async () => {
+    const { licenseNumber, qualification, specialization, experience } =
+      profileData;
+
+    try {
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_APP_API_ENDPOINT_URL
+        }/update/professional-details/${user.user_id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            licenseNumber,
+            qualification,
+            specialization,
+            experience,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        triggerNotification(
+          "Professional details updated successfully!",
+          "success"
+        );
+      } else {
+        triggerNotification("Failed to update professional details.", "error");
+      }
+    } catch (error) {
+      triggerNotification(
+        "An error occurred while updating professional details.",
+        "error"
+      );
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await updateProfilePicture();
+    await updatePersonalDetails();
+    await updateProfessionalDetails();
+  };
+
   return (
-    <section className="max-w-4xl mx-auto bg-white shadow-lg p-8 pt-4 rounded-lg">
-      {/* Navigation between sections */}
-      <div className="flex items-center mb-6 border-b border-[#2e7478]">
-        {["Profile", "Password", "Contact", "Professional Details"].map(
-          (section) => (
+    <section className="max-w-4xl mx-auto bg-white shadow-lg p-8 rounded-lg">
+      {/* Progress Bar */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between text-sm font-medium">
+          <span
+            className={`${
+              progressStep >= 1 ? "text-[#1E3E62]" : "text-gray-400"
+            }`}
+          >
+            Personal Details
+          </span>
+          <span
+            className={`${
+              progressStep === 2 ? "text-[#1E3E62]" : "text-gray-400"
+            }`}
+          >
+            Professional Details
+          </span>
+        </div>
+        <div className="relative mt-2">
+          <div className="w-full bg-gray-200 h-1 rounded-full">
             <div
-              key={section}
-              role="tab"
-              aria-selected={activeSection === section}
-              onClick={() => setActiveSection(section)}
-              className={`flex-1 text-center cursor-pointer text-lg font-medium text-gray-700 py-2 
-              ${
-                activeSection === section
-                  ? "border-b-4 border-[#387478] text-[#387478]"
-                  : ""
+              className={`bg-[#1E3E62] h-1 rounded-full ${
+                progressStep === 2 ? "w-full" : "w-1/2"
               }`}
-            >
-              {section}
-            </div>
-          )
-        )}
+            ></div>
+          </div>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8 p-8">
-        {/* Profile Section */}
-        {activeSection === "Profile" && (
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {progressStep === 1 && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Edit Profile
+            <h2 className="text-xl font-bold text-gray-800">
+              Personal Details
             </h2>
-            <div className="flex items-center mb-6">
-              <div className="relative">
-                <img
-                  src={profilePreview}
-                  alt="Profile Preview"
-                  className="w-24 h-24 rounded-full border border-[#2e7478] object-cover"
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              {/* <div>
+                <label className="block text-gray-600">Profile Picture</label>
+                <input
+                  type="file"
+                  name="profilePicture"
+                  accept="image/*"
+                  onChange={handleProfilePictureChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg"
                 />
-                <label
-                  htmlFor="profilePicture"
-                  className="absolute bottom-0 right-0 bg-[#1E3E62] text-white p-2 rounded-full cursor-pointer shadow"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    className="w-5 h-5"
+                {profilePreview && (
+                  <img
+                    src={profilePreview}
+                    alt="Profile Preview"
+                    className="mt-4 w-32 h-32 rounded-full object-cover"
+                  />
+                )}
+              </div> */}
+
+              <div className="flex items-center mb-6">
+                <div className="relative">
+                  <img
+                    src={profilePreview || "https://via.placeholder.com/150"}
+                    alt="Profile Preview"
+                    className="w-24 h-24 rounded-full border border-gray-300 object-cover"
+                  />
+
+                  <label
+                    htmlFor="profilePicture"
+                    className="absolute bottom-0 right-0 bg-[#1E3E62] text-white p-2 rounded-full cursor-pointer shadow"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </label>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </label>
+
+                  <input
+                    type="file"
+                    id="profilePicture"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleProfilePictureChange}
+                  />
+                </div>
               </div>
-              <input
-                type="file"
-                id="profilePicture"
-                accept="image/*"
-                className="hidden"
-                onChange={handleProfilePictureChange}
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
               <div>
                 <label className="block text-gray-600">First Name</label>
                 <input
                   type="text"
                   name="firstName"
-                  placeholder="Enter your first name"
                   value={profileData.firstName}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-[#2e7478] rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  placeholder="Enter your first name"
                 />
               </div>
+
               <div>
                 <label className="block text-gray-600">Last Name</label>
                 <input
                   type="text"
                   name="lastName"
-                  placeholder="Enter your last name"
                   value={profileData.lastName}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-[#2e7478] rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  placeholder="Enter your last name"
                 />
               </div>
-            </div>
-          </div>
-        )}
 
-        {/* Password Section */}
-        {activeSection === "Password" && (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Change Password
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="mb-6">
-                <label className="block text-gray-600">Password</label>
-                <div className="relative">
-                  <input
-                    type={passwordVisible ? "text" : "password"}
-                    name="password"
-                    placeholder="Enter your password"
-                    value={profileData.password}
-                    onChange={handleInputChange}
-                    className="w-full p-3 border border-[#2e7478] rounded-lg"
-                  />
-                  <span
-                    onClick={() => setPasswordVisible(!passwordVisible)}
-                    className="absolute right-3 top-4 text-gray-500 cursor-pointer"
-                  >
-                    {passwordVisible ? <FiEye /> : <FiEyeOff />}
-                  </span>
-                </div>
-              </div>
-              <div className="mb-6">
-                <label className="block text-gray-600">Confirm Password</label>
-                <div className="relative">
-                  <input
-                    type={confirmPasswordVisible ? "text" : "password"}
-                    name="confirmPassword"
-                    placeholder="Confirm your password"
-                    value={profileData.confirmPassword}
-                    onChange={handleInputChange}
-                    className="w-full p-3 border border-[#2e7478] rounded-lg"
-                  />
-                  <span
-                    onClick={() =>
-                      setConfirmPasswordVisible(!confirmPasswordVisible)
-                    }
-                    className="absolute right-3 top-4 text-gray-500 cursor-pointer"
-                  >
-                    {confirmPasswordVisible ? <FiEye /> : <FiEyeOff />}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Contact Section */}
-        {activeSection === "Contact" && (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Update Contact Information
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="mt-4">
-                <label className="block text-gray-600">Email</label>
+              <div>
+                <label className="block text-gray-600">Email Address</label>
                 <input
                   type="email"
                   name="email"
-                  placeholder="Enter your email"
                   value={profileData.email}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-[#2e7478] rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  placeholder="Enter your email address"
                 />
               </div>
-              <div className="mt-4">
+
+              <div>
                 <label className="block text-gray-600">Phone</label>
                 <input
                   type="tel"
                   name="phone"
-                  placeholder="Enter your phone number"
                   value={profileData.phone}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-[#2e7478] rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  placeholder="Enter your phone number"
                 />
+              </div>
+
+              <div>
+                <label className="block text-gray-600">Current Password</label>
+                <div className="relative">
+                  <input
+                    type={passwordVisibility.current ? "text" : "password"}
+                    name="currentPassword"
+                    value={profileData.currentPassword}
+                    onChange={handleInputChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    placeholder="Enter your current password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-3 text-gray-500"
+                    onClick={() => togglePasswordVisibility("current")}
+                  >
+                    {passwordVisibility.current ? <FiEyeOff /> : <FiEye />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-gray-600">New Password</label>
+                <div className="relative">
+                  <input
+                    type={passwordVisibility.new ? "text" : "password"}
+                    name="newPassword"
+                    value={profileData.newPassword}
+                    onChange={handleInputChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    placeholder="Enter your new password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-3 text-gray-500"
+                    onClick={() => togglePasswordVisibility("new")}
+                  >
+                    {passwordVisibility.new ? <FiEyeOff /> : <FiEye />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-gray-600">
+                  Confirm New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={passwordVisibility.confirm ? "text" : "password"}
+                    name="confirmNewPassword"
+                    value={profileData.confirmNewPassword}
+                    onChange={handleInputChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    placeholder="Confirm your new password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-3 text-gray-500"
+                    onClick={() => togglePasswordVisibility("confirm")}
+                  >
+                    {passwordVisibility.confirm ? <FiEyeOff /> : <FiEye />}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Professional Details Section */}
-        {activeSection === "Professional Details" && (
+        {progressStep === 2 && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            <h2 className="text-xl font-bold text-gray-800">
               Professional Details
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div>
                 <label className="block text-gray-600">License Number</label>
                 <input
                   type="text"
                   name="licenseNumber"
-                  placeholder="Enter your license number"
                   value={profileData.licenseNumber}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-[#2e7478] rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  placeholder="Enter your license number"
                 />
               </div>
               <div>
@@ -321,10 +421,10 @@ const AccountSettings = () => {
                 <input
                   type="text"
                   name="qualification"
-                  placeholder="Enter your qualification"
                   value={profileData.qualification}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-[#2e7478] rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  placeholder="Enter your qualification"
                 />
               </div>
               <div>
@@ -332,10 +432,10 @@ const AccountSettings = () => {
                 <input
                   type="text"
                   name="specialization"
-                  placeholder="Enter your specialization"
                   value={profileData.specialization}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-[#2e7478] rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                  placeholder="Enter your specialization"
                 />
               </div>
               <div>
@@ -345,7 +445,7 @@ const AccountSettings = () => {
                   name="experience"
                   value={profileData.experience}
                   onChange={handleInputChange}
-                  className="w-full p-3 border border-[#2e7478] rounded-lg"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
                   placeholder="Years of experience"
                 />
               </div>
@@ -353,13 +453,35 @@ const AccountSettings = () => {
           </div>
         )}
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-fit bg-[#1E3E62] text-white py-3 px-2 rounded-lg font-semibold hover:bg-[#243642] transition duration-300 mx-auto"
-        >
-          Save Changes
-        </button>
+        {/* Navigation Buttons */}
+        <div className="flex justify-between mt-6">
+          {progressStep > 1 && (
+            <button
+              type="button"
+              className="bg-[#1E3E62] text-[#fff] py-2 px-4 rounded-lg"
+              onClick={() => setProgressStep((prev) => prev - 1)}
+            >
+              Back
+            </button>
+          )}
+          {progressStep < 2 && (
+            <button
+              type="button"
+              className="bg-[#1E3E62] text-white py-2 px-4 rounded-lg"
+              onClick={() => setProgressStep((prev) => prev + 1)}
+            >
+              Next
+            </button>
+          )}
+          {progressStep === 2 && (
+            <button
+              type="submit"
+              className="bg-[#1E3E62] text-white py-2 px-4 rounded-lg"
+            >
+              Save Changes
+            </button>
+          )}
+        </div>
       </form>
     </section>
   );
