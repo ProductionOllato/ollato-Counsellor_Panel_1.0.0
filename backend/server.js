@@ -7,6 +7,10 @@ const authRoutes = require("./routes/counsellorAuthRoutes");
 const verificationRoutes = require("./routes/verificationRoutes");
 const resetPasswordRoutes = require("./routes/resetPassword");
 const sessionBooking = require("./routes/sessionBookingCounsellor");
+const supportFromRoutes = require("./routes/supportFormRoutes");
+const counsellorAvailabilityRoutes = require("./routes/counsellorAvailabilityRoutes");
+const updateProfileRoutes = require("./routes/updateProfileRoutes");
+const getCounsellorsRoutes = require("./routes/getCounsellorsRoutes.js");
 const path = require("path");
 
 const app = express();
@@ -31,6 +35,10 @@ app.use("/auth", authRoutes);
 app.use("/otp", verificationRoutes);
 app.use("/reset", resetPasswordRoutes);
 app.use("/session", sessionBooking);
+app.use("/help", supportFromRoutes);
+app.use("/counsellor", counsellorAvailabilityRoutes);
+app.use("/update", updateProfileRoutes);
+app.use("/get", getCounsellorsRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
