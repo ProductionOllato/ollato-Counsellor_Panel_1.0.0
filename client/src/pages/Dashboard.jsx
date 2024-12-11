@@ -102,19 +102,19 @@ export default function Dashboard() {
 
   if (profileStatus === "pending") {
     return (
-      <div className="flex-1 h-full">
-        <div className="p-6 rounded-lg w-full shadow-2xl h-auto mb-6 mt-20 sm:p-4 sm:mr-4 sm:mt-12 md:p-6 lg:h-2/3">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-            Welcome to your dashboard
+      <div className="flex-1 h-full p-4 md:p-6">
+        <div className="bg-white rounded-lg shadow-2xl h-auto mb-6 p-6">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Welcome to Your Dashboard
           </h2>
-          <hr className="border-gray-300 mb-4" />
+          <hr className="border-t-2 border-gray-300 mb-6" />
           <div className="flex flex-col items-center">
-            <p className="text-[#640D5F] text-md">
-              Access Denied !!. Complete your registration to get started.
+            <p className="text-[#b640b0] text-lg font-semibold shadow text-center">
+              Access Denied! Please complete your registration to get started.
             </p>
             <button
               onClick={completeProfile}
-              className="mt-4 bg-[#AE445A] hover:bg-[#3e5679] text-white font-semibold py-2 px-4 rounded"
+              className="mt-10 bg-[#AE445A] hover:bg-[#4D4C7D] text-white font-semibold py-3 px-6 rounded-md transition duration-200 ease-in-out shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#AE445A] focus:ring-opacity-50"
             >
               Complete Profile
             </button>
@@ -126,14 +126,14 @@ export default function Dashboard() {
 
   if (profileStatus === "waiting_approval") {
     return (
-      <div className="flex-1 h-full">
-        <div className="p-6 rounded-lg w-full shadow-2xl h-auto mb-6 mt-20 sm:p-4 sm:mr-4 sm:mt-12 md:p-6 lg:h-2/3">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+      <div className="flex-1 h-full p-4 md:p-6">
+        <div className="bg-white rounded-lg shadow-2xl h-auto mb-6 p-6">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
             Welcome to your dashboard
           </h2>
           <hr className="border-gray-300 mb-4" />
           <div className="flex flex-col items-center">
-            <p className="text-[#640D5F] text-md">
+            <p className="text-[#b640b0] text-lg font-semibold shadow text-center mt-10 mb-6">
               Your profile is under review. Please wait for approval to access
               your dashboard.
             </p>

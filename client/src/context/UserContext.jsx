@@ -108,7 +108,7 @@ export const UserProvider = ({ children }) => {
         logout,
         updateProfileStatus,
         updateCompletedSteps,
-        approveProfile, //testing - will be removed
+        approveProfile,
       }}
     >
       {children}

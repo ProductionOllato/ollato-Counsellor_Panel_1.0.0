@@ -16,7 +16,6 @@ const RegistrationDetails = () => {
   const { triggerNotification } = useNotification();
 
   const [currentStep, setCurrentStep] = useState(1);
-  // const [stepLocked, setStepLocked] = useState(false);
 
   // Step 1: Professional Details State
   const [educationDetails, setEducationDetails] = useState({
@@ -55,13 +54,6 @@ const RegistrationDetails = () => {
 
   // Calculate progress percentage
   const progressPercentage = (currentStep / steps.length) * 100;
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     triggerNotification("User is not logged in.", "error");
-  //     navigate("/login");
-  //   }
-  // }, [user, navigate, triggerNotification]);
 
   useEffect(() => {
     if (profileStatus === "approved") {

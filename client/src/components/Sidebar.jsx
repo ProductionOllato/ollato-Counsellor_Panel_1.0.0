@@ -11,6 +11,7 @@ import { FaUserCog } from "react-icons/fa";
 import { CgLogOut } from "react-icons/cg";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { BiSupport } from "react-icons/bi";
+import { CiLock } from "react-icons/ci";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
 
 import {
@@ -22,7 +23,7 @@ import {
 } from "@material-tailwind/react";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-  const { user, profileComplete, logout } = useAuth();
+  const { profileComplete, logout } = useAuth();
   const { triggerNotification } = useNotification();
   const navigate = useNavigate();
 
@@ -68,10 +69,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     <Card
       className={`h-[calc(100vh)] ${
         sidebarOpen ? "w-64" : "w-20"
-      } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#584976] rounded-none`}
+      } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#584976] rounded-none pt-4`}
     >
       {/* Sidebar Logo Section */}
-      <div className="bg-[#f2d9da] p-4 flex justify-center">
+      {/* <div className="bg-[#f2d9da] p-4 flex justify-center">
         <Link to="/dashboard" className="flex items-center">
           <img
             src={LOGO}
@@ -81,33 +82,38 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             }`}
           />
         </Link>
-      </div>
+      </div> */}
 
-      <hr className="mb-4 border-gray-300 opacity-40" />
+      <hr className="mb-20 border-gray-300 opacity-40" />
 
       {/* Sidebar Items */}
-      <List>
+      <List className="space-y-2">
         {sidebarItems.map(({ label, icon, path }) => (
           <NavLink
             key={path}
             to={profileComplete ? path : "#"}
             onClick={(e) => {
-              if (!profileComplete) e.preventDefault();
+              if (!profileComplete) e.preventDefault(); // Prevent navigation for incomplete profiles
             }}
             className={({ isActive }) =>
-              `block rounded-md ${
+              `block rounded-lg transition-all duration-300 ${
                 isActive
-                  ? "bg-[#F0D9DA] text-gray-900"
-                  : "hover:bg-[#EDE3F0] hover:text-gray-900 text-[#F0D9DA]"
-              } text-lg font-base transition-all duration-300`
+                  ? "bg-[#faf8ed] text-[#e9385b] shadow"
+                  : "hover:bg-pink-100 hover:text-gray-900 text-[#e4d8d8]"
+              } ${!profileComplete ? "cursor-not-allowed opacity-50" : ""}`
             }
+            aria-disabled={!profileComplete} // Adds accessibility support
           >
-            <ListItem className="flex items-center gap-4 px-1 py-3">
-              <ListItemPrefix className="text-xl">{icon}</ListItemPrefix>
+            <ListItem className="flex items-center gap-4 px-4 py-3">
+              <ListItemPrefix className="text-2xl">
+                {!profileComplete ? (
+                  <CiLock className="text-[#e9385b]" />
+                ) : (
+                  icon
+                )}
+              </ListItemPrefix>
               {sidebarOpen && (
-                <Typography className="text-base font-semibold">
-                  {label}
-                </Typography>
+                <Typography className="text-sm font-medium">{label}</Typography>
               )}
             </ListItem>
           </NavLink>

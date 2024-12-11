@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNotification } from "../context/NotificationContext";
+import { useAuth } from "../context/UserContext";
 
 const AccountSettings = () => {
   const [profileData, setProfileData] = useState({
@@ -22,6 +23,7 @@ const AccountSettings = () => {
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [activeSection, setActiveSection] = useState("Profile");
   const { triggerNotification } = useNotification();
+  const { user } = useAuth();
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -59,27 +61,37 @@ const AccountSettings = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
+    
+    // Validate password and confirm password
     if (profileData.password !== profileData.confirmPassword) {
       triggerNotification("Passwords do not match.", "error");
       return;
     }
 
-    // const formData = new FormData();
-    // formData.append("firstName", profileData.firstName);
-    // formData.append("lastName", profileData.lastName);
-    // formData.append("email", profileData.email);
-    // formData.append("phone", profileData.phone);
-    // formData.append("password", profileData.password);
-    // if (profileData.profilePicture) {
-    //   formData.append("profilePicture", profileData.profilePicture);
-    // }
+    // Create FormData and append all profile data
     const formData = new FormData();
-    // Object.entries(profileData).forEach(([key, value]) => {
-    //   formData.append(key, value);
-    // });
     Object.entries(profileData).forEach(([key, value]) => {
-      formData.append(key, key === "profilePicture" ? value : value.toString());
+      // Convert non-file data to string before appending
+      if (key === "profilePicture" && value) {
+        formData.append(key, value); // For file upload
+      } else {
+        formData.append(key, value?.toString() || ""); // Ensure values are strings
+      }
     });
+
+    if (profileData.profilePicture) {
+      try {
+        
+      } catch (error) {
+        triggerNotification(
+          "An unexpected error occurred. Please try again.",
+          "error"
+        )
+      }
+      
+    }
 
     try {
       const response = await fetch(
@@ -90,18 +102,22 @@ const AccountSettings = () => {
         }
       );
 
-      // const response = {
-      //   ok: true,
-      // };
-
       if (response.ok) {
         triggerNotification("Profile updated successfully!", "success");
       } else {
-        triggerNotification("Failed to update profile.", "error");
+        const errorMessage = await response.text(); // Get detailed error message from response
+        console.error("Failed to update profile:", errorMessage);
+        triggerNotification(
+          `Failed to update profile: ${errorMessage}`,
+          "error"
+        );
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      triggerNotification("An error occurred.", "error");
+      triggerNotification(
+        "An unexpected error occurred. Please try again.",
+        "error"
+      );
     }
   };
 
