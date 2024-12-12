@@ -26,8 +26,8 @@ const AccountSettings = () => {
   });
   const { triggerNotification } = useNotification();
   const { user } = useAuth();
-  const userId = user?.user_id;
-  console.log("user-id", userId);
+  // const userId = user?.user_id;
+  // console.log("user-id", userId);
 
   const [progressStep, setProgressStep] = useState(1);
 
@@ -44,21 +44,22 @@ const AccountSettings = () => {
   // Handle profile picture upload
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-      if (!allowedTypes.includes(file.type)) {
-        triggerNotification("Please upload a JPEG, PNG, or JPG file.", "error");
-        return;
-      }
-      if (file.size > 2 * 1024 * 1024) {
-        triggerNotification("File size must be less than 2MB.", "error");
-        return;
-      }
-      setProfileData((prev) => ({ ...prev, profilePicture: file }));
-      const reader = new FileReader();
-      reader.onload = () => setProfilePreview(reader.result);
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      triggerNotification("Please upload a JPEG, PNG, or JPG file.", "error");
+      return;
     }
+    if (file.size > 2 * 1024 * 1024) {
+      triggerNotification("File size must be less than 2MB.", "error");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => setProfilePreview(reader.result);
+    reader.readAsDataURL(file);
+    setProfileData((prev) => ({ ...prev, profilePicture: file }));
   };
 
   // API call for updating profile picture
@@ -67,7 +68,7 @@ const AccountSettings = () => {
 
     const formData = new FormData();
     formData.append("profilePicture", profileData.profilePicture);
-    console.log("user-id", user.user_id);
+    // console.log("user-id", user.user_id);
 
     try {
       const response = await fetch(
@@ -206,15 +207,21 @@ const AccountSettings = () => {
               progressStep === 2 ? "text-[#1E3E62]" : "text-gray-400"
             }`}
           >
+            Password Reset
+          </span>
+          <span
+            className={`${
+              progressStep === 3 ? "text-[#1E3E62]" : "text-gray-400"
+            }`}
+          >
             Professional Details
           </span>
         </div>
         <div className="relative mt-2">
           <div className="w-full bg-gray-200 h-1 rounded-full">
             <div
-              className={`bg-[#1E3E62] h-1 rounded-full ${
-                progressStep === 2 ? "w-full" : "w-1/2"
-              }`}
+              className="bg-[#1E3E62] h-1 rounded-full"
+              style={{ width: `${(progressStep / 3) * 100}%` }}
             ></div>
           </div>
         </div>
@@ -227,24 +234,6 @@ const AccountSettings = () => {
               Personal Details
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              {/* <div>
-                <label className="block text-gray-600">Profile Picture</label>
-                <input
-                  type="file"
-                  name="profilePicture"
-                  accept="image/*"
-                  onChange={handleProfilePictureChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                />
-                {profilePreview && (
-                  <img
-                    src={profilePreview}
-                    alt="Profile Preview"
-                    className="mt-4 w-32 h-32 rounded-full object-cover"
-                  />
-                )}
-              </div> */}
-
               <div className="flex items-center mb-6">
                 <div className="relative">
                   <img
@@ -330,7 +319,14 @@ const AccountSettings = () => {
                   placeholder="Enter your phone number"
                 />
               </div>
+            </div>
+          </div>
+        )}
 
+        {progressStep === 2 && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-800">Password Reset</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div>
                 <label className="block text-gray-600">Current Password</label>
                 <div className="relative">
@@ -399,7 +395,7 @@ const AccountSettings = () => {
           </div>
         )}
 
-        {progressStep === 2 && (
+        {progressStep === 3 && (
           <div>
             <h2 className="text-xl font-bold text-gray-800">
               Professional Details
@@ -455,28 +451,33 @@ const AccountSettings = () => {
 
         {/* Navigation Buttons */}
         <div className="flex justify-between mt-6">
+          {/* Back Button */}
           {progressStep > 1 && (
             <button
               type="button"
-              className="bg-[#1E3E62] text-[#fff] py-2 px-4 rounded-lg"
+              className="bg-[#1E3E62] text-white py-2 px-4 rounded-lg focus:outline-none focus:ring focus:ring-[#1E3E62]/50"
+              aria-label="Go to the previous step"
               onClick={() => setProgressStep((prev) => prev - 1)}
             >
               Back
             </button>
           )}
-          {progressStep < 2 && (
+
+          {/* Conditional Next or Save Button */}
+          {progressStep < 3 ? (
             <button
               type="button"
-              className="bg-[#1E3E62] text-white py-2 px-4 rounded-lg"
+              className="bg-[#1E3E62] text-white py-2 px-4 rounded-lg focus:outline-none focus:ring focus:ring-[#1E3E62]/50"
+              aria-label="Go to the next step"
               onClick={() => setProgressStep((prev) => prev + 1)}
             >
               Next
             </button>
-          )}
-          {progressStep === 2 && (
+          ) : (
             <button
               type="submit"
-              className="bg-[#1E3E62] text-white py-2 px-4 rounded-lg"
+              className="bg-[#1E3E62] text-white py-2 px-4 rounded-lg focus:outline-none focus:ring focus:ring-[#1E3E62]/50"
+              aria-label="Save changes"
             >
               Save Changes
             </button>
