@@ -4,6 +4,7 @@ import { useAuth } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
 import { FaRegUser } from "react-icons/fa";
+import axios from "axios";
 
 export default function Dashboard() {
   const { user, profileComplete, profileStatus, approveProfile } = useAuth();
@@ -67,21 +68,47 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchUserDetails() {
       try {
-        // const response = await axios.get(`${process.env.VITE_APP_API_ENDPOINT_URL}/user/${user.id}`);
-        // setUserDetails(response.data);
-        setUserDetails({
-          first_name: "John",
-          last_name: "Doe",
-          email: "jH2dX@example.com",
-          qualification: "Bachelor of Science in Computer Science",
-          experience: "2 years 5 months",
-          specialization: "Web Development",
-          age: 26,
-          phone: "1234567890",
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/personal-info/${
+            user.user_id
+          }`
+        );
+        const userData = response.data?.data || {};
+        // console.log("User data:", userData);
+
+        setUserDetails((prev) => ({
+          ...prev,
+          first_name: userData.first_name || "",
+          last_name: userData.last_name || "",
+          email: userData.email || "",
+          phone: userData.phone_number || "",
+          DOB: userData.date_of_birth || "",
+        }));
       } catch (error) {
         console.error("Error fetching user details:", error);
         triggerNotification("Error fetching user details", "error");
+      }
+    }
+
+    async function fetchProfessionDetails() {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/professional-info/${
+            user.user_id
+          }`
+        );
+        const userData = response.data?.data || {};
+        // console.log("Profession data:", userData);
+
+        setUserDetails((prev) => ({
+          ...prev,
+          qualification: userData.qualification || "",
+          experience: userData.experience || "",
+          specialization: userData.specification || "",
+        }));
+      } catch (error) {
+        console.error("Error fetching profession details:", error);
+        triggerNotification("Error fetching profession details", "error");
       }
     }
 
@@ -97,8 +124,25 @@ export default function Dashboard() {
     }
 
     fetchUserDetails();
+    fetchProfessionDetails();
     fetchSessions();
   }, []);
+
+  function calculateAge(dateString) {
+    const birthDate = new Date(dateString); // Parse the input date string
+    const today = new Date(); // Get the current date
+
+    let age = today.getFullYear() - birthDate.getFullYear(); // Difference in years
+
+    // Adjust for the case where the birthdate hasn't occurred yet this year
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    const dayDifference = today.getDate() - birthDate.getDate();
+    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+      age--;
+    }
+
+    return age;
+  }
 
   if (profileStatus === "pending") {
     return (
@@ -149,10 +193,18 @@ export default function Dashboard() {
       <div className="flex-1 px-8 h-full">
         <div className="p-2 rounded-lg w-full shadow-lg h-auto mb-6 mt-2 bg-white">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            Welcome{" "}
+            {/* Welcome{" "}
             {user?.first_name.charAt(0).toUpperCase() +
               user?.first_name.slice(1)}{" "}
-            {user?.last_name.charAt(0).toUpperCase() + user?.last_name.slice(1)}
+            {user?.last_name.charAt(0).toUpperCase() + user?.last_name.slice(1)} */}
+            Welcome{" "}
+            {user?.first_name
+              ? user.first_name.charAt(0).toUpperCase() +
+                user.first_name.slice(1)
+              : "Guest"}{" "}
+            {user?.last_name
+              ? user.last_name.charAt(0).toUpperCase() + user.last_name.slice(1)
+              : ""}
           </h2>
           <hr className="border-gray-300 mb-4" />
 
@@ -178,11 +230,16 @@ export default function Dashboard() {
                 <p>
                   Name:
                   {user?.first_name.charAt(0).toUpperCase() +
-                    user?.first_name.slice(1)}{" "}
+                    user?.first_name.slice(1) || "Guest"}{" "}
                   {user?.last_name.charAt(0).toUpperCase() +
-                    user?.last_name.slice(1)}
+                    user?.last_name.slice(1) || ""}
                 </p>
-                <p>Age: {userDetails?.age || "N/A"}</p>
+                {/* <p>Age: {userDetails?.DOB || "N/A"}</p> */}
+                <p>
+                  Age:{" "}
+                  {userDetails?.DOB ? calculateAge(userDetails.DOB) : "N/A"}
+                </p>
+
                 <p>Mobile No.: {userDetails?.phone || "N/A"}</p>
               </div>
             </div>
@@ -194,9 +251,7 @@ export default function Dashboard() {
               <div className="mb-4 text-gray-600">
                 <p>Qualification: {userDetails?.qualification || "N/A"}</p>
                 <p>Experience: {userDetails?.experience || "N/A"}</p>
-                <p>
-                  Subject Expertise: {userDetails?.subject_expertise || "N/A"}
-                </p>
+                <p>Subject Expertise: {userDetails?.specialization || "N/A"}</p>
               </div>
             </div>
           </div>

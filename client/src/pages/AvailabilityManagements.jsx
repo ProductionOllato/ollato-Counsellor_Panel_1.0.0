@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteForever, MdClose } from "react-icons/md";
 import CustomCalendar from "../components/CustomCalendar";
+import axios from "axios";
 
 function AvailabilityManagements() {
   const [availability, setAvailability] = useState([]);
@@ -35,22 +36,39 @@ function AvailabilityManagements() {
   const slotsPerPage = 10;
 
   // Fetch availability slots from backend (mocked for now)
+  // useEffect(() => {
+  //   const fetchAvailability = async () => {
+  //     const mockData = [
+  //       {
+  //         id: 1,
+  //         date: "2024-11-23",
+  //         day: "Thursday",
+  //         time_slot: "10:00:00 to 11:00:00",
+  //         mode: "video",
+  //         duration: "60",
+  //         status: "Available",
+  //         reason_of_cancellation: "",
+  //       },
+  //     ];
+
+  //     setAvailability(mockData);
+  //   };
+  //   fetchAvailability();
+  // }, []);
+
   useEffect(() => {
     const fetchAvailability = async () => {
-      const mockData = [
-        {
-          id: 1,
-          date: "2024-11-23",
-          day: "Thursday",
-          time_slot: "10:00:00 to 11:00:00",
-          mode: "video",
-          duration: "60",
-          status: "Available",
-          reason_of_cancellation: "",
-        },
-      ];
-
-      setAvailability(mockData);
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_APP_API_ENDPOINT_URL
+          }/counsellor/get-availability`
+        );
+        setAvailability(response.data);
+      } catch (error) {
+        console.error("Error fetching availability:", error);
+        triggerNotification("Failed to fetch availability.", "error");
+      }
     };
     fetchAvailability();
   }, []);
@@ -127,12 +145,36 @@ function AvailabilityManagements() {
     return true;
   };
 
-  const handleStatusChange = (slotId, newStatus) => {
-    setAvailability((prev) =>
-      prev.map((slot) =>
-        slot.id === slotId ? { ...slot, status: newStatus } : slot
-      )
-    );
+  // const handleStatusChange = (slotId, newStatus) => {
+  //   setAvailability((prev) =>
+  //     prev.map((slot) =>
+  //       slot.id === slotId ? { ...slot, status: newStatus } : slot
+  //     )
+  //   );
+  //   setShowStatusModal(false);
+  // };
+
+  const handleStatusChange = async (slotId, newStatus) => {
+    try {
+      await axios.put(
+        `${
+          import.meta.env.VITE_APP_API_ENDPOINT_URL
+        }/counsellor/update-availability`,
+        {
+          id: slotId,
+          status: newStatus,
+        }
+      );
+      setAvailability((prev) =>
+        prev.map((slot) =>
+          slot.id === slotId ? { ...slot, status: newStatus } : slot
+        )
+      );
+      triggerNotification("Status updated successfully!", "success");
+    } catch (error) {
+      console.error("Error updating status:", error);
+      triggerNotification("Failed to update status.", "error");
+    }
     setShowStatusModal(false);
   };
 
@@ -144,45 +186,103 @@ function AvailabilityManagements() {
     setSortConfig({ key, direction });
   };
 
-  const addSlot = (newSlot) => {
-    setAvailability((prev) => [newSlot, ...prev]);
-    triggerNotification("Slot added successfully!", "success");
+  const addSlot = async (newSlot) => {
+    try {
+      const response = await axios.post(
+        `${
+          import.meta.env.VITE_APP_API_ENDPOINT_URL
+        }/counsellor/set-availability`,
+        newSlot
+      );
+      setAvailability((prev) => [response.data, ...prev]);
+      triggerNotification("Slot added successfully!", "success");
+    } catch (error) {
+      console.error("Error adding slot:", error);
+      triggerNotification("Failed to add slot.", "error");
+    }
   };
 
-  const updateSlot = (newSlot) => {
-    setAvailability((prev) =>
-      prev.map((slot) => (slot.id === currentSlot.id ? newSlot : slot))
-    );
-    triggerNotification("Slot updated successfully!", "success");
+  const updateSlot = async (updatedSlot) => {
+    try {
+      const response = await axios.put(
+        `${
+          import.meta.env.VITE_APP_API_ENDPOINT_URL
+        }/counsellor/update-availability`,
+        updatedSlot
+      );
+      setAvailability((prev) =>
+        prev.map((slot) => (slot.id === updatedSlot.id ? response.data : slot))
+      );
+      triggerNotification("Slot updated successfully!", "success");
+    } catch (error) {
+      console.error("Error updating slot:", error);
+      triggerNotification("Failed to update slot.", "error");
+    }
   };
 
-  const handleAddOrUpdateSlot = () => {
+  // const handleAddOrUpdateSlot = () => {
+  //   if (!validateSlot()) return;
+
+  //   const newSlot = {
+  //     id: isEditMode
+  //       ? currentSlot.id
+  //       : availability.length
+  //       ? Math.max(availability.map((s) => s.id)) + 1
+  //       : 1,
+  //     date: format(new Date(formData.start_date), "yyyy-MM-dd"),
+  //     day: format(new Date(formData.start_date), "EEEE"),
+  //     time_slot: `${formData.start_time} to ${formData.end_time}`,
+  //     mode: formData.mode,
+  //     duration: formData.duration,
+  //     status: "Available",
+  //   };
+
+  //   isEditMode ? updateSlot(newSlot) : addSlot(newSlot);
+
+  //   resetForm();
+  //   setShowSetAvailability(false);
+  //   setShowAvailabilityTable(true);
+  // };
+
+  const handleAddOrUpdateSlot = async () => {
     if (!validateSlot()) return;
 
     const newSlot = {
-      id: isEditMode
-        ? currentSlot.id
-        : availability.length
-        ? Math.max(availability.map((s) => s.id)) + 1
-        : 1,
-      date: format(new Date(formData.start_date), "yyyy-MM-dd"),
-      day: format(new Date(formData.start_date), "EEEE"),
-      time_slot: `${formData.start_time} to ${formData.end_time}`,
+      id: isEditMode ? currentSlot.id : undefined, // For new slots, let the backend assign the ID
+      start_date: formData.start_date,
+      end_date: formData.end_date,
+      start_time: formData.start_time,
+      end_time: formData.end_time,
       mode: formData.mode,
       duration: formData.duration,
       status: "Available",
     };
 
-    isEditMode ? updateSlot(newSlot) : addSlot(newSlot);
+    isEditMode ? await updateSlot(newSlot) : await addSlot(newSlot);
 
     resetForm();
     setShowSetAvailability(false);
     setShowAvailabilityTable(true);
   };
 
-  const handleDeleteSlot = (id) => {
-    setAvailability((prev) => prev.filter((slot) => slot.id !== id));
-    triggerNotification("Slot deleted successfully!", "error");
+  // const handleDeleteSlot = (id) => {
+  //   setAvailability((prev) => prev.filter((slot) => slot.id !== id));
+  //   triggerNotification("Slot deleted successfully!", "error");
+  // };
+
+  const handleDeleteSlot = async (id) => {
+    try {
+      await axios.delete(
+        `${
+          import.meta.env.VITE_APP_API_ENDPOINT_URL
+        }/counsellor/delete-availability/${id}`
+      );
+      setAvailability((prev) => prev.filter((slot) => slot.id !== id));
+      triggerNotification("Slot deleted successfully!", "success");
+    } catch (error) {
+      console.error("Error deleting slot:", error);
+      triggerNotification("Failed to delete slot.", "error");
+    }
   };
 
   const handleEditSlot = (slot) => {

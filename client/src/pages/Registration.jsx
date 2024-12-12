@@ -349,7 +349,7 @@ const Registration = () => {
                   >
                     {isEmailVerified ? "Email Verified" : "Verify Email"}
                   </button>
-                </div>
+                </div> 
               </div>
 
               <div>

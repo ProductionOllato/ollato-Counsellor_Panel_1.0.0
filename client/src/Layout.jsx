@@ -43,7 +43,7 @@ function Layout({ children }) {
         <main
           className="flex-1 overflow-y-auto bg-gray-100 p-6 pt-10 scrollbar-custom transition-all duration-300"
           style={{
-            marginLeft: sidebarOpen ? "16rem" : "5rem", // Sidebar adjustment
+            marginLeft: sidebarOpen ? "16rem" : "4rem", // Sidebar adjustment
             marginTop: "5rem", // Space below fixed header
           }}
         >
