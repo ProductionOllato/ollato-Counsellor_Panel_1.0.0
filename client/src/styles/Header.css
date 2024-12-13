@@ -1,0 +1,492 @@
+
+
+.header {
+    background: rgba(255, 255, 255, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    width: 100%;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+    padding: 5px 70px;
+    display: flex;  
+    align-items: center;
+    justify-content: space-evenly;
+    transition: all 0.2s ease;
+  }
+  
+  .logo-container {
+    flex-shrink: 0;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-image {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    image-rendering: crisp-edges;
+  }
+  
+  .logo-image:hover {
+    transform: scale(1.1);
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .header-title {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: 400;
+    color: #E9385B;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #E9385B, #F14D7A);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .profile-section {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: flex-start;
+  }
+  
+  .profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .profile-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.05);
+  }
+  
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+  
+  .profile-section:hover .dropdown-menu, 
+  .profile-btn:hover + .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #fff;
+    color: #333333;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+  }
+  
+  .dropdown-btn {
+    background: none;
+    border: none;
+    color: #333333;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  
+  .dropdown-btn:hover {
+    background-color: rgba(188, 204, 204, 0.2);
+    color: #6a669d;
+  }
+  
+  .dropdown-btn.disabled {
+    cursor: not-allowed;
+    color: #b0b0b0;
+    background-color: rgba(240, 240, 240, 0.5);
+  }
+  
+  @media (max-width: 768px) {
+    .logo-image {
+      height: 50px;
+    }
+  
+    .profile-btn span {
+      display: none;
+    }
+  
+    .profile-pic {
+      width: 30px;
+      height: 30px;
+    }
+  
+    .profile-section {
+      justify-content: flex-end;
+    }
+  
+    .profile-btn {
+      padding: 6px 10px;
+    }
+  
+    .title {
+      font-size: 24px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .profile-pic {
+      width: 28px;
+      height: 28px;
+    }
+  
+    .profile-btn {
+      padding: 6px 8px;
+    }
+  
+    .logo-image {
+      height: 40px;
+    }
+  
+    .title {
+      font-size: 20px;
+    }
+  }
+  
+  /* Styles for screens with max-width: 769px */
+@media (max-width: 769px) {
+  .header {
+    background: rgba(255, 255, 255, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    width: 100%;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+    padding: 5px 30px;  /* Adjust padding for smaller screens */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align elements to the end (right) */
+    transition: all 0.2s ease;
+  }
+
+  .logo-container {
+    flex-shrink: 0;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-image {
+    height: 60px;  /* Adjust logo size for smaller screens */
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    image-rendering: crisp-edges;
+  }
+
+  .logo-image:hover {
+    transform: scale(1.1);
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .header-title {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    font-size: 20px;  /* Smaller text for header */
+    font-weight: 400;
+    color: #E9385B;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #E9385B, #F14D7A);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .profile-section {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: flex-start; /* Align profile section to left */
+  }
+
+  .profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    color: black;
+    font-size: 16px;  /* Smaller font for mobile */
+    font-weight: 500;
+    padding: 8px 14px;  /* Adjust padding */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .profile-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.05);
+  }
+
+  .profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+
+  /* Dropdown menu for mobile profile button */
+  .profile-section:hover .dropdown-menu,
+  .profile-btn:hover + .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #fff;
+    color: #333333;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+  }
+
+  .dropdown-btn {
+    background: none;
+    border: none;
+    color: #333333;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .dropdown-btn:hover {
+    background-color: rgba(188, 204, 204, 0.2);
+    color: #6a669d;
+  }
+
+  .dropdown-btn.disabled {
+    cursor: not-allowed;
+    color: #b0b0b0;
+    background-color: rgba(240, 240, 240, 0.5);
+  }
+}
+
+
+  /* Styles for screens with min-width 409px */
+@media (max-width: 520px) {
+  .header {
+    background: rgba(255, 255, 255, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    width: 100%;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+    padding: 5px 30px;  /* Adjust padding for smaller screen */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Align elements to the start */
+    transition: all 0.2s ease;
+  }
+
+  .logo-container {
+    flex-shrink: 0;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-image {
+    height: 60px;  /* Adjust logo size for smaller screens */
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    image-rendering: crisp-edges;
+  }
+
+  .logo-image:hover {
+    transform: scale(1.1);
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .header-title {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    font-size: 20px;  /* Smaller text for header */
+    font-weight: 400;
+    color: #E9385B;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #E9385B, #F14D7A);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .profile-section {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: flex-start;  /* Align profile section to left */
+  }
+
+  .profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    color: black;
+    font-size: 16px;  /* Smaller font for mobile */
+    font-weight: 500;
+    padding: 8px 14px;  /* Adjust padding */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .profile-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.05);
+  }
+
+  .profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+
+  /* Dropdown menu for mobile profile button */
+  .profile-section:hover .dropdown-menu,
+  .profile-btn:hover + .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #fff;
+    color: #333333;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+  }
+
+  .dropdown-btn {
+    background: none;
+    border: none;
+    color: #333333;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .dropdown-btn:hover {
+    background-color: rgba(188, 204, 204, 0.2);
+    color: #6a669d;
+  }
+
+  .dropdown-btn.disabled {
+    cursor: not-allowed;
+    color: #b0b0b0;
+    background-color: rgba(240, 240, 240, 0.5);
+  }
+}
