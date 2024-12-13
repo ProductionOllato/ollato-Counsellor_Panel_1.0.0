@@ -36,6 +36,8 @@ const AccountSettings = () => {
   const [otpModal, setOtpModal] = useState(false);
   const [otpType, setOtpType] = useState("");
 
+  const ApiURL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
+
   useEffect(() => {
     getUserDetails();
     getProfessionDetails();
@@ -44,9 +46,7 @@ const AccountSettings = () => {
   const getUserDetails = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/personal-info/${
-          user.user_id
-        }`,
+        `${ApiURL}/get/personal-info/${user.user_id}`,
         {
           method: "GET",
           headers: {
@@ -54,21 +54,18 @@ const AccountSettings = () => {
           },
         }
       );
+
       if (response.ok) {
         const data = await response.json();
         const userData = data.data;
         // Safely update state, using default values where necessary
         setProfileData((prevData) => ({
           ...prevData,
-          first_name: userData.first_name || "",
-          last_name: userData.last_name || "",
-          email: userData.email || "",
-          phone_number: userData.phone_number || "",
-          profile_pic: userData.profile_pic || "",
-          license_number: userData.license_number || "",
-          qualification: userData.qualification || "",
-          specification: userData.specification || "",
-          experience: userData.experience || "",
+          first_name: userData?.first_name || "",
+          last_name: userData?.last_name || "",
+          email: userData?.email || "",
+          phone_number: userData?.phone_number || "",
+          profile_pic: userData?.profile_pic || "",
         }));
       }
     } catch (error) {
@@ -79,9 +76,7 @@ const AccountSettings = () => {
   const getProfessionDetails = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/professional-info/${
-          user.user_id
-        }`,
+        `${ApiURL}/get/professional-info/${user.user_id}`,
         {
           method: "GET",
           headers: {
@@ -89,6 +84,8 @@ const AccountSettings = () => {
           },
         }
       );
+      // console.log("Response professional:", response);
+
       if (response.ok) {
         const data = await response.json();
         const userData = data.data;
@@ -96,10 +93,10 @@ const AccountSettings = () => {
 
         setProfileData((prevData) => ({
           ...prevData,
-          license_number: userData.license_number || "",
-          qualification: userData.qualification || "",
-          experience: userData.experience || "",
-          specification: userData.specification || "",
+          license_number: userData?.license_number || "",
+          qualification: userData?.qualification || "",
+          specification: userData?.specification || "",
+          experience: userData?.experience || "",
         }));
       }
     } catch (error) {
@@ -152,35 +149,18 @@ const AccountSettings = () => {
   const updateProfilePicture = async () => {
     if (!profileData.profile_pic) return;
 
-    // Validate email
-    if (!isValidEmail(profileData.email)) {
-      triggerNotification("Please enter a valid email address.", "error");
-      return; // Early return
-    }
-
-    // Validate phone number
-    if (!isValidPhoneNumber(profileData.phone_number)) {
-      triggerNotification(
-        "Please enter a valid 10-digit phone number.",
-        "error"
-      );
-      return;
-    }
-
     const payload = new FormData();
     payload.append("profile_pic", profileData.profile_pic);
-    // console.log("user-id", user.user_id);
 
     try {
       const response = await fetch(
-        `${
-          import.meta.env.VITE_APP_API_ENDPOINT_URL
-        }/update/documents-details/profile-pic/${user.user_id}`,
+        `${ApiURL}/documents-details/profile-pic/${user.user_id}`,
         {
-          method: "POST",
+          method: "PUT",
           body: payload,
         }
       );
+      console.log("Response profile:", response);
 
       if (response.ok) {
         triggerNotification("Profile picture updated successfully!", "success");
@@ -215,7 +195,7 @@ const AccountSettings = () => {
           user.user_id
         }`,
         {
-          method: "POST",
+          method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             id: user.user_id,
@@ -228,6 +208,8 @@ const AccountSettings = () => {
           }),
         }
       );
+
+      console.log("Response personal:", response);
 
       if (response.ok) {
         triggerNotification(
@@ -253,10 +235,9 @@ const AccountSettings = () => {
           import.meta.env.VITE_APP_API_ENDPOINT_URL
         }/update/professional-details/${user.user_id}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            id: user.user_id,
             license_number,
             qualification,
             specification,
@@ -264,6 +245,7 @@ const AccountSettings = () => {
           }),
         }
       );
+      console.log("Response professional:", response);
 
       if (response.ok) {
         triggerNotification(
@@ -435,38 +417,56 @@ const AccountSettings = () => {
     <section className=" bg-white shadow-lg rounded-lg w-full">
       {/* Progress Bar */}
       <div className="mb-6">
-        <div className="flex items-center justify-between text-sm font-medium">
-          <span
-            className={`cursor-pointer ${
-              progressStep >= 1 ? "text-[#1E3E62]" : "text-gray-400"
-            }`}
-            onClick={() => setProgressStep(1)}
-          >
-            Personal Details
-          </span>
-          <span
-            className={`cursor-pointer ${
-              progressStep === 2 ? "text-[#1E3E62]" : "text-gray-400"
-            }`}
-            onClick={() => setProgressStep(2)}
-          >
-            Password Reset
-          </span>
-          <span
-            className={`cursor-pointer ${
-              progressStep === 3 ? "text-[#1E3E62]" : "text-gray-400"
-            }`}
-            onClick={() => setProgressStep(3)}
-          >
-            Professional Details
-          </span>
-        </div>
-        <div className="relative mt-2">
-          <div className="w-full bg-gray-200 h-1 rounded-full">
-            <div
-              className="bg-[#1E3E62] h-1 rounded-full"
-              style={{ width: `${(progressStep / 3) * 100}%` }}
-            ></div>
+        <div className="flex items-center justify-between text-sm font-medium relative">
+          {/* Step 1 */}
+          <div className="flex-1 text-center">
+            <span
+              className={`cursor-pointer ${
+                progressStep === 1
+                  ? "text-[#1E3E62] font-bold"
+                  : "text-gray-400"
+              }`}
+              onClick={() => setProgressStep(1)}
+            >
+              Personal Details
+            </span>
+            {progressStep === 1 && (
+              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
+            )}
+          </div>
+
+          {/* Step 2 */}
+          <div className="flex-1 text-center">
+            <span
+              className={`cursor-pointer ${
+                progressStep === 2
+                  ? "text-[#1E3E62] font-bold"
+                  : "text-gray-400"
+              }`}
+              onClick={() => setProgressStep(2)}
+            >
+              Password Reset
+            </span>
+            {progressStep === 2 && (
+              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
+            )}
+          </div>
+
+          {/* Step 3 */}
+          <div className="flex-1 text-center">
+            <span
+              className={`cursor-pointer ${
+                progressStep === 3
+                  ? "text-[#1E3E62] font-bold"
+                  : "text-gray-400"
+              }`}
+              onClick={() => setProgressStep(3)}
+            >
+              Professional Details
+            </span>
+            {progressStep === 3 && (
+              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
+            )}
           </div>
         </div>
       </div>

@@ -64,6 +64,8 @@ exports.updateProfessionalDetails = async (req, res) => {
   const { id } = req.params; // The id from the URL
   const updates = req.body; // The fields to update
 
+  // console.log("Request body - ProfessionalDetails:", req.body);
+
   if (!id || Object.keys(updates).length === 0) {
     return res.status(400).json({
       message: "Invalid request. ID and at least one field are required.",
@@ -75,7 +77,7 @@ exports.updateProfessionalDetails = async (req, res) => {
     const { query, values } = buildUpdateQuery(
       "professional_details", // Table name
       updates, // Fields to update
-      id // The id from the route (which corresponds to 'user_id' in the database)
+      id // The id from the route (which corresponds to 'user_id' in the database
     );
 
     // Modify the query to use 'user_id' instead of 'id' in the WHERE clause
@@ -83,6 +85,8 @@ exports.updateProfessionalDetails = async (req, res) => {
 
     // Execute the modified query
     const [result] = await db.execute(updatedQuery, values);
+
+    // console.log("Result:", result);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({
@@ -130,6 +134,8 @@ const uploadProfilePic = multer({ storage: storage }).single("profile_pic");
 
 exports.updateCounsellorProfilePic = async (req, res) => {
   console.log("Starting profile picture update process...");
+
+  console.log("Request body - CounsellorProfilePic:", req.body);
 
   try {
     // Ensure file is uploaded using Multer
