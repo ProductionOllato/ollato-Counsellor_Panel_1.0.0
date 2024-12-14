@@ -6,6 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Notification from "../components/Notification/Notification";
 import { useAuth } from "../context/UserContext.jsx";
 import { useNotification } from "../context/NotificationContext.jsx";
+import "../styles/Login.css"
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -177,152 +178,148 @@ function Login() {
   const handleForgotPassword = () => navigate("/forgot-password");
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[#FFEADB] h-full">
-      <div className="w-2/4 md:w-2/4 bg-[#406882] flex items-center justify-center p-14">
-        <img src={LOGO} alt="Logo" className="w-1/2 md:w-3/4 h-auto " />
-      </div>
+    <>
+    <div className="login-container">
+  <div className="login-logo-container">
+    <img src={LOGO} alt="Logo" className="login-logo" />
+  </div>
 
-      <div className=" w-2/4 md:w-2/4 p-8 mt-20 h-full ">
-        <div className="bg-[#FFEADB] p-8 border border-[#ff9a3c] rounded-lg shadow-lg w-full max-w-md mx-auto ">
-          <h1 className="text-2xl text-[#ff9a3c] font-semibold mb-6 text-center">
-            {showOtpLogin ? "Login with OTP" : "Welcome Back"}
-          </h1>
-          <form onSubmit={handleSubmit}>
-            {showOtpLogin ? (
-              <>
-                <div className="mb-4">
-                  <label className="block text-[#ff9a3c]">Phone Number *</label>
-                  <input
-                    type="text"
-                    name="phoneNumber"
-                    placeholder="Enter your phone number"
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                {otpSent && (
-                  <div className="mb-4">
-                    <label className="block text-[#ff9a3c]">Enter OTP *</label>
-                    <input
-                      type="text"
-                      name="otp"
-                      placeholder="Enter OTP sent to your phone"
-                      value={formData.otp}
-                      onChange={handleChange}
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                )}
-                <div className="mt-4 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={otpSent ? handleVerifyOtp : handleSendOtp}
-                    className={`w-1/2 bg-[#406882] text-[#ffffff] p-2 rounded-md ${
-                      loading ? "opacity-50" : ""
-                    }`}
-                    disabled={loading || (!otpSent && !formData.phoneNumber)}
-                  >
-                    {loading
-                      ? "Processing..."
-                      : otpSent
-                      ? "Verify OTP"
-                      : "Send OTP"}
-                  </button>
-                </div>
-                {otpSent && (
-                  <div className="mt-4 flex justify-center">
-                    <button
-                      type="button"
-                      onClick={handleResendOtp}
-                      className={`text-[#ff9a3c] underline hover:text-[#c48042] transition duration-200 ${
-                        loading ? "opacity-50" : ""
-                      }`}
-                      disabled={loading}
-                    >
-                      Resend OTP
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <>
-                <div className="mb-4">
-                  <label className="block text-[#ff9a3c]">Email *</label>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="mb-4 relative">
-                  <label className="block text-[#ff9a3c]">Password *</label>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    placeholder="Enter your password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                  <span
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-9 cursor-pointer text-[#0e0d0d]"
-                  >
-                    {showPassword ? (
-                      <AiOutlineEyeInvisible />
-                    ) : (
-                      <AiOutlineEye />
-                    )}
-                  </span>
-                </div>
-                <div className="mt-1">
-                  <button
-                    type="button"
-                    onClick={handleForgotPassword}
-                    className="text-[#ff9a3c] underline hover:translate-x-1 transition duration-200 ease-in-out"
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-                <div className="mt-4 flex justify-center">
-                  <button
-                    type="submit"
-                    className={`w-1/4 bg-[#406882] text-[#ffffff] p-2 rounded-md hover:translate-x-1 transition duration-200 ease-in-out ${
-                      loading ? "opacity-50" : ""
-                    }`}
-                    disabled={loading}
-                  >
-                    {loading ? "Logging in..." : "Login"}
-                  </button>
-                </div>
-              </>
+  <div className="login-form-container">
+    <div className="login-form-wrapper">
+      <h1 className="login-title">
+        {showOtpLogin ? "Login with OTP" : "Welcome Back"}
+      </h1>
+      <form onSubmit={handleSubmit}>
+        {showOtpLogin ? (
+          <>
+            <div className="form-group">
+              <label className="form-label">Phone Number *</label>
+              <input
+                type="text"
+                name="phoneNumber"
+                placeholder="Enter your phone number"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            {otpSent && (
+              <div className="form-group">
+                <label className="form-label">Enter OTP *</label>
+                <input
+                  type="text"
+                  name="otp"
+                  placeholder="Enter OTP sent to your phone"
+                  value={formData.otp}
+                  onChange={handleChange}
+                  className="form-input"
+                />
+              </div>
             )}
-          </form>
-          <div className="mt-6 text-center">
-            <button
-              className="text-[#ff9a3c] underline hover:translate-x-1 transition duration-200 ease-in-out hover:text-[#c48042]"
-              onClick={toggleLoginMethod}
-            >
-              {showOtpLogin ? "Back to Email Login" : "Login with OTP"}
-            </button>
-          </div>
-          <div className="mt-4 text-center flex justify-center sm:text-sm md:text-base">
-            <p className="text-[#ff9a3c]">Don't have an account?</p>
-            <button
-              className="ml-2 text-md text-[#ff9a3c] hover:text-[#c48042] hover:translate-x-1 transition duration-200 ease-in-out flex items-center gap-1"
-              onClick={() => navigate("/registration")}
-            >
-              <FaArrowRightFromBracket />
-              Register
-            </button>
-          </div>
-        </div>
+            <div className="form-action">
+              <button
+                type="button"
+                onClick={otpSent ? handleVerifyOtp : handleSendOtp}
+                className={`form-button ${loading ? "disabled" : ""}`}
+                disabled={loading || (!otpSent && !formData.phoneNumber)}
+              >
+                {loading
+                  ? "Processing..."
+                  : otpSent
+                  ? "Verify OTP"
+                  : "Send OTP"}
+              </button>
+            </div>
+            {otpSent && (
+              <div className="form-resend">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  className={`resend-button ${loading ? "disabled" : ""}`}
+                  disabled={loading}
+                >
+                  Resend OTP
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="form-group">
+              <label className="form-label">Email *</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                className="form-input"
+              />
+            </div>
+            <div className="form-group password-group">
+              <label className="form-label">Password *</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                className="form-input"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="password-toggle"
+              >
+                {showPassword ? (
+                  <AiOutlineEyeInvisible />
+                ) : (
+                  <AiOutlineEye />
+                )}
+              </span>
+            </div>
+            <div className="forgot-password">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="forgot-password-link"
+              >
+                Forgot Password?
+              </button>
+            </div>
+            <div className="form-action">
+              <button
+                type="submit"
+                className={`form-button ${loading ? "disabled" : ""}`}
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </div>
+          </>
+        )}
+      </form>
+      <div className="toggle-login-method">
+        <button
+          className="toggle-login-method-link"
+          onClick={toggleLoginMethod}
+        >
+          {showOtpLogin ? "Back to Email Login" : "Login with OTP"}
+        </button>
+      </div>
+      <div className="register-link-container">
+        <p className="register-text">Don't have an account?</p>
+        <button
+          className="register-button"
+          onClick={() => navigate("/registration")}
+        >
+          <FaArrowRightFromBracket />
+          Register
+        </button>
       </div>
     </div>
+  </div>
+</div>
+</>
   );
 }
 

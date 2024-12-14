@@ -52,11 +52,11 @@ function Header({ sidebarOpen, setSidebarOpen }) {
   return (
     <>
     <nav className="header">
-        <div className="logo-container">
+        
           <Link to="/dashboard" className="logo">
             <img src={LOGO} alt="Logo" className="logo-image" />
           </Link>
-        </div>
+        
       <div className="header-container">
         {/* Logo */}
 
