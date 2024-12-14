@@ -21,6 +21,7 @@ const AvailabilityManagements = () => {
     duration: "",
   });
   const APIURL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
+
   const { triggerNotification } = useNotification();
 
   // State Management
@@ -37,30 +38,71 @@ const AvailabilityManagements = () => {
   const [modal, setModal] = useState({ show: false, type: null });
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState("show");
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+
   const { user } = useAuth();
 
   const slotsPerPage = 10;
+  const totalPages = Math.ceil(availability.length / slotsPerPage);
 
   // Fetch Availability Data
+  // useEffect(() => {
+  //   const fetchAvailability = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await axios.get(
+  //         `${APIURL}/counsellor/get-availability`
+  //       );
+  //       console.log("Response get availability:", response);
+
+  //       setAvailability(response.data || []);
+  //     } catch (error) {
+  //       triggerNotification(
+  //         error.response?.data?.message || "Failed to fetch availability.",
+  //         "error"
+  //       );
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchAvailability();
+  // }, [APIURL]);
   useEffect(() => {
-    const fetchAvailability = async () => {
+    const fetchAvailabilityData = async () => {
       setLoading(true);
+
       try {
-        const response = await axios.get(
-          `${APIURL}/counsellor/get-availability`
+        const response = await axios.post(
+          `${APIURL}/counsellor/get-availability`,
+          { counsellor_id: user.user_id }
         );
-        setAvailability(response.data || []);
+        // console.log("Response get availability:", response);
+
+        if (response.status === 200 && response.data.data) {
+          setAvailability(response.data.data);
+        } else {
+          console.error("Failed to fetch availability data.");
+        }
       } catch (error) {
-        triggerNotification(
-          error.response?.data?.message || "Failed to fetch availability.",
-          "error"
-        );
+        console.error("Error fetching availability data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchAvailability();
-  }, [APIURL]);
+
+    fetchAvailabilityData();
+  }, [user, APIURL]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    console.log("Name:", name, "Value:", value);
+
+    setSelectedSlot((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   // Reset Form State
   const resetForm = () => {
@@ -71,70 +113,41 @@ const AvailabilityManagements = () => {
   };
 
   // Handle Search
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-    setCurrentPage(1);
-  };
-
-  // Validate Slot
-  // const validateSlot = () => {
-  //   const { start_date, end_date, start_time, end_time, duration } = formData;
-  //   if (!start_date || !end_date || !start_time || !end_time || !duration) {
-  //     triggerNotification("All fields are required.", "error");
-  //     return false;
-  //   }
-
-  //   if (new Date(start_date) > new Date(end_date)) {
-  //     triggerNotification("Start date cannot be after end date.", "error");
-  //     return false;
-  //   }
-
-  //   const startTime = new Date(`2000-01-01T${start_time}`);
-  //   const endTime = new Date(`2000-01-01T${end_time}`);
-  //   if (startTime >= endTime) {
-  //     triggerNotification("Start time must be before end time.", "error");
-  //     return false;
-  //   }
-
-  //   if (parseInt(duration, 10) <= 0) {
-  //     triggerNotification("Duration must be greater than 0.", "error");
-  //     return false;
-  //   }
-
-  //   // Check Overlaps
-  //   const conflict = availability.some((slot) => {
-  //     const [slotStart, slotEnd] = slot.time_slot
-  //       .split(" to ")
-  //       .map((time) => new Date(`2000-01-01T${time}`));
-  //     const currentStart = startTime;
-  //     const currentEnd = endTime;
-
-  //     return (
-  //       currentStart < slotEnd &&
-  //       currentEnd > slotStart &&
-  //       slot.id !== (currentSlot?.id || null)
-  //     );
-  //   });
-
-  //   if (conflict) {
-  //     triggerNotification("This slot overlaps with an existing one.", "error");
-  //     return false;
-  //   }
-
-  //   return true;
+  // const handleSearch = (e) => {
+  //   setSearchQuery(e.target.value);
+  //   setCurrentPage(1);
   // };
 
+  // Validate Slot
   const validateSlot = () => {
-    const { start_date, start_time, end_time, mode, duration } = formData;
+    const { date, start_time, end_time, mode, duration } = formData;
 
-    if (!start_date || !start_time || !end_time || !mode || !duration) {
+    if (!date || !start_time || !end_time || !mode || !duration) {
       triggerNotification("All fields are required.", "error");
       return false;
     }
 
-    if (
-      new Date(`2000-01-01T${start_time}`) >= new Date(`2000-01-01T${end_time}`)
-    ) {
+    // if (
+    //   new Date(`2000-01-01T${start_time}`) >= new Date(`2000-01-01T${end_time}`)
+    // ) {
+    //   triggerNotification("Start time must be before end time.", "error");
+    //   return false;
+    // }
+
+    // Validate that the selected date is not in the past
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize time for comparison
+
+    if (selectedDate < today) {
+      triggerNotification("The selected date cannot be in the past.", "error");
+      return false;
+    }
+
+    // Validate start and end times
+    const startTime = new Date(`2000-01-01T${start_time}`);
+    const endTime = new Date(`2000-01-01T${end_time}`);
+    if (startTime >= endTime) {
       triggerNotification("Start time must be before end time.", "error");
       return false;
     }
@@ -147,7 +160,7 @@ const AvailabilityManagements = () => {
     if (!validateSlot()) return;
 
     const newSlot = {
-      id: isEditMode ? currentSlot.id : undefined,
+      sr_no: isEditMode ? currentSlot.sr_no : undefined,
       ...formData,
       status: "Available",
       time_slot: `${formData.start_time} to ${formData.end_time}`,
@@ -157,7 +170,7 @@ const AvailabilityManagements = () => {
       if (isEditMode) {
         await axios.put(`${APIURL}/counsellor/update-availability`, newSlot);
         setAvailability((prev) =>
-          prev.map((slot) => (slot.id === newSlot.id ? newSlot : slot))
+          prev.map((slot) => (slot.sr_no === newSlot.sr_no ? newSlot : slot))
         );
         triggerNotification("Slot updated successfully!", "success");
       } else {
@@ -179,12 +192,22 @@ const AvailabilityManagements = () => {
   };
 
   // Delete Slot
-  const handleDeleteSlot = async (id) => {
+  const handleDeleteSlot = async (sr_no, slotDetails) => {
     if (!window.confirm("Are you sure you want to delete this slot?")) return;
 
+    console.log("Slot to be deleted:", slotDetails);
+
     try {
-      await axios.delete(`${APIURL}/counsellor/delete-availability/${id}`);
-      setAvailability((prev) => prev.filter((slot) => slot.id !== id));
+      const response = await axios.delete(
+        `${APIURL}/counsellor/delete-availability`,
+        {
+          data: { sr_no },
+        }
+      );
+
+      console.log("Delete response:", response);
+
+      setAvailability((prev) => prev.filter((slot) => slot.sr_no !== sr_no));
       triggerNotification("Slot deleted successfully!", "success");
     } catch (error) {
       triggerNotification("Failed to delete slot.", "error");
@@ -211,66 +234,78 @@ const AvailabilityManagements = () => {
         : -1;
     });
 
-  const paginatedData = sortedData.slice(
-    (currentPage - 1) * slotsPerPage,
-    currentPage * slotsPerPage
+  // Pagination calculation
+  const startIndex = (currentPage - 1) * slotsPerPage;
+  const paginatedData = availability.slice(
+    startIndex,
+    startIndex + slotsPerPage
   );
+
+  // Handle sorting
+  const handleSort = (key) => {
+    const direction =
+      sortConfig.direction === "ascending" ? "descending" : "ascending";
+    setSortConfig({ key, direction });
+
+    const sortedData = [...availability].sort((a, b) => {
+      if (key === "date") {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return direction === "ascending" ? dateA - dateB : dateB - dateA;
+      } else {
+        const valueA = a[key];
+        const valueB = b[key];
+        return direction === "ascending" ? valueA - valueB : valueB - valueA;
+      }
+    });
+
+    setAvailability(sortedData);
+  };
+
+  // Handle search
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Filter data based on search query
+  const filteredData = availability.filter(
+    (slot) =>
+      slot.date.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      slot.mode.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Update the table when data is updated
+  const tableData = searchQuery ? filteredData : availability;
 
   const toggleView = (view) => {
     setView(view);
   };
 
-  // const handleAvailabilitySubmit = async (formData) => {
-  //   const counsellor_id = user.user_id;
-  //   try {
-  //     const response = await axios.post(
-  //       `${APIURL}/counsellor/set-availability`,
-  //       { ...formData, counsellor_id }
-  //     );
-
-  //     if (response.status === 200) {
-  //       triggerNotification("Availability added successfully!", "success");
-  //       // Optional: Clear the form or update availability list here
-  //     } else {
-  //       triggerNotification(
-  //         response.data?.message || "Failed to add availability.",
-  //         "error"
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error submitting availability:", error);
-  //     triggerNotification(
-  //       error.response?.data?.message || "Something went wrong!",
-  //       "error"
-  //     );
-  //   } finally {
-  //     resetForm();
-  //   }
-  // };
-
   const handleAvailabilitySubmit = async (formData) => {
-    const counsellor_id = user.user_id; // Get the counsellor ID
+    const counsellor_id = user.user_id;
 
     // Transform formData to match the backend payload
     const payload = {
       counsellor_id,
-      dates: [formData.start_date],
-      mode: formData.mode === "video" ? "online" : "in-person",
-      duration: formData.duration === "60" ? "1 hour" : "45 minutes",
+      dates: [formData.date],
+      mode: formData.mode,
+      duration: `${formData.duration} minutes`,
       status: "available",
       start_time: `${formData.start_time}:00`,
       end_time: `${formData.end_time}:00`,
     };
 
     console.log("Payload:", payload);
+    console.log("FormData:", formData);
 
     try {
       const response = await axios.post(
         `${APIURL}/counsellor/set-availability`,
         payload
       );
+      console.log("Response set availability:", response);
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         triggerNotification("Availability added successfully!", "success");
       } else {
         triggerNotification(
@@ -286,6 +321,51 @@ const AvailabilityManagements = () => {
       );
     } finally {
       resetForm(); // Reset the form
+    }
+  };
+
+  const handleEditSlot = (slot) => {
+    setSelectedSlot(slot); // Set the slot to be edited
+    setShowEditModal(true); // Open the modal
+  };
+
+  const handleUpdateSlot = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    console.log("Selected Slot:", selectedSlot);
+
+    const payload = {
+      counsellor_id: selectedSlot.counsellor_id,
+      date: selectedSlot.date,
+      start_time: selectedSlot.start_time,
+      end_time: selectedSlot.end_time,
+      mode: selectedSlot.mode,
+      duration: selectedSlot.duration,
+      status: selectedSlot.status,
+      sr_no: selectedSlot.sr_no,
+    };
+    console.log("Api url:", `${APIURL}`);
+
+    try {
+      const response = await axios.put(
+        `${APIURL}/counsellor/update-availability`, // Assuming this endpoint exists
+        payload
+      );
+      console.log("Response update availability:", response);
+
+      if (response.status === 200) {
+        // Update the availability in the state after successful update
+        setAvailability((prev) =>
+          prev.map((slot) =>
+            slot.sr_no === selectedSlot.sr_no ? selectedSlot : slot
+          )
+        );
+        setShowEditModal(false); // Close the modal
+      }
+    } catch (error) {
+      console.error("Error updating availability:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -322,7 +402,6 @@ const AvailabilityManagements = () => {
         <section>
           <div>
             <AvailabilityForm
-              // onSubmit={handleAvailabilitySubmit}
               onSubmit={async (formData) => {
                 await handleAvailabilitySubmit(formData);
               }}
@@ -332,153 +411,322 @@ const AvailabilityManagements = () => {
       )}
 
       {view === "show" && (
-        <section className="bg-white antialiased mb-8">
-          <div className="w-full max-w-full px-4 sm:px-6">
-            <div className="relative border border-[#85A98F] rounded-sm">
-              <input
-                type="text"
-                placeholder="Search sessions..."
-                value={searchQuery}
-                onChange={handleSearch}
-                aria-label="Search sessions"
-                className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-[#D3F1DF] pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-              />
-            </div>
-          </div>
-
-          <div className="max-w-screen-xl px-4 py-6 mx-auto lg:px-6 sm:py-16 lg:py-4">
-            <div className="overflow-x-auto mt-6">
-              <table className="min-w-full table-auto border-collapse border border-slate-200">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-300">
-                    {[
-                      { key: "sr_no", label: "Sr. No." },
-                      { key: "date", label: "Date" },
-                      { key: "day", label: "Day" },
-                      { key: "time_slot", label: "Time" },
-                      { key: "mode", label: "Mode" },
-                      { key: "duration", label: "Duration" },
-                      { key: "status", label: "Status" },
-                    ].map((col) => (
-                      <th
-                        key={col.key}
-                        className="p-4 text-sm font-normal leading-none text-slate-500 border-b border-slate-300"
-                        onClick={() => handleSort(col.key)}
-                      >
-                        {col.label}
-                        {sortConfig.key === col.key && (
-                          <span
-                            className={`ml-2 ${
-                              sortConfig.direction === "ascending"
-                                ? "text-blue-500"
-                                : "text-red-500"
-                            } text-sm`}
-                          >
-                            {sortConfig.direction === "ascending" ? "▲" : "▼"}
-                          </span>
-                        )}
-                      </th>
-                    ))}
-                    <th className="p-4 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedData.length > 0 ? (
-                    paginatedData.map((slot, index) => (
-                      <tr key={slot.id} className="hover:bg-slate-50">
-                        <td className="p-4 border-b border-slate-200">
-                          {(currentPage - 1) * slotsPerPage + index + 1}
-                        </td>
-                        <td className="p-4 border-b border-slate-200">
-                          {slot.date}
-                        </td>
-                        <td className="p-4 border-b border-slate-200">
-                          {slot.day}
-                        </td>
-                        <td className="p-4 border-b border-slate-200">
-                          {slot.startTime} to {slot.endTime}
-                        </td>
-                        <td className="p-4 border-b border-slate-200">
-                          {slot.mode}
-                        </td>
-                        <td className="p-4 border-b border-slate-200">
-                          {slot.duration} mins
-                        </td>
-                        <td className="p-4 border-b border-slate-200">
-                          <span
-                            className={`py-1 px-2 rounded text-white text-sm ${
-                              slot.status === "Available"
-                                ? "bg-[#347928]"
-                                : "bg-gray-500"
-                            }`}
-                            onClick={() => {
-                              setCurrentSlot(slot);
-                              setShowStatusModal(true);
-                            }}
-                          >
-                            {slot.status}
-                          </span>
-                        </td>
-                        <td className="p-4 border-b border-slate-200">
-                          <button
-                            onClick={() => handleEditSlot(slot)}
-                            className="bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center"
-                          >
-                            Edit <CiEdit />
-                          </button>
-                        </td>
-                        <td className="p-4 border-b border-slate-200">
-                          <button
-                            onClick={() => handleDeleteSlot(slot.id)}
-                            className="bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center"
-                          >
-                            Delete <MdDeleteForever />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan="8"
-                        className="text-center p-4 text-gray-500 font-medium"
-                      >
-                        No sessions found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-
-              {/* {totalPages > 1 && (
-                <div className="flex justify-center mt-4">
-                  <button
-                    onClick={() => setCurrentPage((prev) => prev - 1)}
-                    disabled={currentPage === 1}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-l"
-                  >
-                    <MdFirstPage />
-                  </button>
-                  <span className="mx-4">
-                    Page {currentPage} of {totalPages}
-                  </span>
-                  <button
-                    onClick={() => setCurrentPage((prev) => prev + 1)}
-                    disabled={currentPage === totalPages}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-r"
-                  >
-                    <MdLastPage />
-                  </button>
+        <div>
+          {loading ? (
+            <p className="text-gray-700 font-semibold text-center">
+              Loading...
+            </p>
+          ) : (
+            <section className="bg-white antialiased mb-8">
+              <div className="w-full max-w-full px-4 sm:px-6">
+                <div className="relative border border-[#85A98F] rounded-sm">
+                  <input
+                    type="text"
+                    placeholder="Search sessions..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    aria-label="Search sessions"
+                    className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-[#D3F1DF] pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                  />
                 </div>
-              )} */}
-            </div>
-          </div>
-        </section>
+              </div>
+
+              <div className="max-w-screen-xl px-4 py-6 mx-auto lg:px-6 sm:py-16 lg:py-4">
+                <div className="overflow-x-auto mt-6">
+                  <table className="min-w-full table-auto border-collapse border border-slate-200">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-300">
+                        {[
+                          { key: "sr_no", label: "Sr. No." },
+                          { key: "date", label: "Date" },
+                          { key: "time_slot", label: "Time" },
+                          { key: "mode", label: "Mode" },
+                          { key: "duration", label: "Duration" },
+                          { key: "status", label: "Status" },
+                        ].map((col) => (
+                          <th
+                            key={col.key}
+                            className="p-4 text-sm font-normal leading-none text-slate-500 border-b border-slate-300"
+                            onClick={() => handleSort(col.key)}
+                          >
+                            {col.label}
+                            {sortConfig.key === col.key && (
+                              <span
+                                className={`ml-2 ${
+                                  sortConfig.direction === "ascending"
+                                    ? "text-blue-500"
+                                    : "text-red-500"
+                                } text-sm`}
+                              >
+                                {sortConfig.direction === "ascending"
+                                  ? "▲"
+                                  : "▼"}
+                              </span>
+                            )}
+                          </th>
+                        ))}
+                        <th className="p-4 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tableData.length > 0 ? (
+                        paginatedData.map((slot, index) => (
+                          <tr key={slot.sr_no} className="hover:bg-slate-50">
+                            <td className="p-4 border-b border-slate-200">
+                              {(currentPage - 1) * slotsPerPage + index + 1}
+                            </td>
+                            <td className="p-4 border-b border-slate-200">
+                              {slot.date}
+                            </td>
+                            <td className="p-4 border-b border-slate-200">
+                              {slot.start_time} to {slot.end_time}
+                            </td>
+                            <td className="p-4 border-b border-slate-200">
+                              {slot.mode}
+                            </td>
+                            <td className="p-4 border-b border-slate-200">
+                              {slot.duration}
+                            </td>
+                            <td className="p-4 border-b border-slate-200">
+                              <span
+                                className={`py-1 px-2 rounded text-white text-sm ${
+                                  slot.status === "available"
+                                    ? "bg-[#347928]"
+                                    : "bg-gray-500"
+                                }`}
+                              >
+                                {slot.status}
+                              </span>
+                            </td>
+                            <td className="p-4 border-b border-slate-200">
+                              <button
+                                onClick={() => handleEditSlot(slot)}
+                                className="bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center"
+                              >
+                                Edit <CiEdit />
+                              </button>
+                            </td>
+                            <td className="p-4 border-b border-slate-200">
+                              <button
+                                onClick={() =>
+                                  handleDeleteSlot(slot.sr_no, slot)
+                                }
+                                className="bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center"
+                              >
+                                Delete <MdDeleteForever />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan="8"
+                            className="text-center p-4 text-gray-500 font-medium"
+                          >
+                            No sessions found.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+
+                  {/* Edit Modal */}
+                  {showEditModal && (
+                    <div className="fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 w-full">
+                      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                        <h2 className="text-2xl font-semibold mb-6 text-gray-900">
+                          Edit Availability
+                        </h2>
+                        <form
+                          onSubmit={handleUpdateSlot}
+                          className="space-y-6 grid grid-cols-2"
+                        >
+                          <div className="mb-5">
+                            <label
+                              htmlFor="date"
+                              className="block text-sm font-medium text-gray-800"
+                            >
+                              Date
+                            </label>
+                            <input
+                              id="date"
+                              type="date"
+                              name="date"
+                              value={selectedSlot?.date}
+                              onChange={handleInputChange}
+                              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+
+                          <TimeDropdown
+                            label="Start Time"
+                            name="start_time"
+                            value={selectedSlot?.start_time}
+                            onChange={handleInputChange}
+                          />
+                          <TimeDropdown
+                            label="End Time"
+                            name="end_time"
+                            value={selectedSlot?.end_time}
+                            onChange={handleInputChange}
+                          />
+
+                          <div className="mb-5">
+                            <label
+                              htmlFor="mode"
+                              className="block text-sm font-medium text-gray-800"
+                            >
+                              Mode
+                            </label>
+                            <select
+                              id="mode"
+                              name="mode"
+                              value={selectedSlot?.mode}
+                              onChange={handleInputChange}
+                              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                              {[
+                                { value: "video", label: "Video" },
+                                { value: "in-person", label: "In-person" },
+                              ].map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="mb-5">
+                            <label
+                              htmlFor="duration"
+                              className="block text-sm font-medium text-gray-800"
+                            >
+                              Duration
+                            </label>
+                            <select
+                              id="duration"
+                              name="duration"
+                              value={selectedSlot?.duration}
+                              onChange={handleInputChange}
+                              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                              {[
+                                { value: "60", label: "60 Minutes" },
+                                { value: "45", label: "45 Minutes" },
+                              ].map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="mb-5">
+                            <label
+                              htmlFor="status"
+                              className="block text-sm font-medium text-gray-800"
+                            >
+                              Status
+                            </label>
+                            <select
+                              id="status"
+                              name="status"
+                              value={selectedSlot?.status}
+                              onChange={handleInputChange}
+                              className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                              <option value="available">Available</option>
+                              <option value="unavailable">Unavailable</option>
+                            </select>
+                          </div>
+
+                          <div className="flex justify-end mt-6 col-span-2">
+                            <button
+                              type="button"
+                              onClick={() => setShowEditModal(false)}
+                              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md mr-2 transition duration-150 ease-in-out"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              disabled={loading}
+                              className={`bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${
+                                loading ? "opacity-50 cursor-not-allowed" : ""
+                              }`}
+                            >
+                              {loading ? "Updating..." : "Update"}
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pagination Controls */}
+                  {totalPages > 1 && (
+                    <div className="flex justify-center mt-4">
+                      <button
+                        onClick={() =>
+                          setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        }
+                        disabled={currentPage === 1}
+                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-l"
+                      >
+                        Previous
+                      </button>
+                      <span className="mx-4">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <button
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            Math.min(prev + 1, totalPages)
+                          )
+                        }
+                        disabled={currentPage === totalPages}
+                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-r"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+        </div>
       )}
     </div>
   );
 };
 
 export default AvailabilityManagements;
+
+const TimeDropdown = ({ label, value, onChange, name }) => (
+  <div className="mb-5">
+    <label className="block text-sm font-semibold text-gray-700 mb-1">
+      {label}
+    </label>
+    <select
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+    >
+      {Array.from({ length: 48 }, (_, i) => {
+        const hours = String(Math.floor(i / 2)).padStart(2, "0");
+        const minutes = i % 2 === 0 ? "00" : "30";
+        const time = `${hours}:${minutes}`;
+        return (
+          <option key={time} value={time}>
+            {time}
+          </option>
+        );
+      })}
+    </select>
+  </div>
+);

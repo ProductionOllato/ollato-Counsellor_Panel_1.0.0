@@ -37,6 +37,8 @@ exports.addCounsellorAvailability = async (req, res) => {
   const { counsellor_id, dates, mode, duration, status, start_time, end_time } =
     req.body;
 
+  console.log("Received data add CounsellorAvailability: ", req.body);
+
   // Validate the required fields
   if (!counsellor_id) {
     return res.status(400).json({ msg: "Counsellor ID is required" });
@@ -90,6 +92,8 @@ exports.updateAvailability = async (req, res) => {
     duration, // Optional, used for updating
     status, // Optional, used for updating
   } = req.body;
+
+  console.log("Received data update availability: ", req.body);
 
   // Validate required fields
   if (!counsellor_id) {
@@ -149,12 +153,84 @@ exports.updateAvailability = async (req, res) => {
 
     // Execute the query
     const [result] = await db.query(query, params);
+    // console.log("Result update availability :", result);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ msg: "No matching availability found" });
     }
 
     res.status(200).json({ msg: "Availability updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+exports.deleteAvailability = async (req, res) => {
+  // const { sr_no } = req.params;
+  const { sr_no } = req.body;
+
+  console.log("Received data delete availability: ", req.params);
+  console.log("Received data delete availability: ", req.body);
+
+  if (!sr_no) {
+    return res.status(400).json({ msg: "id is required" });
+  }
+
+  try {
+    // Construct the SQL query
+    const query = `
+      DELETE FROM counsellor_availability
+      WHERE sr_no = ?
+    `;
+
+    // Execute the query
+    const [result] = await db.query(query, [sr_no]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ msg: "No availability found" });
+    }
+
+    res.status(200).json({ msg: "Availability deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+exports.getCounsellorAvailability = async (req, res) => {
+  const { counsellor_id } = req.body;
+
+  if (!counsellor_id) {
+    return res.status(400).json({ msg: "counsellor_id is required" });
+  }
+
+  try {
+    const query = `
+      SELECT * FROM counsellor_availability
+      WHERE counsellor_id = ?
+    `;
+
+    const [result] = await db.query(query, [counsellor_id]);
+
+    // console.log("Result:", result);
+
+    if (result.length === 0) {
+      return res.status(404).json({ msg: "No availability found" });
+    }
+
+    // Format the date before sending it to the frontend
+    const formattedResult = result.map((item) => {
+      const date = new Date(item.date);
+      item.date = date.toISOString().split("T")[0]; // Formats date as YYYY-MM-DD
+      return item;
+    });
+
+    // console.log("Formatted Result:", formattedResult);
+
+    res
+      .status(200)
+      .json({ msg: "Availability fetched successfully", data: result });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Internal server error" });

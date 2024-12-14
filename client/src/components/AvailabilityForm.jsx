@@ -6,8 +6,9 @@ const AvailabilityForm = ({ onSubmit }) => {
   const { triggerNotification } = useNotification();
 
   const [formData, setFormData] = useState({
-    start_date: "",
-    end_date: "",
+    // start_date: "",
+    // end_date: "",
+    date: "",
     start_time: "",
     end_time: "",
     mode: "video", // default mode is 'video'
@@ -17,6 +18,8 @@ const AvailabilityForm = ({ onSubmit }) => {
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    // console.log("Name:", name, "Value:", value);
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -24,6 +27,13 @@ const AvailabilityForm = ({ onSubmit }) => {
   };
 
   // Handle calendar date changes
+
+  const handleDateChange = (selectedDate) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      date: selectedDate,
+    }));
+  };
   const handleStartDateChange = (selectedDate) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -40,17 +50,27 @@ const AvailabilityForm = ({ onSubmit }) => {
 
   // Form validation
   const validateForm = () => {
-    const { start_date, end_date, start_time, end_time } = formData;
+    const { date, start_time, end_time } = formData;
 
-    if (!start_date || !end_date || !start_time || !end_time) {
+    if (!date || !start_time || !end_time) {
       triggerNotification("All fields are required.", "error");
       return false;
     }
 
-    if (new Date(start_date) > new Date(end_date)) {
-      triggerNotification("Start date cannot be after the end date.", "error");
+    // Validate that the selected date is not in the past
+    const selectedDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize time for comparison
+
+    if (selectedDate < today) {
+      triggerNotification("The selected date cannot be in the past.", "error");
       return false;
     }
+
+    // if (new Date(start_date) > new Date(end_date)) {
+    //   triggerNotification("Start date cannot be after the end date.", "error");
+    //   return false;
+    // }
 
     const startTime = new Date(`2000-01-01T${start_time}`);
     const endTime = new Date(`2000-01-01T${end_time}`);
@@ -81,8 +101,18 @@ const AvailabilityForm = ({ onSubmit }) => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Date Fields */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="">
           <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Date:
+            </label>
+            <CustomCalendar
+              date={formData.date}
+              onDateChange={handleDateChange}
+            />
+          </div>
+
+          {/* <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Start Date:
             </label>
@@ -100,11 +130,11 @@ const AvailabilityForm = ({ onSubmit }) => {
               date={formData.end_date}
               onDateChange={handleEndDateChange}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Time Fields */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Start Time:
@@ -128,6 +158,52 @@ const AvailabilityForm = ({ onSubmit }) => {
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
             />
+          </div>
+        </div> */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Start Time:
+            </label>
+            <select
+              name="start_time"
+              value={formData.start_time}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+            >
+              {Array.from({ length: 48 }, (_, i) => {
+                const hours = String(Math.floor(i / 2)).padStart(2, "0");
+                const minutes = i % 2 === 0 ? "00" : "30";
+                const time = `${hours}:${minutes}`;
+                return (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              End Time:
+            </label>
+            <select
+              name="end_time"
+              value={formData.end_time}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+            >
+              {Array.from({ length: 48 }, (_, i) => {
+                const hours = String(Math.floor(i / 2)).padStart(2, "0");
+                const minutes = i % 2 === 0 ? "00" : "30";
+                const time = `${hours}:${minutes}`;
+                return (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                );
+              })}
+            </select>
           </div>
         </div>
 

@@ -15,10 +15,17 @@ import {
 function CustomCalendar({ date, onDateChange }) {
   const [currentWeek, setCurrentWeek] = useState(startOfWeek(new Date()));
 
+  // const handleDateClick = (selectedDate) => {
+  //   onDateChange(selectedDate);
+  // };
+
   const handleDateClick = (selectedDate) => {
-    onDateChange(selectedDate);
+    // Convert selectedDate to YYYY-MM-DD format before passing it
+    const formattedDate = format(selectedDate, "yyyy-MM-dd");
+    onDateChange(formattedDate); // Pass the formatted date to parent component
   };
 
+  // Handle navigation
   const prevWeek = () => setCurrentWeek((prev) => subWeeks(prev, 1));
   const nextWeek = () => setCurrentWeek((prev) => addWeeks(prev, 1));
 
