@@ -147,15 +147,18 @@ exports.updateAvailability = async (req, res) => {
       SET ${updates.join(", ")}
       WHERE ${whereClause}
     `;
-
+    console.log("SQL Query:", query);
     // Combine update and where parameters
     const params = [...updateParams, ...whereParams];
-
+    console.log("SQL Parameters:", params);
     // Execute the query
     const [result] = await db.query(query, params);
     // console.log("Result update availability :", result);
+    console.log("Update result:", result);
+    console.log("No rows matched the WHERE clause:", whereClause, whereParams);
 
     if (result.affectedRows === 0) {
+      console.warn("No matching availability found for the given criteria");
       return res.status(404).json({ msg: "No matching availability found" });
     }
 

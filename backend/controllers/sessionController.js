@@ -360,10 +360,37 @@ const rescheduleBooking = async (req, res) => {
   }
 };
 
+const getCounsellorAllSessions = async (req, res) => {
+  try {
+    const { counsellor_id } = req.query;
+
+    if (!counsellor_id) {
+      return res.status(400).json({ message: "Counsellor ID is required" });
+    }
+
+    const [sessions] = await db.query(
+      `SELECT * FROM counsellor_booking WHERE counsellor_id = ?`,
+      [counsellor_id]
+    );
+
+    if (sessions.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No sessions found for this counsellor" });
+    }
+
+    res.status(200).json(sessions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   bookSession,
   cancelBookingByCounsellor,
   requestCancellationByStudent,
   acceptStudentCancellationRequest,
   rescheduleBooking,
+  getCounsellorAllSessions,
 };

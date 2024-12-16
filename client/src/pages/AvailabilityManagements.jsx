@@ -348,7 +348,7 @@ const AvailabilityManagements = () => {
 
     try {
       const response = await axios.put(
-        `${APIURL}/counsellor/update-availability`, // Assuming this endpoint exists
+        `${APIURL}/counsellor/update-availability`,
         payload
       );
       console.log("Response update availability:", response);
