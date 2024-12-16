@@ -227,213 +227,216 @@ const RegistrationDetails = () => {
   };
 
   return (
-    <div className="w-full h-full p-10 md:p-8 flex flex-col overflow-y-auto">
-      <div className="bg-white p-8 rounded-lg shadow-lg mx-auto w-full">
-        <h1 className="text-2xl text-[#2C394B] font-semibold mb-6 text-center">
-          Registration Details
-        </h1>
-        {/* Steps */}
-        <div className="mb-6">
-          <div className="flex items-center mb-3">
-            {steps.map((step) => (
+    <>
+      <div className="w-full h-full p-4 md:p-8 flex flex-col overflow-y-auto">
+        <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg mx-auto w-full max-w-lg lg:max-w-2xl">
+          <h1 className="text-xl md:text-2xl text-[#2C394B] font-semibold mb-6 text-center">
+            Registration Details
+          </h1>
+
+          {/* Steps */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
+              {steps.map((step) => (
+                <div
+                  key={step.id}
+                  className={`flex-1 text-center cursor-pointer text-sm md:text-base ${
+                    step.id === currentStep
+                      ? "text-[#2C394B]"
+                      : step.id < currentStep
+                      ? "text-[#2fa047]"
+                      : "text-gray-400"
+                  }`}
+                  onClick={() => handleStepClick(step.id)}
+                >
+                  {step.title}
+                </div>
+              ))}
+            </div>
+            <div className="relative h-2 bg-gray-300 rounded">
               <div
-                key={step.id}
-                className={`flex-1 text-center cursor-pointer ${
-                  step.id === currentStep
-                    ? "text-[#2C394B]"
-                    : step.id < currentStep
-                    ? "text-[#2fa047]"
-                    : "text-gray-400"
-                }`}
-                onClick={() => handleStepClick(step.id)}
-              >
-                {step.title}
+                className="absolute h-full bg-[#2C394B] rounded"
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
+            </div>
+          </div>
+
+          {/* Step 1: Professional Details */}
+          {currentStep === 1 && (
+            <form
+              onSubmit={handleProfessionalSubmit}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            >
+              <InputField
+                label="License Number *"
+                name="license_number"
+                placeholder="Enter License Number"
+                value={educationDetails.license_number}
+                handleChange={(e) =>
+                  setEducationDetails((prev) => ({
+                    ...prev,
+                    license_number: e.target.value,
+                  }))
+                }
+              />
+              <InputField
+                label="Qualification *"
+                name="qualification"
+                placeholder="Enter Qualification"
+                value={educationDetails.qualification}
+                handleChange={(e) =>
+                  setEducationDetails((prev) => ({
+                    ...prev,
+                    qualification: e.target.value,
+                  }))
+                }
+              />
+              <InputField
+                label="Specification *"
+                name="specification"
+                placeholder="Enter Specification"
+                value={educationDetails.specification}
+                handleChange={(e) =>
+                  setEducationDetails((prev) => ({
+                    ...prev,
+                    specification: e.target.value,
+                  }))
+                }
+              />
+              <InputField
+                label="Experience *"
+                name="experience"
+                placeholder="Enter Experience"
+                value={educationDetails.experience}
+                handleChange={(e) =>
+                  setEducationDetails((prev) => ({
+                    ...prev,
+                    experience: e.target.value,
+                  }))
+                }
+              />
+              <div className="col-span-1 sm:col-span-2 flex justify-center mt-6">
+                <button
+                  type="submit"
+                  className="bg-[#337357] text-white py-2 px-6 rounded hover:bg-[#285b45] transition duration-200"
+                >
+                  Next
+                </button>
               </div>
-            ))}
-          </div>
-          <div className="relative h-2 bg-gray-300 rounded">
-            <div
-              className="absolute h-full bg-[#2C394B] rounded"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
+            </form>
+          )}
+
+          {/* Step 2: Documentation Details */}
+          {currentStep === 2 && (
+            <form
+              onSubmit={handleDocumentationSubmit}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            >
+              <InputField
+                label="Upload Profile Picture *"
+                name="profile_pic"
+                type="file"
+                handleChange={handleFileChange}
+              />
+              <InputField
+                label="Upload Degree Certificate *"
+                name="degree_certificate"
+                type="file"
+                handleChange={handleFileChange}
+              />
+              <InputField
+                label="Upload Resume *"
+                name="resume"
+                type="file"
+                handleChange={handleFileChange}
+              />
+              <InputField
+                label="Aadhar Number *"
+                name="aadhar_number"
+                placeholder="Enter Aadhar Number"
+                value={documentation.aadhar_number}
+                handleChange={handleChange}
+              />
+              <InputField
+                label="Upload Aadhar Card Front *"
+                name="aadhar_card_front"
+                type="file"
+                handleChange={handleFileChange}
+              />
+              <InputField
+                label="Upload Aadhar Card Back *"
+                name="aadhar_card_back"
+                type="file"
+                handleChange={handleFileChange}
+              />
+              <InputField
+                label="PAN Number *"
+                name="pan_number"
+                placeholder="Enter PAN Number"
+                value={documentation.pan_number}
+                handleChange={handleChange}
+              />
+              <InputField
+                label="Upload PAN Card *"
+                name="pan_card"
+                type="file"
+                handleChange={handleFileChange}
+              />
+              <InputField
+                label="Upload Signature *"
+                name="signature"
+                type="file"
+                handleChange={handleFileChange}
+              />
+
+              <div className="col-span-1 sm:col-span-2">
+                <label className="block font-medium text-gray-700 mb-2">
+                  Professional Expertise *
+                </label>
+                <div className="flex flex-wrap gap-4">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name="careerCounsellor"
+                      checked={documentation.expertise.careerCounsellor}
+                      onChange={handleCheckboxChange}
+                    />
+                    <span>Career Counsellor</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name="psychologist"
+                      checked={documentation.expertise.psychologist}
+                      onChange={handleCheckboxChange}
+                    />
+                    <span>Psychologist</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name="groupCounsellor"
+                      checked={documentation.expertise.groupCounsellor}
+                      onChange={handleCheckboxChange}
+                    />
+                    <span>Group Counsellor</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="col-span-1 sm:col-span-2 flex justify-center mt-6">
+                <button
+                  type="submit"
+                  className="bg-[#337357] text-white py-2 px-6 rounded hover:bg-[#285b45] transition duration-200"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          )}
         </div>
-
-        {/* Step 1: Professional Details */}
-        {currentStep === 1 && (
-          <form
-            onSubmit={handleProfessionalSubmit}
-            className="grid grid-cols-2 gap-4 p-10"
-          >
-            <InputField
-              label="License Number *"
-              name="license_number"
-              placeholder="Enter License Number"
-              value={educationDetails.license_number}
-              handleChange={(e) =>
-                setEducationDetails((prev) => ({
-                  ...prev,
-                  license_number: e.target.value,
-                }))
-              }
-            />
-            <InputField
-              label="Qualification *"
-              name="qualification"
-              placeholder="Enter Qualification"
-              value={educationDetails.qualification}
-              handleChange={(e) =>
-                setEducationDetails((prev) => ({
-                  ...prev,
-                  qualification: e.target.value,
-                }))
-              }
-            />
-            <InputField
-              label="specification *"
-              name="specification"
-              placeholder="Enter specification"
-              value={educationDetails.specification}
-              handleChange={(e) =>
-                setEducationDetails((prev) => ({
-                  ...prev,
-                  specification: e.target.value,
-                }))
-              }
-            />
-            <InputField
-              label="Experience *"
-              name="experience"
-              placeholder="Enter Experience"
-              value={educationDetails.experience}
-              handleChange={(e) =>
-                setEducationDetails((prev) => ({
-                  ...prev,
-                  experience: e.target.value,
-                }))
-              }
-            />
-            <div className="col-span-2 flex justify-center mt-6">
-              <button
-                type="submit"
-                className="bg-[#337357] text-white py-2 px-6 rounded hover:bg-[#285b45] transition duration-200"
-              >
-                Next
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* Step 2: Documentation Details */}
-        {currentStep === 2 && (
-          <form
-            onSubmit={handleDocumentationSubmit}
-            className="grid grid-cols-2 gap-4 p-10"
-          >
-            <InputField
-              label="Upload Profile Picture *"
-              name="profile_pic"
-              type="file"
-              handleChange={handleFileChange}
-            />
-            <InputField
-              label="Upload Degree Certificate *"
-              name="degree_certificate"
-              type="file"
-              handleChange={handleFileChange}
-            />
-            <InputField
-              label="Upload Resume *"
-              name="resume"
-              type="file"
-              handleChange={handleFileChange}
-            />
-            <InputField
-              label="Aadhar Number *"
-              name="aadhar_number"
-              placeholder="Enter Aadhar Number"
-              value={documentation.aadhar_number}
-              handleChange={handleChange}
-            />
-            <InputField
-              label="Upload Aadhar Card Front *"
-              name="aadhar_card_front"
-              type="file"
-              handleChange={handleFileChange}
-            />
-            <InputField
-              label="Upload Aadhar Card Back *"
-              name="aadhar_card_back"
-              type="file"
-              handleChange={handleFileChange}
-            />
-            <InputField
-              label="PAN Number *"
-              name="pan_number"
-              placeholder="Enter PAN Number"
-              value={documentation.pan_number}
-              handleChange={handleChange}
-            />
-            <InputField
-              label="Upload PAN Card *"
-              name="pan_card"
-              type="file"
-              handleChange={handleFileChange}
-            />
-            <InputField
-              label="Upload Signature *"
-              name="signature"
-              type="file"
-              handleChange={handleFileChange}
-            />
-
-            <div className="col-span-2">
-              <label className="block font-medium text-gray-700 mb-2">
-                Professional Expertise *
-              </label>
-              <div className="flex flex-wrap gap-4 ">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="careerCounsellor"
-                    checked={documentation.expertise.careerCounsellor}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Career Counsellor</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="psychologist"
-                    checked={documentation.expertise.psychologist}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Psychologist</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="groupCounsellor"
-                    checked={documentation.expertise.groupCounsellor}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Group Counsellor</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="col-span-2 flex justify-center mt-6">
-              <button
-                type="submit"
-                className="bg-[#337357] text-white py-2 px-6 rounded hover:bg-[#285b45] transition duration-200"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        )}
       </div>
-    </div>
+    </>
   );
 };
 

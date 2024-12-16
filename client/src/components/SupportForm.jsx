@@ -79,6 +79,7 @@ const SupportForm = () => {
   };
 
   return (
+    <>
     <div className="formbold-main-wrapper">
       <div className="formbold-form-wrapper">
         <h2 className="form-title">Help & Support</h2>
@@ -185,6 +186,7 @@ const SupportForm = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 
