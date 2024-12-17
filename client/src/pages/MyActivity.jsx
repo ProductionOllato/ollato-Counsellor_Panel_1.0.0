@@ -323,12 +323,13 @@ function MyActivity() {
 
   return (
     <>
+    <div className="max-w-6xl mx-auto bg-white shadow-lg p-1 rounded-lg mx-1">
   <h1 className="text-xl lg:text-2xl font-bold mb-4 text-center">My Activity</h1>
     <div className="p-4 bg-gray-100 min-h-screen">
   {/* Top Action Button */}
   <div className="flex justify-end mb-4">
     <button
-      onClick={() => setShowHistory((prev) => !prev)}
+      onClick={() => setShowHistory((prev) => !prev)} 
       className="px-4 py-2 bg-[#7047A3] text-white text-xs sm:text-sm rounded-lg shadow hover:bg-[#5B3A90]"
     >
       {showHistory ? "Back to Activity" : "View History"}
@@ -431,7 +432,7 @@ function MyActivity() {
     </div>
   )}
 </div>
-
+</div>
     </>
   );
 }

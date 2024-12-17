@@ -235,7 +235,7 @@ function AvailabilityManagements() {
 
   return (
     <>
-  <div className="p-6 pt-1">
+  <div className="max-w-4xl mx-auto bg-white shadow-lg p-8 rounded-lg mx-4">
   
   <div className="flex justify-center items-center mb-6 px-4 sm:px-6">
     <h1 className="text-xl sm:text-2xl font-semibold text-gray-700 text-center">

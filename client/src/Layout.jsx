@@ -44,7 +44,7 @@ function Layout({ children }) {
           className="flex-1 bg-gray-100 p-1 pt-10 scrollbar-custom transition-all duration-300"
           style={{
             marginLeft: sidebarOpen ? "16rem" : "5rem", // Sidebar adjustment
-            marginTop: "5rem", // Space below fixed header
+            marginTop: "5rem", // Space below fixed header  
           }}
         >
           {children}
