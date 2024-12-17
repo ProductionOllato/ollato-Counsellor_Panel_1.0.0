@@ -1,23 +1,9 @@
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
 // import { useNotification } from "../context/NotificationContext";
-
-// const myActivityData = [
-//   {
-//     session_id: "session1",
-//     student_id: "STU001",
-//     counsellor_id: "CS001",
-//     client_name: "John Doe",
-//     book_date: "2023-08-01",
-//     timeSlot: "10:00 AM to 11:00 AM",
-//     mode: "Online",
-//     duration: "01:00:00",
-//     feedbackGiven: false,
-//   },
-// ];
-
+// import { useAuth } from "../context/UserContext";
 // function MyActivity() {
-//   const [activityLogs, setActivityLogs] = useState(myActivityData);
+//   const [activityLogs, setActivityLogs] = useState([]);
 //   const [selectedSession, setSelectedSession] = useState(null);
 //   const [showHistory, setShowHistory] = useState(false);
 //   const { triggerNotification } = useNotification();
@@ -25,13 +11,21 @@
 //   const [feedbackSession, setFeedbackSession] = useState(null);
 //   const [feedbackText, setFeedbackText] = useState("");
 
+//   const { user } = useAuth();
+//   const counsellor_id = user?.user_id;
+//   const APIURL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
+
 //   // Fetch activity logs from the backend on component mount
 //   useEffect(() => {
 //     const fetchActivityLogs = async () => {
+//       console.log("Fetching activity logs...");
+//       console.log("counsellor_id:", counsellor_id);
 //       try {
-//         // const response = await axios.get(`${process.env.VITE_APP_API_ENDPOINT_URL}/api/sessions`);
-//         // setActivityLogs(response.data);
-//         setActivityLogs(myActivityData);
+//         const response = await axios.get(
+//           `${APIURL}/myactivity/get-myactivity/${counsellor_id}`
+//         );
+//         console.log("Activity logs:", response);
+//         setActivityLogs(response.data);
 //       } catch (error) {
 //         triggerNotification("Error fetching activity logs", "error");
 //       }
@@ -42,12 +36,12 @@
 
 //   const handleGiveFeedback = async (sessionId) => {
 //     try {
-//       await axios.post(`/api/sessions/${sessionId}/feedback`, {
+//       await axios.post(`${APIURL}/api/sessions/${sessionId}/feedback`, {
 //         feedback: feedbackText,
 //       });
 //       setActivityLogs((prev) =>
 //         prev.map((session) =>
-//           session.id === sessionId
+//           session.session_id === sessionId
 //             ? { ...session, feedbackGiven: true }
 //             : session
 //         )
@@ -61,7 +55,10 @@
 //   };
 
 //   const handleJoinSession = (session) => {
-//     triggerNotification(`Joining session with ID: ${session.id}`, "success");
+//     triggerNotification(
+//       `Joining session with ID: ${session.session_id}`,
+//       "success"
+//     );
 //     setJoinSession(session);
 //   };
 
@@ -80,11 +77,21 @@
 //     return "Upcoming";
 //   };
 
+//   // const filteredLogs = showHistory
+//   //   ? activityLogs.filter(
+//   //       (session) =>
+//   //         determineStatus(session.appointmentDate, session.feedbackGiven) ===
+//   //         "Completed"
+//   //     )
+//   //   : activityLogs;
+
 //   const filteredLogs = showHistory
 //     ? activityLogs.filter(
 //         (session) =>
-//           determineStatus(session.appointmentDate, session.feedbackGiven) ===
-//           "Completed"
+//           determineStatus(
+//             session.r_date || session.b_date,
+//             session.feedbackGiven
+//           ) === "Completed"
 //       )
 //     : activityLogs;
 
@@ -94,77 +101,71 @@
 //       <div className="flex justify-end mb-4">
 //         <button
 //           onClick={() => setShowHistory((prev) => !prev)}
-//           className="px-4 py-2 bg-[#7047A3] text-white text-sm rounded-lg shadow hover:bg-[#5B3A90]"
+//           className="px-4 py-2 bg-purple-600 text-white text-sm rounded-lg shadow hover:bg-purple-500"
 //         >
 //           {showHistory ? "Back to Activity" : "View History"}
 //         </button>
 //       </div>
-//       <table className="min-w-full bg-white shadow-md rounded-lg">
-//         <thead className="bg-gray-200">
-//           <tr>
-//             <th className="px-4 py-2">Sr No</th>
-//             <th className="px-4 py-2">Session ID</th>
-//             <th className="px-4 py-2">Counselor ID</th>
-//             <th className="px-4 py-2">Appointment Date</th>
-//             <th className="px-4 py-2">Time Slot</th>
-//             <th className="px-4 py-2">Mode</th>
-//             <th className="px-4 py-2">Duration</th>
-//             <th className="px-4 py-2">Status</th>
-//             <th className="px-4 py-2">Action</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {filteredLogs.map((session, index) => (
-//             <tr key={session.id}>
-//               <td className="px-4 py-3">{index + 1}</td>
-//               <td className="px-4 py-3">{session.session_id}</td>
-//               <td className="px-4 py-3">{session.counsellor_id}</td>
-//               <td className="px-4 py-3">
-//                 {new Date(session.appointmentDate).toLocaleString()}
-//               </td>
-//               <td className="px-4 py-3">{session.timeSlot}</td>
-//               <td className="px-4 py-3">{session.mode}</td>
-//               <td className="px-4 py-3">{session.duration}</td>
-//               <td className="px-4 py-3">
-//                 {determineStatus(
-//                   session.appointmentDate,
-//                   session.feedbackGiven
-//                 )}
-//               </td>
-//               <td className="px-4 py-3">
-//                 {determineStatus(
-//                   session.appointmentDate,
-//                   session.feedbackGiven
-//                 ) === "Upcoming" && !session.feedbackGiven ? (
-//                   <button
-//                     onClick={() => handleJoinSession(session)}
-//                     className={`w-full px-4 py-2 bg-[#355F2E] text-white text-sm rounded-lg shadow hover:bg-[#388E3C] ${
-//                       !isJoinSessionEnabled(session.appointmentDate)
-//                         ? "cursor-not-allowed opacity-50"
-//                         : ""
-//                     }`}
-//                     disabled={!isJoinSessionEnabled(session.appointmentDate)}
-//                   >
-//                     Join
-//                   </button>
-//                 ) : (
-//                   <button
-//                     onClick={() => setFeedbackSession(session)}
-//                     className="w-full px-4 py-2 bg-[#AA5486] text-white text-sm rounded-lg shadow hover:bg-[#6d3254] "
-//                   >
-//                     Feedback
-//                   </button>
-//                 )}
-//               </td>
+//       <div className="overflow-x-auto">
+//         <table className="min-w-full bg-white shadow-md rounded-lg">
+//           <thead className="bg-gray-200">
+//             <tr>
+//               <th className="px-4 py-2">#</th>
+//               <th className="px-4 py-2">Session ID</th>
+//               <th className="px-4 py-2">Date</th>
+//               <th className="px-4 py-2">Time Slot</th>
+//               <th className="px-4 py-2">Mode</th>
+//               <th className="px-4 py-2">Duration</th>
+//               <th className="px-4 py-2">Status</th>
+//               <th className="px-4 py-2">Action</th>
 //             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-
+//           </thead>
+//           <tbody>
+//             {filteredLogs.map((session, index) => {
+//               const sessionDate = session.r_date || session.b_date;
+//               const timeSlot = session.b_time_slot || session.r_time;
+//               const mode = session.r_mode || session.b_mode;
+//               const duration = session.r_duration || session.b_duration;
+//               return (
+//                 <tr key={session.session_id}>
+//                   <td className="px-4 py-3">{index + 1}</td>
+//                   <td className="px-4 py-3">{session.session_id}</td>
+//                   <td className="px-4 py-3">{sessionDate}</td>
+//                   <td className="px-4 py-3">{timeSlot}</td>
+//                   <td className="px-4 py-3">{mode}</td>
+//                   <td className="px-4 py-3">{duration}</td>
+//                   <td className="px-4 py-3">
+//                     {determineStatus(sessionDate, session.feedbackGiven)}
+//                   </td>
+//                   <td className="px-4 py-3">
+//                     {" "}
+//                     {determineStatus(sessionDate, session.feedbackGiven) ===
+//                     "Upcoming" ? (
+//                       <button
+//                         onClick={() => setFeedbackSession(session)}
+//                         className="px-4 py-2 bg-pink-700 text-white text-sm rounded-lg shadow hover:bg-pink-600"
+//                       >
+//                         Feedback
+//                       </button>
+//                     ) : (
+//                       <button
+//                         disabled
+//                         className="px-4 py-2 bg-gray-400 text-white text-sm rounded-lg cursor-not-allowed"
+//                       >
+//                         Completed
+//                       </button>
+//                     )}
+//                   </td>
+//                 </tr>
+//               );
+//             })}
+//           </tbody>
+//         </table>
+//       </div>
 //       {/* Feedback Modal */}
 //       {feedbackSession && (
 //         <div
-//           className="fixed top-0 left-0 w-full h-full bg-gray-700 bg-opacity-50 flex justify-center items-center"
+//           className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50"
 //           onClick={() => setFeedbackSession(null)}
 //         >
 //           <div
@@ -177,7 +178,7 @@
 //             <textarea
 //               value={feedbackText}
 //               onChange={(e) => setFeedbackText(e.target.value)}
-//               className="px-4 w-full text-sm text-gray-900 border border-gray-200 rounded-lg mb-4 focus:ring-0 focus:outline-none"
+//               className="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
 //               rows="4"
 //               placeholder="Please provide your feedback."
 //             ></textarea>
@@ -189,8 +190,8 @@
 //                 Cancel
 //               </button>
 //               <button
-//                 onClick={() => handleGiveFeedback(feedbackSession.id)}
-//                 className="px-4 py-2 bg-primary-700 text-white bg-[#1f5d7a] text-sm rounded-lg"
+//                 onClick={() => handleGiveFeedback(feedbackSession.session_id)}
+//                 className="px-4 py-2 bg-blue-700 text-white text-sm rounded-lg hover:bg-blue-600"
 //               >
 //                 Submit Feedback
 //               </button>
@@ -207,74 +208,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNotification } from "../context/NotificationContext";
-
-const myActivityData = [
-  {
-    session_id: "session1",
-    student_id: "STU001",
-    counsellor_id: "CS001",
-    client_name: "John Doe",
-    appointmentDate: "2023-08-01T10:00:00",
-    timeSlot: "10:00 AM to 11:00 AM",
-    mode: "Online",
-    duration: "01:00:00",
-    feedbackGiven: false,
-  },
-  {
-    session_id: "session2",
-    student_id: "STU002",
-    counsellor_id: "CS002",
-    client_name: "Jane Smith",
-    appointmentDate: "2023-08-02T14:30:00",
-    timeSlot: "02:00 PM to 03:00 PM",
-    mode: "Offline",
-    duration: "01:00:00",
-    feedbackGiven: true,
-  },
-  {
-    session_id: "session3",
-    student_id: "STU003",
-    counsellor_id: "CS003",
-    client_name: "Alice Johnson",
-    appointmentDate: "2023-08-03T09:00:00",
-    timeSlot: "09:00 AM to 10:00 AM",
-    mode: "Online",
-    duration: "01:00:00",
-    feedbackGiven: false,
-  },
-];
+import { useAuth } from "../context/UserContext";
 
 function MyActivity() {
-  const [activityLogs, setActivityLogs] = useState(myActivityData);
-  const [selectedSession, setSelectedSession] = useState(null);
+  const [activityLogs, setActivityLogs] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
-  const { triggerNotification } = useNotification();
-  const [joinSession, setJoinSession] = useState(null);
   const [feedbackSession, setFeedbackSession] = useState(null);
   const [feedbackText, setFeedbackText] = useState("");
+  const { triggerNotification } = useNotification();
+  const { user } = useAuth();
+  const counsellor_id = user?.user_id;
+  const APIURL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
 
-  // Fetch activity logs from the backend on component mount
   useEffect(() => {
     const fetchActivityLogs = async () => {
       try {
-        // Uncomment and modify when backend API is available
-        // const response = await axios.get(`${process.env.VITE_APP_API_ENDPOINT_URL}/api/sessions`);
-        // setActivityLogs(response.data);
-        setActivityLogs(myActivityData);
+        const response = await axios.get(
+          `${APIURL}/myactivity/get-myactivity/${counsellor_id}`
+        );
+        setActivityLogs(response.data);
       } catch (error) {
         triggerNotification("Error fetching activity logs", "error");
       }
     };
 
     fetchActivityLogs();
-  }, []);
+  }, [counsellor_id, APIURL, triggerNotification]);
 
   const handleGiveFeedback = async (sessionId) => {
     try {
-      // Uncomment and modify when backend API is available
-      // await axios.post(`${process.env.VITE_APP_API_ENDPOINT_URL}/api/sessions/${sessionId}/feedback`, {
-      //   feedback: feedbackText,
-      // });
+      await axios.post(`${APIURL}/sessions/${sessionId}/feedback`, {
+        feedback: feedbackText,
+      });
       setActivityLogs((prev) =>
         prev.map((session) =>
           session.session_id === sessionId
@@ -290,114 +255,113 @@ function MyActivity() {
     }
   };
 
-  const handleJoinSession = (session) => {
-    triggerNotification(
-      `Joining session with ID: ${session.session_id}`,
-      "success"
-    );
-    setJoinSession(session);
-  };
-
-  const isJoinSessionEnabled = (appointmentDate) => {
+  const determineStatus = (sessionDate, feedbackGiven, isCanceled) => {
     const currentTime = new Date();
-    const sessionTime = new Date(appointmentDate);
-    const diffInMinutes = (sessionTime - currentTime) / (1000 * 60);
-    return diffInMinutes <= 10 && diffInMinutes >= -10;
-  };
+    const sessionTime = new Date(sessionDate);
 
-  const determineStatus = (appointmentDate, feedbackGiven) => {
-    const currentTime = new Date();
-    const sessionTime = new Date(appointmentDate);
+    if (isCanceled) return "Canceled";
     if (feedbackGiven) return "Feedback Given";
     if (sessionTime < currentTime) return "Completed";
     return "Upcoming";
   };
 
   const filteredLogs = showHistory
-    ? activityLogs.filter(
-        (session) =>
-          determineStatus(session.appointmentDate, session.feedbackGiven) ===
-          "Completed"
+    ? activityLogs.filter((session) =>
+        ["Completed", "Canceled"].includes(
+          determineStatus(
+            session.r_date || session.b_date,
+            session.feedbackGiven,
+            session.cancelled_r_counsellor
+          )
+        )
       )
     : activityLogs;
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6 text-center">My Activity</h1>
+
+      {/* Toggle between history and upcoming */}
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setShowHistory((prev) => !prev)}
-          className="px-4 py-2 bg-[#7047A3] text-white text-sm rounded-lg shadow hover:bg-[#5B3A90]"
+          className="px-4 py-2 bg-purple-600 text-white text-sm rounded-lg shadow hover:bg-purple-500"
         >
           {showHistory ? "Back to Activity" : "View History"}
         </button>
       </div>
-      <table className="min-w-full bg-white shadow-md rounded-lg">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="px-4 py-2">Sr No</th>
-            <th className="px-4 py-2">Session ID</th>
-            <th className="px-4 py-2">Counselor ID</th>
-            <th className="px-4 py-2">Appointment Date</th>
-            <th className="px-4 py-2">Time Slot</th>
-            <th className="px-4 py-2">Mode</th>
-            <th className="px-4 py-2">Duration</th>
-            <th className="px-4 py-2">Status</th>
-            <th className="px-4 py-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredLogs.map((session, index) => (
-            <tr key={session.session_id}>
-              <td className="px-4 py-3">{index + 1}</td>
-              <td className="px-4 py-3">{session.session_id}</td>
-              <td className="px-4 py-3">{session.counsellor_id}</td>
-              <td className="px-4 py-3">
-                {new Date(session.appointmentDate).toLocaleString()}
-              </td>
-              <td className="px-4 py-3">{session.timeSlot}</td>
-              <td className="px-4 py-3">{session.mode}</td>
-              <td className="px-4 py-3">{session.duration}</td>
-              <td className="px-4 py-3">
-                {determineStatus(
-                  session.appointmentDate,
-                  session.feedbackGiven
-                )}
-              </td>
-              <td className="px-4 py-3">
-                {determineStatus(
-                  session.appointmentDate,
-                  session.feedbackGiven
-                ) === "Upcoming" && !session.feedbackGiven ? (
-                  <button
-                    onClick={() => handleJoinSession(session)}
-                    className={`w-full px-4 py-2 bg-[#355F2E] text-white text-sm rounded-lg shadow hover:bg-[#388E3C] ${
-                      !isJoinSessionEnabled(session.appointmentDate)
-                        ? "cursor-not-allowed opacity-50"
-                        : ""
-                    }`}
-                    disabled={!isJoinSessionEnabled(session.appointmentDate)}
-                  >
-                    Join
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setFeedbackSession(session)}
-                    className="w-full px-4 py-2 bg-[#AA5486] text-white text-sm rounded-lg shadow hover:bg-[#6d3254] "
-                  >
-                    Feedback
-                  </button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+
+      <div className="overflow-x-auto">
+        {filteredLogs.length > 0 ? (
+          <table className="min-w-full bg-white shadow-md rounded-lg">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="px-4 py-2">#</th>
+                <th className="px-4 py-2">Session ID</th>
+                <th className="px-4 py-2">Date</th>
+                <th className="px-4 py-2">Time Slot</th>
+                <th className="px-4 py-2">Mode</th>
+                <th className="px-4 py-2">Duration</th>
+                <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredLogs.map((session, index) => {
+                const sessionDate = session.r_date || session.b_date;
+                const timeSlot = session.b_time_slot || session.r_time;
+                const mode = session.r_mode || session.b_mode;
+                const duration = session.r_duration || session.b_duration;
+
+                const status = determineStatus(
+                  sessionDate,
+                  session.feedbackGiven,
+                  session.cancelled_r_counsellor
+                );
+
+                return (
+                  <tr key={session.session_id}>
+                    <td className="px-4 py-3">{index + 1}</td>
+                    <td className="px-4 py-3">{session.session_id}</td>
+                    <td className="px-4 py-3">{sessionDate}</td>
+                    <td className="px-4 py-3">{timeSlot}</td>
+                    <td className="px-4 py-3">{mode}</td>
+                    <td className="px-4 py-3">{duration} min</td>
+                    <td className="px-4 py-3">{status}</td>
+                    <td className="px-4 py-3">
+                      {status === "Completed" && !session.feedbackGiven ? (
+                        <button
+                          onClick={() => setFeedbackSession(session)}
+                          className="px-4 py-2 bg-pink-700 text-white text-sm rounded-lg shadow hover:bg-pink-600"
+                        >
+                          Give Feedback
+                        </button>
+                      ) : status === "Feedback Given" ? (
+                        <span className="text-green-600 font-semibold">
+                          Feedback Already Given
+                        </span>
+                      ) : (
+                        <span>{status}</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <div className="text-center py-6">
+            {showHistory
+              ? "No completed or canceled sessions found."
+              : "No upcoming sessions found."}
+          </div>
+        )}
+      </div>
 
       {/* Feedback Modal */}
       {feedbackSession && (
         <div
-          className="fixed top-0 left-0 w-full h-full bg-gray-700 bg-opacity-50 flex justify-center items-center"
+          className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50"
           onClick={() => setFeedbackSession(null)}
         >
           <div
@@ -410,7 +374,7 @@ function MyActivity() {
             <textarea
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
-              className="px-4 w-full text-sm text-gray-900 border border-gray-200 rounded-lg mb-4 focus:ring-0 focus:outline-none"
+              className="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
               rows="4"
               placeholder="Please provide your feedback."
             ></textarea>
@@ -423,7 +387,7 @@ function MyActivity() {
               </button>
               <button
                 onClick={() => handleGiveFeedback(feedbackSession.session_id)}
-                className="px-4 py-2 bg-primary-700 text-white bg-[#1f5d7a] text-sm rounded-lg"
+                className="px-4 py-2 bg-blue-700 text-white text-sm rounded-lg hover:bg-blue-600"
               >
                 Submit Feedback
               </button>

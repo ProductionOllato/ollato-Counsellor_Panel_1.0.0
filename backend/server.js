@@ -11,6 +11,7 @@ const supportFromRoutes = require("./routes/supportFormRoutes");
 const counsellorAvailabilityRoutes = require("./routes/counsellorAvailabilityRoutes");
 const updateProfileRoutes = require("./routes/updateProfileRoutes");
 const getCounsellorsRoutes = require("./routes/getCounsellorsRoutes.js");
+const myActivityRoutes = require("./routes/myactivityRoutes.js");
 const path = require("path");
 
 const app = express();
@@ -39,6 +40,7 @@ app.use("/help", supportFromRoutes);
 app.use("/counsellor", counsellorAvailabilityRoutes);
 app.use("/update", updateProfileRoutes);
 app.use("/get", getCounsellorsRoutes);
+app.use("/myactivity", myActivityRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

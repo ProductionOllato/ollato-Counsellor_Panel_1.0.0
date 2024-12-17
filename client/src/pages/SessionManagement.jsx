@@ -12,226 +12,6 @@ const statuses = [
   "Rescheduled",
 ];
 
-// function SessionManagement() {
-//   const [activeStatus, setActiveStatus] = useState("");
-//   const [sessions, setSessions] = useState([]);
-//   const [editSession, setEditSession] = useState(null);
-//   const [newStatus, setNewStatus] = useState("");
-//   const [rescheduleSession, setRescheduleSession] = useState(null);
-//   const [newDate, setNewDate] = useState("");
-//   const [newTime, setNewTime] = useState("");
-//   const { triggerNotification } = useNotification();
-//   const { user } = useAuth();
-//   const counsellor_id = user?.user_id;
-//   const APIURL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
-
-//   // Fetch sessions from backend API
-//   useEffect(() => {
-//     fetchSessions();
-//   }, [counsellor_id]);
-
-//   const fetchSessions = async () => {
-//     try {
-//       const response = await axios.get(
-//         `${APIURL}/session/get-sessions?counsellor_id=${counsellor_id}`
-//       );
-//       console.log("Response get sessions:", response.data);
-//       // Sort sessions by date to show the most recent ones at the top
-//       const sortedSessions = response.data.sort(
-//         (a, b) => new Date(b.b_date) - new Date(a.b_date)
-//       );
-//       setSessions(sortedSessions);
-//     } catch (err) {
-//       triggerNotification("Failed to fetch sessions.", "error");
-//     }
-//   };
-
-//   // Handle status filtering
-//   const filteredSessions = useMemo(() => {
-//     return activeStatus === ""
-//       ? sessions
-//       : sessions.filter(
-//           (session) => session.status_for_counsellor === activeStatus
-//         );
-//   }, [activeStatus, sessions]);
-
-//   // Handle session actions (accept, decline, cancel, reschedule)
-//   const handleAcceptRequest = async (sessionId) => {
-//     try {
-//       await axios.post(`${APIURL}/session/accept-request`, { sessionId });
-//       setSessions((prevSessions) =>
-//         prevSessions.map((session) =>
-//           session.session_id === sessionId
-//             ? { ...session, status_for_counsellor: "Booked" }
-//             : session
-//         )
-//       );
-//       triggerNotification("Request accepted successfully.", "success");
-//     } catch (err) {
-//       triggerNotification("Failed to accept the request.", "error");
-//     }
-//   };
-
-//   const handleDeclineRequestByStudent = async (sessionId) => {
-//     try {
-//       await axios.post(`${APIURL}/session/decline-request`, { sessionId });
-//       setSessions((prevSessions) =>
-//         prevSessions.map((session) =>
-//           session.session_id === sessionId
-//             ? { ...session, status_for_counsellor: "Cancelled" }
-//             : session
-//         )
-//       );
-//       triggerNotification("Request declined successfully.", "success");
-//     } catch (err) {
-//       triggerNotification("Failed to decline request.", "error");
-//     }
-//   };
-
-//   const handleCancelRequestByCounsellor = async (sessionId) => {
-//     try {
-//       await axios.post(`${APIURL}/session/cancel-by-counsellor`, { sessionId });
-//       setSessions((prevSessions) =>
-//         prevSessions.map((session) =>
-//           session.session_id === sessionId
-//             ? { ...session, status_for_counsellor: "Cancelled" }
-//             : session
-//         )
-//       );
-//       triggerNotification("Session cancelled successfully.", "success");
-//     } catch (err) {
-//       triggerNotification("Failed to cancel session.", "error");
-//     }
-//   };
-
-//   const handleReschedule = (session) => {
-//     setRescheduleSession(session);
-//   };
-
-//   const handleRescheduleSave = async () => {
-//     if (!newDate || !newTime) {
-//       triggerNotification("Please select both a date and a time.", "error");
-//       return;
-//     }
-//     try {
-//       // Make API request to reschedule session
-//       await axios.post(`${APIURL}/session/rescheduleBooking`, {
-//         sessionId: rescheduleSession.session_id,
-//         newDate,
-//         newTime,
-//       });
-//       setSessions((prevSessions) =>
-//         prevSessions.map((session) =>
-//           session.session_id === rescheduleSession.session_id
-//             ? { ...session, b_date: new Date(`${newDate}T${newTime}`) }
-//             : session
-//         )
-//       );
-//       setRescheduleSession(null);
-//       triggerNotification("Session rescheduled successfully.", "success");
-//     } catch (err) {
-//       triggerNotification("Failed to reschedule session.", "error");
-//     }
-//   };
-
-//   const handleCancelReschedule = () => {
-//     setRescheduleSession(null);
-//     setNewDate("");
-//     setNewTime("");
-//   };
-
-//   const handleEdit = (session) => {
-//     if (
-//       ["Completed", "Cancelled", "Ongoing"].includes(
-//         session.status_for_counsellor
-//       )
-//     ) {
-//       triggerNotification("Editing not allowed for this session.", "error");
-//       return;
-//     }
-//     setEditSession(session);
-//     setNewStatus(session.status_for_counsellor);
-//   };
-
-//   const handleUpdateSession = async () => {
-//     if (!newStatus) {
-//       triggerNotification("Please select a valid status.", "error");
-//       return;
-//     }
-//     try {
-//       await axios.put(`${APIURL}/session/update-status`, {
-//         sessionId: editSession.session_id,
-//         newStatus,
-//       });
-//       setSessions((prevSessions) =>
-//         prevSessions.map((session) =>
-//           session.session_id === editSession.session_id
-//             ? { ...session, status_for_counsellor: newStatus }
-//             : session
-//         )
-//       );
-//       setEditSession(null);
-//       triggerNotification("Session updated successfully.", "success");
-//     } catch (err) {
-//       triggerNotification("Failed to update session.", "error");
-//     }
-//   };
-
-//   return (
-//     <div className="p-6 bg-gray-100 min-h-screen">
-//       <h1 className="text-2xl font-bold mb-8 text-center">
-//         Session Management
-//       </h1>
-
-//       {/* Status Filter */}
-//       <div className="flex justify-around mb-6">
-//         <button
-//           onClick={() => setActiveStatus("")}
-//           className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
-//             activeStatus === ""
-//               ? "bg-[#7047A3] text-white"
-//               : "bg-gray-200 text-gray-800"
-//           }`}
-//         >
-//           All
-//         </button>
-//         {statuses.map((status) => (
-//           <button
-//             key={status}
-//             onClick={() => setActiveStatus(status)}
-//             className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
-//               activeStatus === status
-//                 ? "bg-[#7047A3] text-white"
-//                 : "bg-gray-200 text-gray-800"
-//             }`}
-//           >
-//             {status}
-//           </button>
-//         ))}
-//       </div>
-
-//       {/* Sessions Table */}
-//       <SessionTable
-//         sessions={filteredSessions}
-//         handleAcceptRequest={handleAcceptRequest}
-//         handleDeclineRequestByStudent={handleDeclineRequestByStudent}
-//         handleCancelRequestByCounsellor={handleCancelRequestByCounsellor}
-//         handleReschedule={handleReschedule}
-//         handleRescheduleSave={handleRescheduleSave}
-//         rescheduleSession={rescheduleSession}
-//         newDate={newDate}
-//         setNewDate={setNewDate}
-//         newTime={newTime}
-//         setNewTime={setNewTime}
-//         handleCancelReschedule={handleCancelReschedule}
-//         handleEdit={handleEdit}
-//         handleUpdateSession={handleUpdateSession}
-//         newStatus={newStatus}
-//         setNewStatus={setNewStatus}
-//       />
-//     </div>
-//   );
-// }
 function SessionManagement() {
   const [activeStatus, setActiveStatus] = useState("");
   const [sessions, setSessions] = useState([]);
@@ -259,7 +39,7 @@ function SessionManagement() {
       const response = await axios.get(
         `${APIURL}/session/get-sessions?counsellor_id=${counsellor_id}`
       );
-      console.log("Response get sessions:", response.data);
+      // console.log("Response get sessions:", response.data);
       // Sort sessions by date to show the most recent ones at the top
       const sortedSessions = response.data.sort(
         (a, b) => new Date(b.b_date) - new Date(a.b_date)
@@ -281,8 +61,15 @@ function SessionManagement() {
 
   // Handle session actions (accept, decline, cancel, reschedule)
   const handleAcceptRequest = async (sessionId) => {
+    console.log("sessionId:", sessionId);
+    const payload = {
+      session_id: sessionId,
+    };
     try {
-      await axios.post(`${APIURL}/accept-request-counsellor`, { sessionId });
+      await axios.post(
+        `${APIURL}/session/accept-booking-request-counsellor`,
+        payload
+      );
       setSessions((prevSessions) =>
         prevSessions.map((session) =>
           session.session_id === sessionId
@@ -298,7 +85,7 @@ function SessionManagement() {
 
   const handleDeclineRequestByStudent = async (sessionId) => {
     try {
-      await axios.post(`${APIURL}/cancel-by-student`, { sessionId });
+      await axios.post(`${APIURL}/session/decline-request`, { sessionId });
       setSessions((prevSessions) =>
         prevSessions.map((session) =>
           session.session_id === sessionId
@@ -312,38 +99,24 @@ function SessionManagement() {
     }
   };
 
-  // const handleCancelRequestByCounsellor = async (sessionId) => {
-  //   try {
-  //     await axios.post(`${APIURL}/cancelBookingByCounsellor`, {
-  //       counsellor_id,
-  //       sessionId,
-  //       reason_of_cancellation,
-  //     });
-  //     setSessions((prevSessions) =>
-  //       prevSessions.map((session) =>
-  //         session.session_id === sessionId
-  //           ? { ...session, status_for_counsellor: "Cancelled" }
-  //           : session
-  //       )
-  //     );
-  //     triggerNotification("Session cancelled successfully.", "success");
-  //   } catch (err) {
-  //     triggerNotification("Failed to cancel session.", "error");
-  //   }
-  // };
-
   const handleCancelRequestByCounsellor = async (
     sessionId,
     reason_of_cancellation
   ) => {
+    // console.log("sessionId:", sessionId);
+    // console.log("reason_of_cancellation:", reason_of_cancellation);
+
+    const payload = {
+      session_id: sessionId,
+      counsellor_id: counsellor_id,
+      reason_of_cancellation: reason_of_cancellation,
+    };
+    // console.log("Payload:", payload);
+
     try {
-      await axios.post(`${APIURL}/session/cancel-by-counsellor`, {
-        counsellor_id,
-        sessionId,
-        reason_of_cancellation,
-      });
+      await axios.post(`${APIURL}/session/cancel-by-counsellor`, payload);
       console.log("Response cancel by counsellor:", response.data);
-      
+
       setSessions((prevSessions) =>
         prevSessions.map((session) =>
           session.session_id === sessionId
@@ -363,6 +136,8 @@ function SessionManagement() {
   };
 
   const handleConfirmCancellation = () => {
+    console.log("cancelSession:", cancelSession);
+
     if (!cancelReason.trim()) {
       triggerNotification("Please provide a reason for cancellation.", "error");
       return;
@@ -607,23 +382,15 @@ const SessionTable = ({
                         />
                         <ActionButton
                           label="Decline"
-                          onClick={() =>
-                            handleDeclineRequestByStudent(session.session_id)
-                          }
+                          // onClick={() =>
+                          //   handleDeclineRequestByStudent(session.session_id)
+                          // }
+                          onClick={() => openCancelModal(session)}
                           colorClass="bg-red-500 hover:bg-red-600"
                         />
                       </>
                     )}
-                    {/* {session.status_for_counsellor === "Booked" && (
-                      <ActionButton
-                        label="Cancel"
-                        // onClick={() =>
-                        //   handleCancelRequestByCounsellor(session.session_id)
-                        // }
-                        onClick={() => cancelSession()}
-                        colorClass="bg-red-500 hover:bg-red-600"
-                      />
-                    )} */}
+
                     {session.status_for_counsellor === "Booked" && (
                       <ActionButton
                         label="Cancel"
@@ -739,14 +506,21 @@ const SessionTable = ({
               Are you sure you want to cancel this session? Please provide a
               reason below:
             </p>
-
-            <textarea
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 mb-4"
-              rows="4"
-              placeholder="Enter reason for cancellation..."
-              value={cancelReason}
-              onChange={(e) => setCancelReason(e.target.value)}
-            ></textarea>
+            <div>
+              <label htmlFor="cancelReason">
+                Reason:{" "}
+                <span className="text-[#f86464] text-sm">
+                  Reason must be at least 10 characters long
+                </span>
+              </label>
+              <textarea
+                className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 mb-4"
+                rows="4"
+                placeholder="Enter reason for cancellation..."
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+              ></textarea>
+            </div>
 
             <div className="flex justify-end gap-4">
               <button

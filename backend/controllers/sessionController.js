@@ -107,65 +107,6 @@ const bookSession = async (req, res) => {
   }
 };
 
-const cancelBookingByCounsellor = async (req, res) => {
-  // Validate request body
-  await body("session_id")
-    .isInt()
-    .withMessage("Session ID must be a valid integer")
-    .run(req);
-  await body("counsellor_id")
-    .isInt()
-    .withMessage("Counsellor ID must be a valid integer")
-    .run(req);
-  await body("reason_of_cancellation")
-    .isLength({ min: 10 })
-    .withMessage("Reason must be at least 10 characters long")
-    .run(req);
-
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { session_id, counsellor_id, reason_of_cancellation } = req.body;
-
-  try {
-    // Check if the booking exists and belongs to the counsellor
-    const [booking] = await db.query(
-      `SELECT * FROM counsellor_booking WHERE session_id = ? AND counsellor_id = ? AND Booked = true`,
-      [session_id, counsellor_id]
-    );
-
-    if (booking.length === 0) {
-      return res.status(404).json({
-        message: "Booking not found or does not belong to this counsellor",
-      });
-    }
-
-    // Update the booking fields to cancel the session
-    await db.query(
-      `UPDATE counsellor_booking
-             SET cancelled_r_counsellor = true,
-                 reason_of_cancellation = ?,
-                 status_for_counsellor = 'Cancelled'
-             WHERE session_id = ?`,
-      [reason_of_cancellation, session_id]
-    );
-
-    res.status(200).json({
-      message: "Booking cancelled successfully",
-      cancellation_details: {
-        session_id,
-        counsellor_id,
-        reason_of_cancellation,
-      },
-    });
-  } catch (error) {
-    console.error("Error cancelling booking:", error.message);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
 // Cancel Booking by Student
 const requestCancellationByStudent = async (req, res) => {
   // Validate request body
@@ -221,6 +162,67 @@ const requestCancellationByStudent = async (req, res) => {
     });
   } catch (error) {
     console.error("Error requesting cancellation:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const cancelBookingByCounsellor = async (req, res) => {
+  console.log("Received data cancel booking by counsellor: ", req.body);
+
+  // Validate request body
+  await body("session_id")
+    .isInt()
+    .withMessage("Session ID must be a valid integer")
+    .run(req);
+  await body("counsellor_id")
+    .isInt()
+    .withMessage("Counsellor ID must be a valid integer")
+    .run(req);
+  await body("reason_of_cancellation")
+    .isLength({ min: 10 })
+    .withMessage("Reason must be at least 10 characters long")
+    .run(req);
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { session_id, counsellor_id, reason_of_cancellation } = req.body;
+
+  try {
+    // Check if the booking exists and belongs to the counsellor
+    const [booking] = await db.query(
+      `SELECT * FROM counsellor_booking WHERE session_id = ? AND counsellor_id = ? AND Booked = true`,
+      [session_id, counsellor_id]
+    );
+
+    if (booking.length === 0) {
+      return res.status(404).json({
+        message: "Booking not found or does not belong to this counsellor",
+      });
+    }
+
+    // Update the booking fields to cancel the session
+    await db.query(
+      `UPDATE counsellor_booking
+             SET cancelled_r_counsellor = true,
+                 reason_of_cancellation = ?,
+                 status_for_counsellor = 'Cancelled'
+             WHERE session_id = ?`,
+      [reason_of_cancellation, session_id]
+    );
+
+    res.status(200).json({
+      message: "Booking cancelled successfully",
+      cancellation_details: {
+        session_id,
+        counsellor_id,
+        reason_of_cancellation,
+      },
+    });
+  } catch (error) {
+    console.error("Error cancelling booking:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -386,6 +388,74 @@ const getCounsellorAllSessions = async (req, res) => {
   }
 };
 
+const acceptStudentBookingRequestByCounsellor = async (req, res) => {
+  console.log(
+    "Received data accept student booking request by counsellor: ",
+    req.body
+  );
+
+  // Validate the request body
+  await body("session_id")
+    .isInt()
+    .withMessage("Session ID must be a valid integer")
+    .run(req);
+
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { session_id } = req.body;
+
+  try {
+    // Check if the booking exists
+    const [booking] = await db.query(
+      `SELECT * FROM counsellor_booking WHERE session_id = ?`,
+      [session_id]
+    );
+
+    if (!booking || booking.length === 0) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    // Check if the student's status is 'Requested'
+    if (booking[0].status_for_student === "Requested") {
+      return res.status(400).json({
+        message:
+          "Booking cannot be accepted as the student has requested cancellation",
+      });
+    }
+
+    // Update the booking with the new status
+    const result = await db.query(
+      `UPDATE counsellor_booking
+      SET status_for_counsellor = 'Accepted'
+      WHERE session_id = ?`,
+      [session_id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(400).json({
+        message: "Failed to accept booking. Please try again later.",
+      });
+    }
+
+    res.status(200).json({
+      message: "Booking accepted successfully",
+      updated_booking: {
+        ...booking[0],
+        status_for_counsellor: "Accepted",
+      },
+    });
+  } catch (error) {
+    console.error("Error accepting booking:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   bookSession,
   cancelBookingByCounsellor,
@@ -393,4 +463,5 @@ module.exports = {
   acceptStudentCancellationRequest,
   rescheduleBooking,
   getCounsellorAllSessions,
+  acceptStudentBookingRequestByCounsellor,
 };
