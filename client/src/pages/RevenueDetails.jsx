@@ -136,156 +136,129 @@ const RevenueDetails = () => {
   // }
 
   return (
-    <section className="bg-white">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header Section */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Payment</h1>
+    <>
+<div className="flex-1 px-1 h-full" >
+<div className="p-4 rounded-lg w-full shadow-lg h-auto mb-6 mt-2 bg-white ml-10">
+  {/* Header Section */}
+  <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
+    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Payment Dashboard</h1>
+    <button
+      onClick={downloadCSV}
+      className="mt-4 sm:mt-0 px-6 py-2 bg-[#1E3E62] text-white text-xs sm:text-sm rounded-lg hover:bg-[#2b5c7c] transition duration-300"
+    >
+      Download CSV
+    </button>
+  </div>
+
+  {/* Revenue Summary Section - Cards */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    {/* Total Revenue Card */}
+    <div className="flex items-center justify-between p-4 sm:p-6 bg-white border border-[#387478] rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+      <div>
+        <h3 className="text-lg sm:text-xl font-semibold text-[#387478]">Total Revenue</h3>
+        <p className="text-sm sm:text-base text-[#387478]">{totalRevenue} Rs</p>
+      </div>
+      <img
+        src={Logo}
+        alt="Logo"
+        className="w-12 sm:w-16 h-12 sm:h-16 opacity-80 hover:opacity-100 transition-opacity duration-300"
+      />
+    </div>
+
+    {/* Dispatched Amount Card */}
+    <div className="flex items-center justify-between p-4 sm:p-6 bg-white border border-[#8174A0] rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+      <div>
+        <h3 className="text-lg sm:text-xl font-semibold text-[#8174A0]">Dispatched Amount</h3>
+        <p className="text-sm sm:text-base text-[#8174A0]">{dispatchedAmount} Rs</p>
+      </div>
+      <img
+        src={Logo}
+        alt="Logo"
+        className="w-12 sm:w-16 h-12 sm:h-16 opacity-80 hover:opacity-100 transition-opacity duration-300"
+      />
+    </div>
+
+    {/* Pending Amount Card */}
+    <div className="flex items-center justify-between p-4 sm:p-6 bg-white border border-[#AA5486] rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
+      <div>
+        <h3 className="text-lg sm:text-xl font-semibold text-[#AA5486]">Pending Amount</h3>
+        <p className="text-sm sm:text-base text-[#AA5486]">{pendingAmount} Rs</p>
+      </div>
+      <img
+        src={Logo}
+        alt="Logo"
+        className="w-12 sm:w-16 h-12 sm:h-16 opacity-80 hover:opacity-100 transition-opacity duration-300"
+      />
+    </div>
+  </div>
+
+  {/* Payment Details Table Section */}
+  <div className="bg-white shadow rounded-lg overflow-hidden mt-8">
+    <div className="px-4 sm:px-6 py-4 flex justify-between items-center border-b">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Payment Details</h2>
+      <div className="ml-3">
+        <div className="w-full max-w-xs sm:max-w-sm min-w-[200px] relative">
+          <input
+            className="bg-white w-full pr-10 sm:pr-11 h-8 sm:h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-xs sm:text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+            type="search"
+            value={searchQuery}
+            onChange={handleSearch}
+            placeholder="Search"
+          />
           <button
-            onClick={downloadCSV}
-            className="px-6 py-2 bg-[#1E3E62] text-white text-sm rounded-lg hover:bg-[#2b5c7c] transition duration-300"
+            className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded"
+            type="button"
           >
-            Download
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-6 h-6 sm:w-8 sm:h-8 text-slate-600"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+              />
+            </svg>
           </button>
         </div>
-
-        {/* Revenue Summary Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {/* Total Revenue Card */}
-          <div className="flex items-center justify-between p-6 bg-white border  rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out border-[#387478]">
-            <div>
-              <h3 className="text-xl font-semibold text-[#387478]">
-                Total Revenue
-              </h3>
-              <p className="text-base  text-[#387478]">{totalRevenue} Rs</p>
-            </div>
-            <img
-              src={Logo}
-              alt="Logo"
-              className="w-16 h-16 opacity-80 hover:opacity-100 transition-opacity duration-300"
-            />
-          </div>
-
-          {/* Dispatched Amount Card */}
-          <div className="flex items-center justify-between p-6 bg-white border border-[#8174A0] rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
-            <div>
-              <h3 className="text-xl font-semibold text-[#8174A0]">
-                Dispatched Amount
-              </h3>
-              <p className="text-base text-[#8174A0]">{dispatchedAmount} Rs</p>
-            </div>
-            <img
-              src={Logo}
-              alt="Logo"
-              className="w-16 h-16 opacity-80 hover:opacity-100 transition-opacity duration-300"
-            />
-          </div>
-
-          {/* Pending Amount Card */}
-          <div className="flex items-center justify-between p-6 bg-white border border-[#AA5486] rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
-            <div>
-              <h3 className="text-xl font-semibold text-[#AA5486]">
-                Pending Amount
-              </h3>
-              <p className="text-base text-[#AA5486]">{pendingAmount} Rs</p>
-            </div>
-            <img
-              src={Logo}
-              alt="Logo"
-              className="w-16 h-16 opacity-80 hover:opacity-100 transition-opacity duration-300"
-            />
-          </div>
-        </div>
-
-        {/* Payment Details Table Section */}
-        <div className="bg-white shadow rounded-lg overflow-hidden mt-8">
-          <div className="px-6 py-4 flex justify-between items-center border-b">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Payment Details
-            </h2>
-            <div className="ml-3">
-              <div className="w-full max-w-sm min-w-[200px] relative">
-                <div className="relative">
-                  <input
-                    className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                    type="search"
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    placeholder="Search by Session ID, Student ID, or Payment Date"
-                  />
-                  <button
-                    className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
-                    type="button"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="3"
-                      stroke="currentColor"
-                      className="w-8 h-8 text-slate-600"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
-            <div className="overflow-x-auto px-6 py-4">
-              <table className="min-w-full table-auto text-sm text-gray-600">
-                <thead className="text-xs text-gray-700 uppercase border-b border-[#243642] bg-[#A6AEBF]">
-                  <tr>
-                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
-                      Sr. No
-                    </th>
-                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
-                      Session ID
-                    </th>
-                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
-                      Student ID
-                    </th>
-                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
-                      Payment Date
-                    </th>
-                    <th className="px-4 py-3 text-center font-bold text-[#1A1A1D]">
-                      Payment Amount
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-[#C5D3E8]">
-                  {filteredPaymentDetails.map((payment, index) => (
-                    <tr key={index} className="hover:bg-slate-50">
-                      <td className="px-4 py-3 text-sm text-[#1A1A1D] text-center">
-                        {payment.srNo}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-[#1A1A1D] text-center">
-                        {payment.sessionId}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-[#1A1A1D] text-center">
-                        {payment.studentId}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-[#1A1A1D] text-center">
-                        {payment.paymentDate}
-                      </td>
-                      <td className="px-4 py-3 text-sm font-semibold text-slate-800 text-center">
-                        {payment.paymentAmount} Rs
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
       </div>
-    </section>
+    </div>
+
+    {/* Table Body */}
+    <div className="overflow-x-auto px-4 sm:px-6 py-4">
+      <table className="min-w-full table-auto text-xs sm:text-sm text-gray-600">
+        <thead className="text-xs text-gray-700 uppercase border-b border-[#243642] bg-[#A6AEBF]">
+          <tr>
+            <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Sr. No</th>
+            <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Session ID</th>
+            <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Student ID</th>
+            <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Payment Date</th>
+            <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Payment Amount</th>
+          </tr>
+        </thead>
+        <tbody className="bg-[#C5D3E8]">
+          {filteredPaymentDetails.map((payment, index) => (
+            <tr key={index} className="hover:bg-slate-50">
+              <td className="px-3 py-2 text-sm text-[#1A1A1D] text-center">{payment.srNo}</td>
+              <td className="px-3 py-2 text-sm text-[#1A1A1D] text-center">{payment.sessionId}</td>
+              <td className="px-3 py-2 text-sm text-[#1A1A1D] text-center">{payment.studentId}</td>
+              <td className="px-3 py-2 text-sm text-[#1A1A1D] text-center">{payment.paymentDate}</td>
+              <td className="px-3 py-2 text-sm font-semibold text-slate-800 text-center">{payment.paymentAmount} Rs</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+    </>
   );
 };
 

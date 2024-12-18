@@ -146,27 +146,33 @@ export default function Dashboard() {
 
   if (profileStatus === "pending") {
     return (
-      <div className="flex-1 h-full p-4 md:p-6">
-        <div className="bg-white rounded-lg shadow-2xl h-auto mb-6 p-6">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+      <>
+      <div className="flex-1 h-full p-4 md:p-6 flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-2xl h-auto w-full max-w-md md:max-w-lg p-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center">
             Welcome to Your Dashboard
           </h2>
+  
           <hr className="border-t-2 border-gray-300 mb-6" />
+  
           <div className="flex flex-col items-center">
-            <p className="text-[#b640b0] text-lg font-semibold shadow text-center">
+            <p className="text-[#b640b0] text-center text-base sm:text-lg font-semibold shadow">
               Access Denied! Please complete your registration to get started.
             </p>
+  
             <button
               onClick={completeProfile}
-              className="mt-10 bg-[#AE445A] hover:bg-[#4D4C7D] text-white font-semibold py-3 px-6 rounded-md transition duration-200 ease-in-out shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#AE445A] focus:ring-opacity-50"
+              className="mt-6 sm:mt-10 bg-[#AE445A] hover:bg-[#4D4C7D] text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-md transition duration-200 ease-in-out shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#AE445A] focus:ring-opacity-50"
             >
               Complete Profile
             </button>
           </div>
         </div>
       </div>
+      </>
     );
   }
+  
 
   if (profileStatus === "waiting_approval") {
     return (
@@ -191,124 +197,126 @@ export default function Dashboard() {
   if (profileComplete) {
     return (
       <>
-        <div className="flex-1 px-8 h-full">
-          <div className="p-4 rounded-lg w-full shadow-lg h-auto mb-6 mt-2 bg-white">
-            <div className="flex items-center justify-center h-full">
-              <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center font-sans sm:text-2xl">
-                Welcome{" "}
-                {user?.first_name.charAt(0).toUpperCase() +
-                  user?.first_name.slice(1)}{" "}
-                {user?.last_name.charAt(0).toUpperCase() +
-                  user?.last_name.slice(1)}
-              </h2>
-            </div>
+          <div className="flex-1 px-1 h-full">
+            <div className="p-4 rounded-lg w-full shadow-lg h-auto mb-6 mt-2 bg-white">
+            {/* Welcome Section */}
+              <div className="flex items-center justify-center h-full">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 text-center font-sans">
+                  Welcome{" "}
+                  {user?.first_name.charAt(0).toUpperCase() +
+                    user?.first_name.slice(1)}{" "}
+                  {user?.last_name.charAt(0).toUpperCase() +
+                    user?.last_name.slice(1)}
+                </h2>
+              </div>
 
-            <div className="p-2 rounded-lg w-full shadow-lg h-auto mb-6 mt-2 bg-white">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                {/* Welcome{" "}
-            {user?.first_name.charAt(0).toUpperCase() +
-              user?.first_name.slice(1)}{" "}
-            {user?.last_name.charAt(0).toUpperCase() + user?.last_name.slice(1)} */}
-                Welcome{" "}
-                {user?.first_name
-                  ? user.first_name.charAt(0).toUpperCase() +
-                    user.first_name.slice(1)
-                  : "Guest"}{" "}
-                {user?.last_name
-                  ? user.last_name.charAt(0).toUpperCase() +
-                    user.last_name.slice(1)
-                  : ""}
-              </h2>
-              <hr className="border-gray-300 mb-4" />
+            <hr className="border-gray-300 mb-4" />
 
-              <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 bg-gray-50 rounded-lg shadow-md p-4">
-                <div className="w-full flex justify-center sm:justify-start sm:w-auto">
-                  {user?.profile_pic ? (
-                    <img
-                      className="object-cover w-24 h-24 mt-3 mr-3 rounded-full border-2 border-blue-400 shadow-md"
-                      src={user.profile_pic}
-                      alt="Profile"
-                    />
-                  ) : (
-                    <FaRegUser className="w-24 h-24 mt-3 mr-3 rounded-full border-2 shadow-md text-gray-500 p-2" />
-                  )}
-                </div>
+            {/* Main Content Section */}
+            <div className="flex flex-col gap-6 bg-gray-50 rounded-lg shadow-md p-4">
+              {/* Profile Picture Section */}
+              <div className="flex justify-center">
+                {user?.profile_pic ? (
+                  <img
+                    className="object-cover w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-blue-400 shadow-md"
+                    src={user.profile_pic}
+                    alt="Profile"
+                  />
+                ) : (
+                  <FaRegUser className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 shadow-md text-gray-500 p-2" />
+                )}
+              </div>
 
-                <div className="flex-1 p-4 border border-gray-300 rounded-lg shadow-sm w-full sm:w-auto flex flex-col sm:items-start bg-white">
+              {/* Information Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Counselor Information */}
+                <div className="p-4 border border-gray-300 rounded-lg shadow-sm bg-white">
                   <h3 className="font-semibold text-gray-800 mb-2 text-lg sm:text-xl">
                     Counselor Information
                   </h3>
-                  <div className="mb-4 text-gray-600">
+                  <div className="text-gray-600 text-sm sm:text-base">
                     <p>
-                      Name:{" "}
+                      <span className="font-medium">Name:</span>{" "}
                       {user?.first_name.charAt(0).toUpperCase() +
-                        user?.first_name.slice(1) || "Guest"}{" "}
+                        user?.first_name.slice(1)}{" "}
                       {user?.last_name.charAt(0).toUpperCase() +
-                        user?.last_name.slice(1) || ""}
+                        user?.last_name.slice(1)}
                     </p>
-                    {/* <p>Age: {userDetails?.DOB || "N/A"}</p> */}
                     <p>
-                      Age:{" "}
-                      {userDetails?.DOB ? calculateAge(userDetails.DOB) : "N/A"}
+                      <span className="font-medium">Age:</span>{" "}
+                      {userDetails?.age || "N/A"}
                     </p>
-
-                    <p>Mobile No.: {userDetails?.phone || "N/A"}</p>
+                    <p>
+                      <span className="font-medium">Mobile No.:</span>{" "}
+                      {userDetails?.phone || "N/A"}
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex-1 p-4 border border-gray-300 rounded-lg shadow-sm bg-white">
+                {/* Education Information */}
+                <div className="p-4 border border-gray-300 rounded-lg shadow-sm bg-white">
                   <h3 className="font-semibold text-gray-800 mb-2 text-lg sm:text-xl">
                     Education Information
                   </h3>
-                  <div className="mb-4 text-gray-600">
-                    <p>Qualification: {userDetails?.qualification || "N/A"}</p>
-                    <p>Experience: {userDetails?.experience || "N/A"}</p>
+                  <div className="text-gray-600 text-sm sm:text-base">
                     <p>
-                      Subject Expertise: {userDetails?.specialization || "N/A"}
+                      <span className="font-medium">Qualification:</span>{" "}
+                      {userDetails?.qualification || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-medium">Experience:</span>{" "}
+                      {userDetails?.experience || "N/A"}
+                    </p>
+                    <p>
+                      <span className="font-medium">Subject Expertise:</span>{" "}
+                      {userDetails?.subject_expertise || "N/A"}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="p-6 rounded-lg w-full shadow-lg h-auto mb-6 bg-white mt-10">
-              <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center font-sans sm:text-2xl">
-                Overall Session Details
-              </h2>
-              <hr className="border-gray-300 mb-4" />
+          <div className="p-6 rounded-lg w-full shadow-lg h-auto mb-6 bg-white mt-10">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center font-sans sm:text-2xl">
+              Overall Session Details
+            </h2>
+            <hr className="border-gray-300 mb-4" />
 
-              <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-                {sessions.map((session, index) => (
-                  <div
-                    key={index}
-                    className={`flex justify-between items-center p-4 border-2 cursor-pointer bg-white rounded-lg shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ${
-                      session.color === "green" ? "border-green-500" : ""
-                    } ${session.color === "blue" ? "border-blue-500" : ""} ${
-                      session.color === "yellow" ? "border-yellow-500" : ""
-                    } ${
-                      session.color === "orange" ? "border-orange-500" : ""
-                    } ${session.color === "red" ? "border-red-500" : ""}`}
-                  >
-                    <div className="flex-1">
-                      <h3
-                        className={`text-${session.color}-700 font-semibold text-lg sm:text-xl`}
-                      >
-                        {session.status}
-                      </h3>
-                      <p className="text-xl sm:text-2xl font-bold">
-                        {session.count}
-                      </p>
-                    </div>
-                    <div className="flex justify-center items-center">
-                      <img
-                        src={session.icon}
-                        alt={`${session.status} icon`}
-                        className="h-12 w-12 sm:h-16 sm:w-16 object-contain"
-                      />
-                    </div>
+            <div className="w-full max-w-screen-lg mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+              {sessions.map((session, index) => (
+                <div
+                  key={index}
+                  className={`flex flex-col justify-between items-center p-4 border-2 cursor-pointer bg-white rounded-lg shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ${
+                    session.color === "green" ? "border-green-500" : ""
+                  } ${session.color === "blue" ? "border-blue-500" : ""} ${
+                    session.color === "yellow" ? "border-yellow-500" : ""
+                  } ${session.color === "orange" ? "border-orange-500" : ""} ${
+                    session.color === "red" ? "border-red-500" : ""
+                  }`}
+                >
+                  {/* Content Section */}
+                  <div className="flex-1 w-full text-center">
+                    <h3
+                      className={`text-${session.color}-700 font-semibold text-base sm:text-lg md:text-xl lg:text-2xl truncate`}
+                    >
+                      {session.status}
+                    </h3>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold">
+                      {session.count}
+                    </p>
                   </div>
-                ))}
-              </div>
+
+                  {/* Icon Section */}
+                  <div className="flex justify-center items-center mt-4">
+                    <img
+                      src={session.icon}
+                      alt={`${session.status} icon`}
+                      className="h-12 w-12 sm:h-16 sm:w-16 object-contain"
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

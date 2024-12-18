@@ -69,10 +69,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   }, [isMobile, setSidebarOpen]);
 
   return (
+    <>
     <Card
-      className={`h-[calc(100vh)] ${sidebarOpen ? "w-64" : "w-20"} fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#ab97d4] rounded-none pt-4 backdrop-blur-lg bg-opacity-40`}
+      className={`h-[calc(100vh)] ${sidebarOpen ? "w-64" : "w-20"} fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#ab97d4] rounded-none pt-10 backdrop-blur-lg bg-opacity-40`}
     >
-
         <hr className="mb-20 border-gray-300 opacity-40" />
       {/* Sidebar Items */}
       <List className="space-y-2">
@@ -81,14 +81,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             key={path}
             to={profileComplete ? path : "#"}
             onClick={(e) => { if (!profileComplete) e.preventDefault(); }}
-            className={({ isActive }) => `block rounded-lg transition-all duration-300 ${isActive ? "bg-[#584976] bg-opacity-30 backdrop-blur-lg text-white shadow" : "hover:bg-pink-100 text-[#000000]"} ${!profileComplete ? "cursor-not-allowed opacity-50" : ""}`}
+            className={({ isActive }) => `block rounded-lg transition-all duration-300 ${isActive ? "bg-[#584976] bg-opacity-30 backdrop-blur-lg text-white shadow" : "hover:bg-pink-100 text-[#000000]"} ${!profileComplete ? "cursor-not-allowed opacity-70" : ""}`}
             aria-disabled={!profileComplete}
           >
             <ListItem className="flex items-center gap-4 px-4 py-3">
               <ListItemPrefix className="text-2xl">
-                {!profileComplete ? <CiLock className="text-[#e9385b]" /> : icon}
+                {!profileComplete ? <CiLock className="text-[#8B0000] font-bold" /> : icon}
               </ListItemPrefix>
-              {sidebarOpen && <Typography className="text-sm font-medium">{label}</Typography>}
+              {sidebarOpen && <Typography className="text-[#000000] text-sm font-medium">{label}</Typography>}
             </ListItem>
           </NavLink>
         ))}
@@ -101,19 +101,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           onClick={handleLogout}
         >
           <CgLogOut className="text-lg" />
-          {sidebarOpen && <Typography className="ml-4 text-md font-medium">Logout</Typography>}
+          {sidebarOpen && <Typography className="ml-4 text-1.5xl font-medium">Logout</Typography>}
         </button>
       </div>
 
-      {/* Sidebar Toggle Button */}
+      {/* Sidebar Toggle Button */} 
       {/* Only show the button if the screen width is >= 768px */}
       <button
         onClick={() => setSidebarOpen((prev) => !prev)}
-        className={`absolute bottom-4 sm:bottom-5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${!isMobile ? "block" : "hidden"}`}
+        className={`absolute bottom-4 sm:bottom-1.5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${!isMobile ? "block" : "hidden"}`}
       >
         {sidebarOpen ? <IoIosArrowBack /> : <IoIosArrowForward />}
       </button>
     </Card>
+    </>
   );
 };
 

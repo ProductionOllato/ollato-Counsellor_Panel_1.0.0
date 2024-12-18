@@ -34,6 +34,7 @@ function App() {
   };
 
   return (
+    <>
     <UserProvider>
       <NotificationProvider>
         <BrowserRouter>
@@ -149,6 +150,7 @@ function App() {
         </BrowserRouter>
       </NotificationProvider>
     </UserProvider>
+    </>
   );
 }
 function ErrorBoundary() {

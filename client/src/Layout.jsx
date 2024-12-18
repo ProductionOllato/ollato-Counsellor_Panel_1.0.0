@@ -41,12 +41,10 @@ function Layout({ children }) {
 
         {/* Main Content */}
         <main
-          className={`flex-1 bg-gray-100 p-6 pt-10 scrollbar-custom transition-all duration-300 ${
-            sidebarOpen ? "ml-64" : "ml-20"
-          }`}
+          className="flex-1 bg-gray-100 p-1 pt-10 scrollbar-custom transition-all duration-300"
           style={{
-            // marginLeft: sidebarOpen ? "16rem" : "4rem",
-            marginTop: "5rem",
+            marginLeft: sidebarOpen ? "16rem" : "5rem", // Sidebar adjustment
+            marginTop: "5rem", // Space below fixed header  
           }}
         >
           {children}
