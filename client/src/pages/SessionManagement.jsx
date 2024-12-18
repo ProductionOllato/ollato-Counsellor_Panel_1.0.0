@@ -211,7 +211,7 @@ function SessionManagement() {
   };
 
   return (
-        <div className="max-w-4xl mx-auto bg-white shadow-lg p-8 rounded-lg mx-4">
+        <div className="max-w-4xl  bg-white shadow-lg rounded-lg">
     <h1 className="text-2xl font-bold mb-8 text-center">
         Session Management
       </h1>
@@ -317,7 +317,7 @@ const SessionTable = ({
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-lg shadow-md relative">
+    <div className="pt-1 bg-white rounded-lg shadow-md relative">
       <h1 className="text-2xl font-bold mb-6 text-[#7047A3]">
         Session Management
       </h1>

@@ -35,17 +35,23 @@ function Layout({ children }) {
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
+      <div
+        // className="flex-1 flex flex-col"
+        className={`flex-1 flex flex-col transition-all duration-300 ${
+          sidebarOpen ? "ml-64" : "ml-16"
+        } `}
+      >
         {/* Header */}
         <Header />
 
         {/* Main Content */}
         <main
-          className="flex-1 bg-gray-100 p-1 pt-10 scrollbar-custom transition-all duration-300"
-          style={{
-            marginLeft: sidebarOpen ? "16rem" : "5rem", // Sidebar adjustment
-            marginTop: "5rem", // Space below fixed header  
-          }}
+          // className="flex-1 bg-gray-100 p-1 pt-10 scrollbar-custom transition-all duration-300"
+          // style={{
+          //   marginLeft: sidebarOpen ? "16rem" : "5rem", // Sidebar adjustment
+          //   marginTop: "5rem", // Space below fixed header
+          // }}
+          className="flex-1 bg-gray-100 p-6 pt-20 overflow-auto scrollbar-custom transition-all duration-300"
         >
           {children}
         </main>

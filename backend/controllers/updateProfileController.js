@@ -18,7 +18,9 @@ const buildUpdateQuery = (table, fields, id) => {
 // Update personal details
 exports.updatePersonalDetails = async (req, res) => {
   const { id } = req.params;
-  let updates = req.body;
+  // let updates = req.body;
+  let { currentPassword, newPassword, ...updates } = req.body;
+  console.log("Request body - PersonalDetails:", req.body);
 
   if (!id || Object.keys(updates).length === 0) {
     return res.status(400).json({
@@ -27,6 +29,38 @@ exports.updatePersonalDetails = async (req, res) => {
   }
 
   try {
+    // Validate currentPassword and newPassword if provided
+    if (currentPassword || newPassword) {
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({
+          message: "Both current password and new password are required.",
+        });
+      }
+      // Fetch the current hashed password from the database
+      const [user] = await db.execute(
+        "SELECT password FROM personal_details WHERE id = ?",
+        [id]
+      );
+      if (user.length === 0) {
+        return res.status(404).json({ message: "Counselor not found." });
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        currentPassword,
+        user[0].password
+      );
+
+      if (!isPasswordValid) {
+        return res
+          .status(400)
+          .json({ message: "Current password is incorrect." });
+      }
+
+      // Hash the new password
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(newPassword, salt);
+    }
+
     // Check if email exists in updates
     if (updates.email) {
       const [emailCheck] = await db.execute(
@@ -38,11 +72,11 @@ exports.updatePersonalDetails = async (req, res) => {
       }
     }
 
-    // Hash the password if it is being updated
-    if (updates.password) {
-      const salt = await bcrypt.genSalt(10);
-      updates.password = await bcrypt.hash(updates.password, salt);
-    }
+    // // Hash the password if it is being updated
+    // if (updates.password) {
+    //   const salt = await bcrypt.genSalt(10);
+    //   updates.password = await bcrypt.hash(updates.password, salt);
+    // }
 
     // Build and execute the update query
     const { query, values } = buildUpdateQuery("personal_details", updates, id);
@@ -64,7 +98,7 @@ exports.updateProfessionalDetails = async (req, res) => {
   const { id } = req.params; // The id from the URL
   const updates = req.body; // The fields to update
 
-  // console.log("Request body - ProfessionalDetails:", req.body);
+  console.log("Request body - ProfessionalDetails:", req.body);
 
   if (!id || Object.keys(updates).length === 0) {
     return res.status(400).json({

@@ -3,6 +3,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNotification } from "../context/NotificationContext";
 import { useAuth } from "../context/UserContext";
 import OtpModal from "../components/OtpModal";
+import axios from "axios";
 
 const AccountSettings = () => {
   const [profileData, setProfileData] = useState({
@@ -13,13 +14,26 @@ const AccountSettings = () => {
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
-    profile_pic: "",
     license_number: "",
     qualification: "",
     specification: "",
     experience: "",
   });
 
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [profileDataPlaceholder, setProfileDataPlaceholder] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+    license_number: "",
+    qualification: "",
+    specification: "",
+    experience: "",
+  });
   const [profilePreview, setProfilePreview] = useState(null);
   const [passwordVisibility, setPasswordVisibility] = useState({
     current: false,
@@ -58,8 +72,7 @@ const AccountSettings = () => {
       if (response.ok) {
         const data = await response.json();
         const userData = data.data;
-        // Safely update state, using default values where necessary
-        setProfileData((prevData) => ({
+        setProfileDataPlaceholder((prevData) => ({
           ...prevData,
           first_name: userData?.first_name || "",
           last_name: userData?.last_name || "",
@@ -89,9 +102,8 @@ const AccountSettings = () => {
       if (response.ok) {
         const data = await response.json();
         const userData = data.data;
-        // console.log("Profession data:", userData);
 
-        setProfileData((prevData) => ({
+        setProfileDataPlaceholder((prevData) => ({
           ...prevData,
           license_number: userData?.license_number || "",
           qualification: userData?.qualification || "",
@@ -142,38 +154,103 @@ const AccountSettings = () => {
     const reader = new FileReader();
     reader.onload = () => setProfilePreview(reader.result);
     reader.readAsDataURL(file);
-    setProfileData((prev) => ({ ...prev, profile_pic: file }));
+    setProfilePicture(file);
   };
 
   // API call for updating profile picture
-  const updateProfilePicture = async () => {
-    if (!profileData.profile_pic) return;
+  const updateProfilePicture = async (event) => {
+    event.preventDefault();
+
+    if (!profilePicture || !(profilePicture instanceof File)) {
+      triggerNotification("No profile picture selected.", "error");
+      return;
+    }
 
     const payload = new FormData();
-    payload.append("profile_pic", profileData.profile_pic);
+    payload.append("profile_pic", profilePicture);
 
     try {
-      const response = await fetch(
+      const response = await axios.put(
         `${ApiURL}/documents-details/profile-pic/${user.user_id}`,
-        {
-          method: "PUT",
-          body: payload,
-        }
+        payload
       );
       console.log("Response profile:", response);
 
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         triggerNotification("Profile picture updated successfully!", "success");
       } else {
-        throw new Error("Failed to update profile picture.");
+        throw new Error(
+          response.statusText || "Failed to update profile picture."
+        );
       }
     } catch (error) {
       triggerNotification(error.message, "error");
     }
   };
+  // const updateProfilePicture = async (event) => {
+  //   event.preventDefault();
+
+  //   // Check if profile picture is selected
+  //   if (!profileData.profile_pic) {
+  //     triggerNotification(
+  //       "Please select a profile picture to upload.",
+  //       "error"
+  //     );
+  //     return;
+  //   }
+
+  //   const file = profileData.profile_pic;
+
+  //   // Validate file type and size
+  //   const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+  //   if (!allowedTypes.includes(file.type)) {
+  //     triggerNotification("Please upload a JPEG, PNG, or JPG file.", "error");
+  //     return;
+  //   }
+
+  //   const maxSize = 2 * 1024 * 1024; // 2MB
+  //   if (file.size > maxSize) {
+  //     triggerNotification("File size must be less than 2MB.", "error");
+  //     return;
+  //   }
+
+  //   // Create FormData
+  //   const payload = new FormData();
+  //   payload.append("profile_pic", file);
+
+  //   // Show loading state (optional)
+  //   triggerNotification("Updating profile picture...", "info");
+
+  //   try {
+  //     const response = await fetch(
+  //       `${ApiURL}/documents-details/profile-pic/${user.user_id}`,
+  //       {
+  //         method: "PUT",
+  //         body: payload,
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       triggerNotification("Profile picture updated successfully!", "success");
+  //     } else {
+  //       const errorData = await response.json();
+  //       // Provide more detailed error messages if available
+  //       throw new Error(
+  //         errorData.message || "Failed to update profile picture."
+  //       );
+  //     }
+  //   } catch (error) {
+  //     triggerNotification(error.message, "error");
+  //   }
+  // };
 
   // API call for updating personal details
-  const updatePersonalDetails = async () => {
+  const updatePersonalDetails = async (event) => {
+    event.preventDefault();
+    if (profilePicture) {
+      updateProfilePicture();
+    }
+
     const {
       first_name,
       last_name,
@@ -184,40 +261,41 @@ const AccountSettings = () => {
       confirmNewPassword,
     } = profileData;
 
+    if (newPassword) {
+      if (currentPassword === newPassword) {
+        triggerNotification(
+          "New password cannot be the same as the current password.",
+          "error"
+        );
+        return;
+      }
+    }
+
     if (newPassword !== confirmNewPassword) {
       triggerNotification("New passwords do not match.", "error");
       return;
     }
 
+    const nonEmptyFields = Object.fromEntries(
+      Object.entries(profileData).filter(([_, value]) => value !== "")
+    );
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/update/personal-details/${
-          user.user_id
-        }`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: user.user_id,
-            first_name,
-            last_name,
-            email,
-            phone_number,
-            currentPassword,
-            newPassword,
-          }),
-        }
+      const response = await axios.put(
+        `${ApiURL}/update/personal-details/${user.user_id}`,
+        nonEmptyFields
       );
 
       console.log("Response personal:", response);
 
-      if (response.ok) {
+      if (response.status === 200) {
         triggerNotification(
           "Personal details updated successfully!",
           "success"
         );
       } else {
-        throw new Error("Failed to update personal details.");
+        throw new Error(
+          response.statusText || "Failed to update personal details."
+        );
       }
     } catch (error) {
       triggerNotification(error.message, "error");
@@ -225,35 +303,31 @@ const AccountSettings = () => {
   };
 
   // API call for updating professional details
-  const updateProfessionalDetails = async () => {
+  const updateProfessionalDetails = async (event) => {
+    event.preventDefault();
     const { license_number, qualification, specification, experience } =
       profileData;
 
+    const nonEmptyFields = Object.fromEntries(
+      Object.entries(profileData).filter(([_, value]) => value !== "")
+    );
     try {
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_APP_API_ENDPOINT_URL
-        }/update/professional-details/${user.user_id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            license_number,
-            qualification,
-            specification,
-            experience,
-          }),
-        }
+      const response = await axios.put(
+        `${ApiURL}/update/professional-details/${user.user_id}`,
+        nonEmptyFields
       );
-      console.log("Response professional:", response);
 
-      if (response.ok) {
+      // Check for successful response using response.status
+      if (response.status === 200) {
         triggerNotification(
           "Professional details updated successfully!",
           "success"
         );
       } else {
-        throw new Error("Failed to update professional details.");
+        // Handle unexpected status codes
+        throw new Error(
+          response.statusText || "Failed to update professional details."
+        );
       }
     } catch (error) {
       triggerNotification(error.message, "error");
@@ -349,6 +423,51 @@ const AccountSettings = () => {
     }
   };
 
+  // const handleOtpVerification = async (type) => {
+  //   if (!otp || otp.length !== 4) {
+  //     triggerNotification("Please enter a valid 4-digit OTP.", "error");
+  //     return;
+  //   }
+
+  //   const endpoint =
+  //     type === "email" ? "/otp/verify-email-otp" : "/otp/verify-mobile-otp";
+
+  //   try {
+  //     const response = await fetch(
+  //       `${import.meta.env.VITE_APP_API_ENDPOINT_URL}${endpoint}`,
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           enteredOtp: otp,
+  //           ...(type === "email"
+  //             ? { email: profileData.email }
+  //             : { phoneNumber: profileData.phone_number }),
+  //         }),
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       triggerNotification(
+  //         `${type === "email" ? "Email" : "Phone"} verified successfully!`,
+  //         "success"
+  //       );
+  //       type === "email" ? setIsEmailVerified(true) : setIsPhoneVerified(true);
+  //       setOtpModal(false);
+  //     } else {
+  //       const errorData = await response.json();
+  //       triggerNotification(
+  //         errorData.message || "Failed to verify OTP.",
+  //         "error"
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("OTP verification error:", error);
+  //     triggerNotification("Error verifying OTP. Please try again.", "error");
+  //   }
+  // };
+
+  // OTP Verification Handling
   const handleOtpVerification = async (type) => {
     if (!otp || otp.length !== 4) {
       triggerNotification("Please enter a valid 4-digit OTP.", "error");
@@ -378,7 +497,8 @@ const AccountSettings = () => {
           `${type === "email" ? "Email" : "Phone"} verified successfully!`,
           "success"
         );
-        type === "email" ? setIsEmailVerified(true) : setIsPhoneVerified(true);
+        if (type === "email") setIsEmailVerified(true);
+        if (type === "phone") setIsPhoneVerified(true);
         setOtpModal(false);
       } else {
         const errorData = await response.json();
@@ -388,25 +508,15 @@ const AccountSettings = () => {
         );
       }
     } catch (error) {
-      console.error("OTP verification error:", error);
       triggerNotification("Error verifying OTP. Please try again.", "error");
     }
   };
-
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await updateProfilePicture();
-    await updatePersonalDetails();
-    await updateProfessionalDetails();
-  };
-
   // Reusable button component
   const NavigationButton = ({ label, onClick, isSubmit = false }) => (
     <button
       type={isSubmit ? "submit" : "button"}
       onClick={onClick}
-      className="bg-[#1E3E62] text-white py-2 px-4 rounded-lg focus:outline-none focus:ring focus:ring-[#1E3E62]/50"
+      className="bg-[#1E3E62] text-white text-base py-2 px-4 rounded-lg focus:outline-none focus:ring focus:ring-[#1E3E62]/50"
       aria-label={label}
     >
       {label}
@@ -414,7 +524,7 @@ const AccountSettings = () => {
   );
 
   return (
-    <section className=" bg-white shadow-lg rounded-lg w-full">
+    <section className="bg-white shadow-lg rounded-lg w-full p-6 mt-6">
       {/* Progress Bar */}
       <div className="mb-6">
         <div className="flex items-center justify-between text-sm font-medium relative">
@@ -471,9 +581,9 @@ const AccountSettings = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-6 px-6">
         {progressStep === 1 && (
-          <div>
+          <form onSubmit={updatePersonalDetails} className="space-y-4 ">
             <h2 className="text-xl font-bold text-gray-800">
               Personal Details
             </h2>
@@ -535,7 +645,10 @@ const AccountSettings = () => {
                     value={profileData.first_name}
                     onChange={handleInputChange}
                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-                    placeholder="Enter your first name"
+                    placeholder={
+                      profileDataPlaceholder.first_name ||
+                      "Enter your first name"
+                    }
                   />
                 </div>
 
@@ -553,7 +666,9 @@ const AccountSettings = () => {
                     value={profileData.last_name}
                     onChange={handleInputChange}
                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-                    placeholder="Enter your last name"
+                    placeholder={
+                      profileDataPlaceholder.last_name || "Enter your last name"
+                    }
                   />
                 </div>
               </div>
@@ -571,7 +686,9 @@ const AccountSettings = () => {
                   value={profileData.email}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-                  placeholder="Enter your email address"
+                  placeholder={
+                    profileDataPlaceholder.email || "Enter your email address"
+                  }
                   disabled={isEmailVerified}
                 />
                 {/* Email Verification Button */}
@@ -605,7 +722,9 @@ const AccountSettings = () => {
                   value={profileData.phone_number}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-                  placeholder="Enter your phone number"
+                  placeholder={
+                    profileDataPlaceholder.phone_number || "Enter your phone"
+                  }
                   disabled={isPhoneVerified}
                 />
                 {/* Phone Verification Button */}
@@ -613,7 +732,7 @@ const AccountSettings = () => {
                   <button
                     type="button"
                     onClick={handleVerifyPhone}
-                    disabled={isPhoneVerified} // Corrected condition
+                    disabled={isPhoneVerified}
                     className={`py-2 px-4 rounded transition duration-150 ${
                       isPhoneVerified
                         ? "bg-[#BC7C7C] text-[#243642] cursor-not-allowed"
@@ -634,11 +753,14 @@ const AccountSettings = () => {
                 )}
               </div>
             </div>
-          </div>
+            <div className="flex justify-end mt-4 text-base">
+              <NavigationButton label="Save Changes" isSubmit />
+            </div>
+          </form>
         )}
 
         {progressStep === 2 && (
-          <div>
+          <form onSubmit={updatePersonalDetails}>
             <h2 className="text-xl font-bold text-gray-800">Password Reset</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div>
@@ -722,11 +844,18 @@ const AccountSettings = () => {
                 </div>
               </div>
             </div>
-          </div>
+            <div className="flex justify-between mt-4 text-base">
+              <NavigationButton
+                label="Back"
+                onClick={() => setProgressStep((prev) => prev - 1)}
+              />
+              <NavigationButton label="Save Changes" isSubmit />
+            </div>
+          </form>
         )}
 
         {progressStep === 3 && (
-          <div>
+          <form onSubmit={updateProfessionalDetails}>
             <h2 className="text-xl font-bold text-gray-800">
               Professional Details
             </h2>
@@ -738,7 +867,6 @@ const AccountSettings = () => {
                 >
                   License Number
                 </label>
-
                 <input
                   type="text"
                   id="license_number"
@@ -746,7 +874,10 @@ const AccountSettings = () => {
                   value={profileData.license_number}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-                  placeholder="Enter your license number"
+                  placeholder={
+                    profileDataPlaceholder.license_number ||
+                    "Enter your license number"
+                  }
                 />
               </div>
               <div>
@@ -763,7 +894,10 @@ const AccountSettings = () => {
                   value={profileData.qualification}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-                  placeholder="Enter your qualification"
+                  placeholder={
+                    profileDataPlaceholder.qualification ||
+                    "Enter your qualification"
+                  }
                 />
               </div>
               <div>
@@ -780,7 +914,10 @@ const AccountSettings = () => {
                   value={profileData.specification}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-                  placeholder="Enter your specialization"
+                  placeholder={
+                    profileDataPlaceholder.specification ||
+                    "Enter your specialization"
+                  }
                 />
               </div>
               <div>
@@ -797,33 +934,23 @@ const AccountSettings = () => {
                   value={profileData.experience}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-                  placeholder="Years of experience"
+                  placeholder={
+                    profileDataPlaceholder.experience ||
+                    "Enter your experience in years"
+                  }
                 />
               </div>
             </div>
-          </div>
+            <div className="flex justify-between mt-4 text-base">
+              <NavigationButton
+                label="Back"
+                onClick={() => setProgressStep((prev) => prev - 1)}
+              />
+              <NavigationButton label="Save Changes" isSubmit />
+            </div>
+          </form>
         )}
-
-        {/* Navigation Buttons */}
-        <div className="flex justify-between mt-4">
-          {/* Back Button */}
-          {progressStep > 1 && (
-            <NavigationButton
-              label="Back"
-              onClick={() => setProgressStep((prev) => prev - 1)}
-            />
-          )}
-          {progressStep < 3 && (
-            <NavigationButton
-              label="Next"
-              onClick={() => setProgressStep((prev) => prev + 1)}
-            />
-          )}
-          {progressStep === 3 && (
-            <NavigationButton label="Save Changes" isSubmit />
-          )}
-        </div>
-      </form>
+      </div>
     </section>
   );
 };

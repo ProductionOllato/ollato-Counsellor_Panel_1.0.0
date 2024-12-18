@@ -73,7 +73,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     <Card
       className={`h-[calc(100vh)] ${sidebarOpen ? "w-64" : "w-20"} fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#ab97d4] rounded-none pt-10 backdrop-blur-lg bg-opacity-40`}
     >
-        <hr className="mb-20 border-gray-300 opacity-40" />
+        <hr className="mb-12 border-gray-300 opacity-40" />
       {/* Sidebar Items */}
       <List className="space-y-2">
         {sidebarItems.map(({ label, icon, path }) => (
@@ -109,7 +109,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       {/* Only show the button if the screen width is >= 768px */}
       <button
         onClick={() => setSidebarOpen((prev) => !prev)}
-        className={`absolute bottom-4 sm:bottom-1.5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${!isMobile ? "block" : "hidden"}`}
+        className={`absolute bottom-8 sm:bottom-1.5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${!isMobile ? "block" : "hidden"}`}
       >
         {sidebarOpen ? <IoIosArrowBack /> : <IoIosArrowForward />}
       </button>

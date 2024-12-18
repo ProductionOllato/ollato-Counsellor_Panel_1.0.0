@@ -1,0 +1,137 @@
+.container-myactivity {
+  padding: 1rem;
+  background-color: #f7fafc; /* Light gray background */
+  min-height: 100vh; /* Full height */
+}
+
+.header-myactivity {
+  font-size: 1.5rem; /* Larger font size */
+  font-weight: bold; /* Bold text */
+  margin-bottom: 1.5rem; /* Space below header */
+  text-align: center; /* Centered text */
+}
+
+.toggle-button-myactivity {
+  display: flex;
+  justify-content: flex-end; /* Align button to the right */
+  margin-bottom: 1rem; /* Space below button */
+}
+
+.toggle-btn-myactivity {
+  padding: 0.5rem 1rem; /* Padding for button */
+  background-color: #6b46c1; /* Purple background */
+  color: white; /* White text */
+  font-size: 0.875rem; /* Smaller font size */
+  border-radius: 0.375rem; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.toggle-btn-myactivity:hover {
+  background-color: #805ad5; /* Lighter purple on hover */
+}
+
+.table-container-myactivity {
+  overflow-x: auto; /* Allow horizontal scrolling */
+}
+
+.activity-table-myactivity {
+  width: 100%; /* Full width */
+  background-color: white; /* White background for table */
+  border-radius: 0.375rem; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.activity-table-myactivity th,
+.activity-table-myactivity td {
+  padding: 0.75rem; /* Padding for cells */
+  text-align: left; /* Left align text */
+}
+
+.activity-table-myactivity thead {
+  background-color: #edf2f7; /* Light gray for header */
+}
+
+.feedback-btn-myactivity {
+  padding: 0.5rem 1rem; /* Padding for feedback button */
+  background-color: #e53e3e; /* Pink background */
+  color: white; /* White text */
+  border-radius: 0.375rem; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.feedback-btn-myactivity:hover {
+  background-color: #c53030; /* Darker pink on hover */
+}
+
+.no-sessions-myactivity {
+  text-align: center; /* Centered text */
+  padding: 1.5rem; /* Padding for no sessions message */
+}
+
+.modal-overlay-myactivity {
+  position: fixed; /* Fixed positioning for modal */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(55, 65, 81, 0.7); /* Dark overlay */
+  display: flex; /* Flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 50; /* Ensure modal is on top */
+}
+
+.modal-content-myactivity {
+  background-color: white; /* White background for modal */
+  padding: 1.5rem; /* Padding for modal */
+  border-radius: 0.375rem; /* Rounded corners */
+  max-width: 500px; /* Max width for modal */
+  width: 100%; /* Full width */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.modal-title-myactivity {
+  font-size: 1.25rem; /* Larger font size for title */
+  font-weight: bold; /* Bold text */
+  margin-bottom: 1rem; /* Space below title */
+}
+
+.feedback-textarea-myactivity {
+  width: 100%; /* Full width */
+  padding: 0.5rem; /* Padding for textarea */
+  border: 1px solid #e2e8f0; /* Light border */
+  border-radius: 0.375rem; /* Rounded corners */
+  margin-bottom: 1rem; /* Space below textarea */
+  resize: none; /* Disable resizing */
+}
+
+.modal-actions-myactivity {
+  display: flex; /* Flexbox for buttons */
+  justify-content: flex-end; /* Align buttons to the right */
+}
+
+.cancel-btn-myactivity {
+  padding: 0.5rem 1rem; /* Padding for cancel button */
+  background-color: #e2e8f0; /* Light gray background */
+  color: black; /* Black text */
+  border-radius: 0.375rem; /* Rounded corners */
+  margin-right: 0.5rem; /* Space between buttons */
+}
+
+.submit-btn-myactivity {
+  padding: 0.5rem 1rem; /* Padding for submit button */
+  background-color: #021d38; /* Blue background */
+  color: white; /* White text */
+  border-radius: 0.375rem; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.submit-btn:hover {
+  background-color: #2b6cb0; /* Darker blue on hover */
+}
+
+.feedback-status-myactivity {
+  color: #38a169; /* Green color for feedback status */
+  font-weight: 600; /* Semi-bold for emphasis */
+}

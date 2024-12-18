@@ -51,58 +51,63 @@ function Header({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <>
-    <nav className="header">
-        
-          <Link to="/dashboard" className="logo">
-            <img src={LOGO} alt="Logo" className="logo-image" />
-          </Link>
-        
-      <div className="header-container">
-        {/* Logo */}
+      <nav className="header">
+        <Link to="/dashboard" className="logo">
+          <img src={LOGO} alt="Logo" className="logo-image" />
+        </Link>
 
-        {/* Heading */}
-        <div className="header-title">
-          <h1 className="title">Ollato's Mind Mapping</h1>
-        </div>
+        <div className="header-container">
+          {/* Logo */}
 
-        {/* Profile Section */}
-        <div className="profile-section">
-          <button
-            onClick={handleDropdownToggle}
-            ref={userIconRef}
-            className="profile-btn"
-            aria-haspopup="true"
-            aria-expanded={isDropdownOpen}
-          >
-            <span className="capitalize">{user?.first_name}</span>
-            {user?.profile_pic ? (
-              <img
-                src={user.profile_pic}
-                alt="User Profile"
-                className="profile-pic"
-              />
-            ) : (
-              <FaRegUser className="user-icon" />
+          {/* Heading */}
+          <div className="header-title">
+            <h1 className="title">
+              Ollato's Mind Mapping - Counselor's Management Panel
+              {/* <p className="sub-title">Counselor's Management Panel </p> */}
+            </h1>
+            {/* <h2 className="sub-title ">Counselor's Management Panel </h2> */}
+          </div>
+
+          {/* Profile Section */}
+          <div className="profile-section">
+            <button
+              onClick={handleDropdownToggle}
+              ref={userIconRef}
+              className="profile-btn"
+              aria-haspopup="true"
+              aria-expanded={isDropdownOpen}
+            >
+              <span className="capitalize">{user?.first_name}</span>
+              {user?.profile_pic ? (
+                <img
+                  src={user.profile_pic}
+                  alt="User Profile"
+                  className="profile-pic"
+                />
+              ) : (
+                <FaRegUser className="user-icon" />
+              )}
+            </button>
+
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div ref={dropdownRef} className="dropdown-menu">
+                <DropdownButton
+                  onClick={handleProfileClick}
+                  disabled={!profileComplete}
+                  isComplete={profileComplete}
+                >
+                  Profile
+                </DropdownButton>
+                <DropdownButton onClick={handleSupportClick}>
+                  Support
+                </DropdownButton>
+                <DropdownButton onClick={handleLogout}>Logout</DropdownButton>
+              </div>
             )}
-          </button>
-
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
-            <div ref={dropdownRef} className="dropdown-menu">
-              <DropdownButton
-                onClick={handleProfileClick}
-                disabled={!profileComplete}
-                isComplete={profileComplete}
-              >
-                Profile
-              </DropdownButton>
-              <DropdownButton onClick={handleSupportClick}>Support</DropdownButton>
-              <DropdownButton onClick={handleLogout}>Logout</DropdownButton>
-            </div>
-          )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
     </>
   );
 }
@@ -112,13 +117,13 @@ export default Header;
 const DropdownButton = ({ onClick, children, disabled }) => {
   return (
     <>
-    <button
-      onClick={onClick}
-      className={`dropdown-btn ${disabled ? "disabled" : ""}`}
-      disabled={disabled}
-    >
-      {children}
-    </button>
+      <button
+        onClick={onClick}
+        className={`dropdown-btn ${disabled ? "disabled" : ""}`}
+        disabled={disabled}
+      >
+        {children}
+      </button>
     </>
   );
 };
