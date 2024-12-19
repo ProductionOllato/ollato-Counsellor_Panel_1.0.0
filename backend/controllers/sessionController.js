@@ -305,6 +305,8 @@ const rescheduleBooking = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
+  console.log("Received data reschedule booking: ", req.body);
+
   const { session_id, new_r_time, new_r_date, new_r_duration, new_r_mode } =
     req.body;
 
@@ -388,68 +390,97 @@ const getCounsellorAllSessions = async (req, res) => {
   }
 };
 
+// const acceptStudentBookingRequestByCounsellor = async (req, res) => {
+//   console.log(
+//     "Received data accept student booking request by counsellor: ",
+//     req.body
+//   );
+
+//   // Validate the request body
+//   await body("session_id")
+//     .isInt()
+//     .withMessage("Session ID must be a valid integer")
+//     .run(req);
+
+//   // Check for validation errors
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).json({ errors: errors.array() });
+//   }
+
+//   const { session_id } = req.body;
+
+//   try {
+//     // Check if the booking exists
+//     const [booking] = await db.query(
+//       `SELECT * FROM counsellor_booking WHERE session_id = ?`,
+//       [session_id]
+//     );
+
+//     if (!booking || booking.length === 0) {
+//       return res.status(404).json({
+//         message: "Booking not found",
+//       });
+//     }
+
+//     // Check if the student's status is 'Requested'
+//     if (booking[0].status_for_student === "Requested") {
+//       return res.status(400).json({
+//         message:
+//           "Booking cannot be accepted as the student has requested cancellation",
+//       });
+//     }
+
+//     // Update the booking with the new status
+//     const result = await db.query(
+//       `UPDATE counsellor_booking
+//       SET status_for_counsellor = 'Booked'
+//       WHERE session_id = ?`,
+//       [session_id]
+//     );
+
+//     if (result.affectedRows === 0) {
+//       return res.status(400).json({
+//         message: "Failed to accept booking. Please try again later.",
+//       });
+//     }
+
+//     res.status(200).json({
+//       message: "Booking accepted successfully",
+//       updated_booking: {
+//         ...booking[0],
+//         status_for_counsellor: "Accepted",
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error accepting booking:", error.message);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
 const acceptStudentBookingRequestByCounsellor = async (req, res) => {
+  const { session_id } = req.body;
   console.log(
     "Received data accept student booking request by counsellor: ",
     req.body
   );
 
-  // Validate the request body
-  await body("session_id")
-    .isInt()
-    .withMessage("Session ID must be a valid integer")
-    .run(req);
-
-  // Check for validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { session_id } = req.body;
-
   try {
-    // Check if the booking exists
     const [booking] = await db.query(
       `SELECT * FROM counsellor_booking WHERE session_id = ?`,
       [session_id]
     );
 
     if (!booking || booking.length === 0) {
-      return res.status(404).json({
-        message: "Booking not found",
-      });
+      return res.status(404).json({ message: "Booking not found" });
     }
 
-    // Check if the student's status is 'Requested'
-    if (booking[0].status_for_student === "Requested") {
-      return res.status(400).json({
-        message:
-          "Booking cannot be accepted as the student has requested cancellation",
-      });
-    }
-
-    // Update the booking with the new status
-    const result = await db.query(
-      `UPDATE counsellor_booking
-      SET status_for_counsellor = 'Accepted'
-      WHERE session_id = ?`,
+    await db.query(
+      `UPDATE counsellor_booking SET status_for_counsellor = 'Booked' WHERE session_id = ?`,
       [session_id]
     );
 
-    if (result.affectedRows === 0) {
-      return res.status(400).json({
-        message: "Failed to accept booking. Please try again later.",
-      });
-    }
-
-    res.status(200).json({
-      message: "Booking accepted successfully",
-      updated_booking: {
-        ...booking[0],
-        status_for_counsellor: "Accepted",
-      },
-    });
+    res.status(200).json({ message: "Booking accepted successfully" });
   } catch (error) {
     console.error("Error accepting booking:", error.message);
     res.status(500).json({ message: "Internal server error" });

@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNotification } from "../context/NotificationContext";
-import {
-  MdFirstPage,
-  MdLastPage,
-  MdDeleteForever,
-  MdClose,
-} from "react-icons/md";
+import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import axios from "axios";
 import AvailabilityForm from "../components/AvailabilityForm";
@@ -46,38 +41,14 @@ const AvailabilityManagements = () => {
   const slotsPerPage = 10;
   const totalPages = Math.ceil(availability.length / slotsPerPage);
 
-  // Fetch Availability Data
-  // useEffect(() => {
-  //   const fetchAvailability = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await axios.get(
-  //         `${APIURL}/counsellor/get-availability`
-  //       );
-  //       console.log("Response get availability:", response);
-
-  //       setAvailability(response.data || []);
-  //     } catch (error) {
-  //       triggerNotification(
-  //         error.response?.data?.message || "Failed to fetch availability.",
-  //         "error"
-  //       );
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchAvailability();
-  // }, [APIURL]);
   useEffect(() => {
     const fetchAvailabilityData = async () => {
       setLoading(true);
-
       try {
         const response = await axios.post(
           `${APIURL}/counsellor/get-availability`,
           { counsellor_id: user.user_id }
         );
-        // console.log("Response get availability:", response);
 
         if (response.status === 200 && response.data.data) {
           setAvailability(response.data.data);
@@ -96,8 +67,6 @@ const AvailabilityManagements = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log("Name:", name, "Value:", value);
-
     setSelectedSlot((prevData) => ({
       ...prevData,
       [name]: value,
@@ -112,12 +81,6 @@ const AvailabilityManagements = () => {
     setModal({ show: false, type: null });
   };
 
-  // Handle Search
-  // const handleSearch = (e) => {
-  //   setSearchQuery(e.target.value);
-  //   setCurrentPage(1);
-  // };
-
   // Validate Slot
   const validateSlot = () => {
     const { date, start_time, end_time, mode, duration } = formData;
@@ -127,24 +90,15 @@ const AvailabilityManagements = () => {
       return false;
     }
 
-    // if (
-    //   new Date(`2000-01-01T${start_time}`) >= new Date(`2000-01-01T${end_time}`)
-    // ) {
-    //   triggerNotification("Start time must be before end time.", "error");
-    //   return false;
-    // }
-
-    // Validate that the selected date is not in the past
     const selectedDate = new Date(date);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize time for comparison
+    today.setHours(0, 0, 0, 0);
 
     if (selectedDate < today) {
       triggerNotification("The selected date cannot be in the past.", "error");
       return false;
     }
 
-    // Validate start and end times
     const startTime = new Date(`2000-01-01T${start_time}`);
     const endTime = new Date(`2000-01-01T${end_time}`);
     if (startTime >= endTime) {
@@ -152,10 +106,111 @@ const AvailabilityManagements = () => {
       return false;
     }
 
-    return true; // Pass validation
+    return true;
   };
 
-  // Add or Update Slot
+  // Handle add availability submit
+  const handleAvailabilitySubmit = async (formData) => {
+    const counsellor_id = user.user_id;
+
+    // Transform formData to match the backend payload
+    const payload = {
+      counsellor_id,
+      dates: [formData.date],
+      mode: formData.mode,
+      duration: `${formData.duration} minutes`,
+      status: "available",
+      start_time: `${formData.start_time}:00`,
+      end_time: `${formData.end_time}:00`,
+    };
+
+    console.log("Payload:", payload);
+    console.log("FormData:", formData);
+
+    try {
+      const response = await axios.post(
+        `${APIURL}/counsellor/set-availability`,
+        payload
+      );
+      console.log("Response set availability:", response);
+
+      if (response.status === 200 || response.status === 201) {
+        triggerNotification("Availability added successfully!", "success");
+        toggleView("show");
+      } else {
+        triggerNotification(
+          response.data?.message || "Failed to add availability.",
+          "error"
+        );
+      }
+    } catch (error) {
+      console.error("Error submitting availability:", error);
+      triggerNotification(
+        error.response?.data?.message || "Something went wrong!",
+        "error"
+      );
+    } finally {
+      resetForm(); // Reset the form
+    }
+  };
+
+  //
+  const handleEditSlot = (slot) => {
+    setSelectedSlot(slot); // Set the slot to be edited
+    setShowEditModal(true); // Open the modal
+  };
+
+  //handle update slot
+  const handleUpdateSlot = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    console.log("Selected Slot:", selectedSlot);
+
+    const payload = {
+      counsellor_id: selectedSlot.counsellor_id,
+      date: selectedSlot.date,
+      start_time: selectedSlot.start_time,
+      end_time: selectedSlot.end_time,
+      mode: selectedSlot.mode,
+      duration: selectedSlot.duration,
+      status: selectedSlot.status,
+      sr_no: selectedSlot.sr_no,
+    };
+    console.log("Payload update availability:", payload);
+
+    try {
+      const response = await axios.put(
+        `${APIURL}/counsellor/update-availability`,
+        payload
+      );
+      console.log("Response update availability:", response);
+
+      if (response.status === 200) {
+        // Update the availability in the state after successful update
+        setAvailability((prev) =>
+          prev.map((slot) =>
+            slot.sr_no === selectedSlot.sr_no ? selectedSlot : slot
+          )
+        );
+        setShowEditModal(false); // Close the modal
+        triggerNotification("Availability updated successfully!", "success");
+      } else {
+        throw new Error(
+          response.data.message || "Failed to update availability."
+        );
+      }
+    } catch (error) {
+      console.error(error.message || "Failed to update availability.");
+      triggerNotification(
+        error.message || "Failed to update availability.",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //
   const handleSaveSlot = async () => {
     if (!validateSlot()) return;
 
@@ -195,17 +250,10 @@ const AvailabilityManagements = () => {
   const handleDeleteSlot = async (sr_no, slotDetails) => {
     if (!window.confirm("Are you sure you want to delete this slot?")) return;
 
-    console.log("Slot to be deleted:", slotDetails);
-
     try {
-      const response = await axios.delete(
-        `${APIURL}/counsellor/delete-availability`,
-        {
-          data: { sr_no },
-        }
-      );
-
-      console.log("Delete response:", response);
+      await axios.delete(`${APIURL}/counsellor/delete-availability`, {
+        data: { sr_no },
+      });
 
       setAvailability((prev) => prev.filter((slot) => slot.sr_no !== sr_no));
       triggerNotification("Slot deleted successfully!", "success");
@@ -234,150 +282,33 @@ const AvailabilityManagements = () => {
         : -1;
     });
 
-  // Pagination calculation
-  const startIndex = (currentPage - 1) * slotsPerPage;
-  const paginatedData = availability.slice(
-    startIndex,
-    startIndex + slotsPerPage
-  );
-
-  // Handle sorting
   const handleSort = (key) => {
     const direction =
       sortConfig.direction === "ascending" ? "descending" : "ascending";
     setSortConfig({ key, direction });
-
-    const sortedData = [...availability].sort((a, b) => {
-      if (key === "date") {
-        const dateA = new Date(a.date).getTime();
-        const dateB = new Date(b.date).getTime();
-        return direction === "ascending" ? dateA - dateB : dateB - dateA;
-      } else {
-        const valueA = a[key];
-        const valueB = b[key];
-        return direction === "ascending" ? valueA - valueB : valueB - valueA;
-      }
-    });
-
-    setAvailability(sortedData);
   };
+
+  const startIndex = (currentPage - 1) * slotsPerPage;
+  const paginatedData = sortedData.slice(startIndex, startIndex + slotsPerPage);
 
   // Handle search
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // Filter data based on search query
-  const filteredData = availability.filter(
-    (slot) =>
-      slot.date.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      slot.mode.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Update the table when data is updated
-  const tableData = searchQuery ? filteredData : availability;
+  const tableData = searchQuery ? sortedData : availability;
 
   const toggleView = (view) => {
     setView(view);
   };
 
-  const handleAvailabilitySubmit = async (formData) => {
-    const counsellor_id = user.user_id;
-
-    // Transform formData to match the backend payload
-    const payload = {
-      counsellor_id,
-      dates: [formData.date],
-      mode: formData.mode,
-      duration: `${formData.duration} minutes`,
-      status: "available",
-      start_time: `${formData.start_time}:00`,
-      end_time: `${formData.end_time}:00`,
-    };
-
-    console.log("Payload:", payload);
-    console.log("FormData:", formData);
-
-    try {
-      const response = await axios.post(
-        `${APIURL}/counsellor/set-availability`,
-        payload
-      );
-      console.log("Response set availability:", response);
-
-      if (response.status === 200 || response.status === 201) {
-        triggerNotification("Availability added successfully!", "success");
-      } else {
-        triggerNotification(
-          response.data?.message || "Failed to add availability.",
-          "error"
-        );
-      }
-    } catch (error) {
-      console.error("Error submitting availability:", error);
-      triggerNotification(
-        error.response?.data?.message || "Something went wrong!",
-        "error"
-      );
-    } finally {
-      resetForm(); // Reset the form
-    }
-  };
-
-  const handleEditSlot = (slot) => {
-    setSelectedSlot(slot); // Set the slot to be edited
-    setShowEditModal(true); // Open the modal
-  };
-
-  const handleUpdateSlot = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    console.log("Selected Slot:", selectedSlot);
-
-    const payload = {
-      counsellor_id: selectedSlot.counsellor_id,
-      date: selectedSlot.date,
-      start_time: selectedSlot.start_time,
-      end_time: selectedSlot.end_time,
-      mode: selectedSlot.mode,
-      duration: selectedSlot.duration,
-      status: selectedSlot.status,
-      sr_no: selectedSlot.sr_no,
-    };
-    console.log("Api url:", `${APIURL}`);
-
-    try {
-      const response = await axios.put(
-        `${APIURL}/counsellor/update-availability`,
-        payload
-      );
-      console.log("Response update availability:", response);
-
-      if (response.status === 200) {
-        // Update the availability in the state after successful update
-        setAvailability((prev) =>
-          prev.map((slot) =>
-            slot.sr_no === selectedSlot.sr_no ? selectedSlot : slot
-          )
-        );
-        setShowEditModal(false); // Close the modal
-      }
-    } catch (error) {
-      console.error("Error updating availability:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg p-8 rounded-lg mx-4">
+    <div className="w-full bg-white shadow-lg rounded-lg mt-4 pt-2">
       <div className="flex justify-center items-center mb-6 px-4 sm:px-6">
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-700 text-center">
           Availability Management
         </h1>
       </div>
-
-      {/* Add and Show Buttons */}
 
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 px-4 sm:px-6">
         <button
@@ -385,28 +316,25 @@ const AvailabilityManagements = () => {
             resetForm();
             toggleView("add");
           }}
-          className="bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto"
+          className="bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto text-base"
         >
           Add Availability
         </button>
         <button
           onClick={() => toggleView("show")}
-          className="bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto"
+          className="bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto text-base"
         >
           Show Availability
         </button>
       </div>
-      {/*  */}
 
       {view === "add" && (
         <section>
-          <div>
-            <AvailabilityForm
-              onSubmit={async (formData) => {
-                await handleAvailabilitySubmit(formData);
-              }}
-            />
-          </div>
+          <AvailabilityForm
+            onSubmit={async (formData) => {
+              await handleAvailabilitySubmit(formData);
+            }}
+          />
         </section>
       )}
 
@@ -426,16 +354,33 @@ const AvailabilityManagements = () => {
                     value={searchQuery}
                     onChange={handleSearch}
                     aria-label="Search sessions"
-                    className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-[#D3F1DF] pl-3 pr-28 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                    className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-[#D3F1DF] pl-10 pr-12 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                   />
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg
+                      className="w-5 h-5 text-slate-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm10 2l-5.3-5.3"
+                      />
+                    </svg>
+                  </span>
                 </div>
               </div>
 
-              <div className="max-w-screen-xl px-4 py-6 mx-auto lg:px-6 sm:py-16 lg:py-4">
+              <div className="max-w-screen-xl mx-auto">
                 <div className="overflow-x-auto mt-6">
                   <table className="min-w-full table-auto border-collapse border border-slate-200">
                     <thead>
-                      <tr className="bg-slate-50 border-b border-slate-300">
+                      <tr className="bg-slate-50 border-b border-slate-300 text-center">
                         {[
                           { key: "sr_no", label: "Sr. No." },
                           { key: "date", label: "Date" },
@@ -446,7 +391,7 @@ const AvailabilityManagements = () => {
                         ].map((col) => (
                           <th
                             key={col.key}
-                            className="p-4 text-sm font-normal leading-none text-slate-500 border-b border-slate-300"
+                            className="p-4 text-base font-normal leading-none text-slate-500 border-b border-slate-300 "
                             onClick={() => handleSort(col.key)}
                           >
                             {col.label}
@@ -500,22 +445,20 @@ const AvailabilityManagements = () => {
                                 {slot.status}
                               </span>
                             </td>
-                            <td className="p-4 border-b border-slate-200">
+                            <td className="p-4 border-b border-slate-200 flex">
                               <button
                                 onClick={() => handleEditSlot(slot)}
-                                className="bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center"
+                                className="bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
                               >
-                                Edit <CiEdit />
+                                <CiEdit />
                               </button>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
                               <button
                                 onClick={() =>
                                   handleDeleteSlot(slot.sr_no, slot)
                                 }
-                                className="bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center"
+                                className="bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm"
                               >
-                                Delete <MdDeleteForever />
+                                <MdDeleteForever />
                               </button>
                             </td>
                           </tr>
@@ -530,12 +473,22 @@ const AvailabilityManagements = () => {
                           </td>
                         </tr>
                       )}
+                      {tableData.length === 0 && (
+                        <tr>
+                          <td
+                            colSpan="8"
+                            className="text-center p-4 text-gray-500 font-medium"
+                          >
+                            No sessions found matching the search criteria.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
 
                   {/* Edit Modal */}
                   {showEditModal && (
-                    <div className="fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 w-full">
+                    <div className="fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 w-full transition-opacity duration-300 opacity-100">
                       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
                         <h2 className="text-2xl font-semibold mb-6 text-gray-900">
                           Edit Availability
@@ -668,17 +621,17 @@ const AvailabilityManagements = () => {
 
                   {/* Pagination Controls */}
                   {totalPages > 1 && (
-                    <div className="flex justify-center mt-4">
+                    <div className="flex justify-center mt-4 text-base">
                       <button
                         onClick={() =>
                           setCurrentPage((prev) => Math.max(prev - 1, 1))
                         }
                         disabled={currentPage === 1}
-                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-l"
+                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-l text-base"
                       >
                         Previous
                       </button>
-                      <span className="mx-4">
+                      <span className="mx-4 ">
                         Page {currentPage} of {totalPages}
                       </span>
                       <button
@@ -688,7 +641,7 @@ const AvailabilityManagements = () => {
                           )
                         }
                         disabled={currentPage === totalPages}
-                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-r"
+                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-r text-base"
                       >
                         Next
                       </button>

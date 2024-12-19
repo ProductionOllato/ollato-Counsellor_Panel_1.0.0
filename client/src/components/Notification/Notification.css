@@ -31,6 +31,12 @@
   color: #721c24;
 }
 
+.notification-info {
+  background-color: #d9ebfd; /* Light blue background */
+  color: #004085; /* Dark blue text color */
+  border: 1px solid #b8daff; /* Optional: border for emphasis */
+}
+
 /* Icon Styling */
 .notification .icon {
   margin-right: 10px;

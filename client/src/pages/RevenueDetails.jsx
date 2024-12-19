@@ -137,8 +137,8 @@ const RevenueDetails = () => {
 
   return (
     <>
-      <div className="flex-1 px-1 h-full">
-        <div className="p-4 rounded-lg w-full shadow-lg h-auto mb-6 mt-2 bg-white">
+      <div className="flex-1 h-full w-full mt-4 pt-2">
+        <div className="p-4 rounded-lg w-full shadow-lg h-auto mt-2 bg-white">
           {/* Header Section */}
           <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
@@ -245,7 +245,7 @@ const RevenueDetails = () => {
             </div>
 
             {/* Table Body */}
-            <div className="overflow-x-auto px-4 sm:px-6 py-4">
+            <div className="overflow-x-auto w-full">
               <table className="min-w-full table-auto text-xs sm:text-sm text-gray-600">
                 <thead className="text-xs text-gray-700 uppercase border-b border-[#243642] bg-[#A6AEBF]">
                   <tr>

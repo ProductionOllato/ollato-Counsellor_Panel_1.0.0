@@ -8,6 +8,7 @@ const {
   getCounsellorAllSessions,
   acceptStudentBookingRequestByCounsellor,
 } = require("../controllers/sessionController");
+const { route } = require("./counsellorAuthRoutes");
 
 const router = express.Router();
 
@@ -22,5 +23,6 @@ router.post(
   "/accept-booking-request-counsellor",
   acceptStudentBookingRequestByCounsellor
 );
+
 
 module.exports = router;

@@ -6,7 +6,7 @@ import OtpModal from "../components/OtpModal";
 import axios from "axios";
 
 const AccountSettings = () => {
-  const [profileData, setProfileData] = useState({
+  const [personalDetails, setPersonalDetails] = useState({
     first_name: "",
     last_name: "",
     email: "",
@@ -14,12 +14,14 @@ const AccountSettings = () => {
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
+  });
+
+  const [professionalDetails, setProfessionalDetails] = useState({
     license_number: "",
     qualification: "",
     specification: "",
     experience: "",
   });
-
   const [profilePicture, setProfilePicture] = useState(null);
   const [profileDataPlaceholder, setProfileDataPlaceholder] = useState({
     first_name: "",
@@ -34,6 +36,7 @@ const AccountSettings = () => {
     specification: "",
     experience: "",
   });
+
   const [profilePreview, setProfilePreview] = useState(null);
   const [passwordVisibility, setPasswordVisibility] = useState({
     current: false,
@@ -59,19 +62,12 @@ const AccountSettings = () => {
 
   const getUserDetails = async () => {
     try {
-      const response = await fetch(
-        `${ApiURL}/get/personal-info/${user.user_id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axios.get(
+        `${ApiURL}/get/personal-info/${user.user_id}`
       );
+      if (response.status === 200) {
+        const userData = response.data.data;
 
-      if (response.ok) {
-        const data = await response.json();
-        const userData = data.data;
         setProfileDataPlaceholder((prevData) => ({
           ...prevData,
           first_name: userData?.first_name || "",
@@ -80,28 +76,25 @@ const AccountSettings = () => {
           phone_number: userData?.phone_number || "",
           profile_pic: userData?.profile_pic || "",
         }));
+      } else {
+        throw new Error("Failed to fetch user details.");
       }
     } catch (error) {
-      triggerNotification(error.message, "error");
+      triggerNotification(
+        `Error fetching user details: ${error.message}`,
+        "error"
+      );
     }
   };
 
   const getProfessionDetails = async () => {
     try {
-      const response = await fetch(
-        `${ApiURL}/get/professional-info/${user.user_id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axios.get(
+        `${ApiURL}/get/professional-info/${user.user_id}`
       );
-      // console.log("Response professional:", response);
 
-      if (response.ok) {
-        const data = await response.json();
-        const userData = data.data;
+      if (response.status === 200) {
+        const userData = response.data.data;
 
         setProfileDataPlaceholder((prevData) => ({
           ...prevData,
@@ -110,9 +103,14 @@ const AccountSettings = () => {
           specification: userData?.specification || "",
           experience: userData?.experience || "",
         }));
+      } else {
+        throw new Error("Failed to fetch professional details.");
       }
     } catch (error) {
-      triggerNotification(error.message, "error");
+      triggerNotification(
+        `Error fetching professional details: ${error.message}`,
+        "error"
+      );
     }
   };
 
@@ -129,40 +127,58 @@ const AccountSettings = () => {
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfileData((prev) => ({ ...prev, [name]: value }));
+    // setPersonalDetails((prev) => ({ ...prev, [name]: value }));
+    if (name in personalDetails) {
+      setPersonalDetails((prev) => ({ ...prev, [name]: value }));
+    } else if (name in professionalDetails) {
+      setProfessionalDetails((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const togglePasswordVisibility = (field) => {
     setPasswordVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
+  // Helper Function for File Validation
+  const validateFile = (file) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    console.log("File:", file);
+
+    if (!file) return "No file selected.";
+    if (!allowedTypes.includes(file.type)) return "Invalid file type.";
+    if (file.size > maxSize) return "File size must be less than 2MB.";
+    return null;
+  };
+
   // Handle profile picture upload
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    const error = validateFile(file);
+    console.log("Error:", error);
+    console.log("File:", file);
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-    if (!allowedTypes.includes(file.type)) {
-      triggerNotification("Please upload a JPEG, PNG, or JPG file.", "error");
+    if (error) {
+      triggerNotification(error, "error");
       return;
     }
-    if (file.size > 2 * 1024 * 1024) {
-      triggerNotification("File size must be less than 2MB.", "error");
-      return;
-    }
-
     const reader = new FileReader();
     reader.onload = () => setProfilePreview(reader.result);
     reader.readAsDataURL(file);
+
     setProfilePicture(file);
   };
 
   // API call for updating profile picture
-  const updateProfilePicture = async (event) => {
-    event.preventDefault();
-
+  const updateProfilePicture = async () => {
     if (!profilePicture || !(profilePicture instanceof File)) {
       triggerNotification("No profile picture selected.", "error");
+      return;
+    }
+
+    const error = validateFile(profilePicture);
+    if (error) {
+      triggerNotification(error, "error");
       return;
     }
 
@@ -171,10 +187,10 @@ const AccountSettings = () => {
 
     try {
       const response = await axios.put(
-        `${ApiURL}/documents-details/profile-pic/${user.user_id}`,
+        `${ApiURL}/update/documents-details/profile-pic/${user.user_id}`,
         payload
       );
-      console.log("Response profile:", response);
+      console.log("Response profile pic:", response.data);
 
       if (response.status >= 200 && response.status < 300) {
         triggerNotification("Profile picture updated successfully!", "success");
@@ -187,69 +203,10 @@ const AccountSettings = () => {
       triggerNotification(error.message, "error");
     }
   };
-  // const updateProfilePicture = async (event) => {
-  //   event.preventDefault();
-
-  //   // Check if profile picture is selected
-  //   if (!profileData.profile_pic) {
-  //     triggerNotification(
-  //       "Please select a profile picture to upload.",
-  //       "error"
-  //     );
-  //     return;
-  //   }
-
-  //   const file = profileData.profile_pic;
-
-  //   // Validate file type and size
-  //   const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-  //   if (!allowedTypes.includes(file.type)) {
-  //     triggerNotification("Please upload a JPEG, PNG, or JPG file.", "error");
-  //     return;
-  //   }
-
-  //   const maxSize = 2 * 1024 * 1024; // 2MB
-  //   if (file.size > maxSize) {
-  //     triggerNotification("File size must be less than 2MB.", "error");
-  //     return;
-  //   }
-
-  //   // Create FormData
-  //   const payload = new FormData();
-  //   payload.append("profile_pic", file);
-
-  //   // Show loading state (optional)
-  //   triggerNotification("Updating profile picture...", "info");
-
-  //   try {
-  //     const response = await fetch(
-  //       `${ApiURL}/documents-details/profile-pic/${user.user_id}`,
-  //       {
-  //         method: "PUT",
-  //         body: payload,
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       triggerNotification("Profile picture updated successfully!", "success");
-  //     } else {
-  //       const errorData = await response.json();
-  //       // Provide more detailed error messages if available
-  //       throw new Error(
-  //         errorData.message || "Failed to update profile picture."
-  //       );
-  //     }
-  //   } catch (error) {
-  //     triggerNotification(error.message, "error");
-  //   }
-  // };
 
   // API call for updating personal details
   const updatePersonalDetails = async (event) => {
     event.preventDefault();
-    if (profilePicture) {
-      updateProfilePicture();
-    }
 
     const {
       first_name,
@@ -259,8 +216,9 @@ const AccountSettings = () => {
       currentPassword,
       newPassword,
       confirmNewPassword,
-    } = profileData;
+    } = personalDetails;
 
+    // Password Validation
     if (newPassword) {
       if (currentPassword === newPassword) {
         triggerNotification(
@@ -269,23 +227,34 @@ const AccountSettings = () => {
         );
         return;
       }
+      if (newPassword !== confirmNewPassword) {
+        triggerNotification("New passwords do not match.", "error");
+        return;
+      }
     }
 
-    if (newPassword !== confirmNewPassword) {
-      triggerNotification("New passwords do not match.", "error");
+    const { confirmNewPassword: _, ...filteredPersonalDeatils } =
+      personalDetails;
+
+    // Remove keys with empty, null, or undefined values
+    const cleanedPersonalDetails = Object.fromEntries(
+      Object.entries(filteredPersonalDeatils).filter(([_, value]) => value)
+    );
+    // Check if data to update exists
+    if (Object.keys(cleanedPersonalDetails).length === 0) {
+      // Optionally trigger a notification for no data to send
+      // triggerNotification("No changes to update.", "info");
       return;
     }
 
-    const nonEmptyFields = Object.fromEntries(
-      Object.entries(profileData).filter(([_, value]) => value !== "")
-    );
+    console.log("cleanedPersonalDetails:", cleanedPersonalDetails);
+
     try {
       const response = await axios.put(
         `${ApiURL}/update/personal-details/${user.user_id}`,
-        nonEmptyFields
+        cleanedPersonalDetails
       );
-
-      console.log("Response personal:", response);
+      console.log("Response personal details:", response);
 
       if (response.status === 200) {
         triggerNotification(
@@ -302,15 +271,31 @@ const AccountSettings = () => {
     }
   };
 
+  // Unified Form Submission Handler
+  const handleFormSubmission = async (event) => {
+    event.preventDefault();
+
+    try {
+      if (profilePicture) {
+        await updateProfilePicture();
+      }
+      await updatePersonalDetails(event);
+    } catch (error) {
+      console.error("Error during form submission:", error);
+    }
+  };
+
   // API call for updating professional details
   const updateProfessionalDetails = async (event) => {
     event.preventDefault();
     const { license_number, qualification, specification, experience } =
-      profileData;
+      professionalDetails;
 
     const nonEmptyFields = Object.fromEntries(
-      Object.entries(profileData).filter(([_, value]) => value !== "")
+      Object.entries(professionalDetails).filter(([_, value]) => value !== "")
     );
+    console.log("nonEmptyFields:", nonEmptyFields);
+
     try {
       const response = await axios.put(
         `${ApiURL}/update/professional-details/${user.user_id}`,
@@ -335,26 +320,26 @@ const AccountSettings = () => {
   };
 
   const handleVerifyEmail = async () => {
-    if (!profileData.email) {
+    if (!personalDetails.email) {
       triggerNotification("Please enter an email address.", "error");
       return;
     }
-    if (!isValidEmail(profileData.email)) {
+    if (!isValidEmail(personalDetails.email)) {
       triggerNotification("Please enter a valid email address.", "error");
       return;
     }
 
-    sendEmailOtp(profileData.email);
+    sendEmailOtp(personalDetails.email);
     setOtpType("email");
   };
 
   const handleVerifyPhone = async () => {
-    if (!profileData.phone_number) {
+    if (!personalDetails.phone_number) {
       triggerNotification("Please enter a phone number.", "error");
       return;
     }
 
-    if (!isValidPhoneNumber(profileData.phone_number)) {
+    if (!isValidPhoneNumber(personalDetails.phone_number)) {
       triggerNotification(
         "Please enter a valid 10-digit phone number.",
         "error"
@@ -362,7 +347,7 @@ const AccountSettings = () => {
       return;
     }
 
-    sendPhoneOtp(profileData.phone_number);
+    sendPhoneOtp(personalDetails.phone_number);
     setOtpType("phone");
   };
   const sendEmailOtp = async (email) => {
@@ -391,7 +376,7 @@ const AccountSettings = () => {
     }
   };
   const sendPhoneOtp = async (phoneNumber) => {
-    if (!isValidPhoneNumber(profileData.phone_number)) {
+    if (!isValidPhoneNumber(personalDetails.phone_number)) {
       triggerNotification(
         "Please enter a valid 10-digit phone number.",
         "error"
@@ -486,8 +471,8 @@ const AccountSettings = () => {
           body: JSON.stringify({
             enteredOtp: otp,
             ...(type === "email"
-              ? { email: profileData.email }
-              : { phoneNumber: profileData.phone_number }),
+              ? { email: personalDetails.email }
+              : { phoneNumber: personalDetails.phone_number }),
           }),
         }
       );
@@ -583,10 +568,11 @@ const AccountSettings = () => {
 
       <div className="space-y-6 px-6">
         {progressStep === 1 && (
-          <form onSubmit={updatePersonalDetails} className="space-y-4 ">
+          <form onSubmit={handleFormSubmission} className="space-y-4 ">
             <h2 className="text-xl font-bold text-gray-800">
               Personal Details
             </h2>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
               <div className="flex items-center mb-6">
                 <div className="relative group">
@@ -642,7 +628,7 @@ const AccountSettings = () => {
                     type="text"
                     id="first_name"
                     name="first_name"
-                    value={profileData.first_name}
+                    value={personalDetails.first_name}
                     onChange={handleInputChange}
                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                     placeholder={
@@ -663,7 +649,7 @@ const AccountSettings = () => {
                     type="text"
                     id="last_name"
                     name="last_name"
-                    value={profileData.last_name}
+                    value={personalDetails.last_name}
                     onChange={handleInputChange}
                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                     placeholder={
@@ -683,7 +669,7 @@ const AccountSettings = () => {
                   type="email"
                   id="email"
                   name="email"
-                  value={profileData.email}
+                  value={personalDetails.email}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                   placeholder={
@@ -719,7 +705,7 @@ const AccountSettings = () => {
                   type="tel"
                   id="phone_number"
                   name="phone_number"
-                  value={profileData.phone_number}
+                  value={personalDetails.phone_number}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                   placeholder={
@@ -775,7 +761,7 @@ const AccountSettings = () => {
                     type={passwordVisibility.current ? "text" : "password"}
                     id="currentPassword"
                     name="currentPassword"
-                    value={profileData.currentPassword}
+                    value={personalDetails.currentPassword}
                     onChange={handleInputChange}
                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                     placeholder="Enter your current password"
@@ -802,7 +788,7 @@ const AccountSettings = () => {
                     type={passwordVisibility.new ? "text" : "password"}
                     id="newPassword"
                     name="newPassword"
-                    value={profileData.newPassword}
+                    value={personalDetails.newPassword}
                     onChange={handleInputChange}
                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                     placeholder="Enter your new password"
@@ -829,7 +815,7 @@ const AccountSettings = () => {
                     type={passwordVisibility.confirm ? "text" : "password"}
                     id="confirmNewPassword"
                     name="confirmNewPassword"
-                    value={profileData.confirmNewPassword}
+                    value={personalDetails.confirmNewPassword}
                     onChange={handleInputChange}
                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                     placeholder="Confirm your new password"
@@ -871,7 +857,7 @@ const AccountSettings = () => {
                   type="text"
                   id="license_number"
                   name="license_number"
-                  value={profileData.license_number}
+                  value={professionalDetails.license_number}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                   placeholder={
@@ -891,7 +877,7 @@ const AccountSettings = () => {
                   type="text"
                   id="qualification"
                   name="qualification"
-                  value={profileData.qualification}
+                  value={professionalDetails.qualification}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                   placeholder={
@@ -911,7 +897,7 @@ const AccountSettings = () => {
                   type="text"
                   id="specification"
                   name="specification"
-                  value={profileData.specification}
+                  value={professionalDetails.specification}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                   placeholder={
@@ -931,7 +917,7 @@ const AccountSettings = () => {
                   type="number"
                   id="experience"
                   name="experience"
-                  value={profileData.experience}
+                  value={professionalDetails.experience}
                   onChange={handleInputChange}
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
                   placeholder={
