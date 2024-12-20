@@ -162,20 +162,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       </Card>
 
       {/* Mobile Navbar (767px and below) */}
-      <div className="fixed top-0 left-0 right-0 bg-[#ab97d4] p-2 flex justify-around items-center md:hidden z-40 mt-24">
+<div className="fixed top-0 left-0 right-0 bg-[#d5cbe8] p-2 flex justify-around items-center md:hidden z-40 mt-24">
   {sidebarItems.map(({ label, icon, path }) => (
     <NavLink
       key={path}
       to={profileComplete ? path : "#"}
-      className="flex flex-col items-center justify-center text-center text-sm text-[#000000] hover:text-pink-500"
+      className="flex flex-col items-center justify-center text-center text-xs text-[#2f2346] bg-opacity-30 hover:text-pink-500 transition duration-300"
     >
       {/* Smaller icon size */}
       <span className="text-lg">{icon}</span>
       {/* Smaller label size */}
-      <span className="text-xs">{label}</span>
+      <p className="text-xs font-medium">{label}</p>
     </NavLink>
   ))}
 </div>
+
 
     </>
   );
