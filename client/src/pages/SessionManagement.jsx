@@ -1423,11 +1423,11 @@ const SessionTable = ({
                     )}
                     {session.status_for_counsellor === "Booked" && (
                       <>
-                        <ActionButton
+                        {/* <ActionButton
                           label="Cancel"
                           onClick={() => openCancelModal(session)}
                           colorClass="bg-red-500 hover:bg-red-600"
-                        />
+                        /> */}
                         <ActionButton
                           label="Reschedule"
                           onClick={() => openRescheduleModal(session)}

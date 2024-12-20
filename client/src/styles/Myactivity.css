@@ -135,3 +135,32 @@
   color: #38a169; /* Green color for feedback status */
   font-weight: 600; /* Semi-bold for emphasis */
 }
+
+/* Mobile View: Card Layout */
+.mobile-view-myactivity {
+  display: none;
+}
+
+.mobile-view-myactivity .session-card-myactivity {
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-view-myactivity .session-card-myactivity div {
+  margin: 0.5rem 0;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .activity-table-myactivity {
+    display: none;
+  }
+
+  .mobile-view-myactivity {
+    display: block;
+  }
+}

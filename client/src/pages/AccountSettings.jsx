@@ -143,7 +143,6 @@ const AccountSettings = () => {
   const validateFile = (file) => {
     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
     const maxSize = 2 * 1024 * 1024; // 2MB
-    console.log("File:", file);
 
     if (!file) return "No file selected.";
     if (!allowedTypes.includes(file.type)) return "Invalid file type.";
@@ -155,8 +154,6 @@ const AccountSettings = () => {
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
     const error = validateFile(file);
-    console.log("Error:", error);
-    console.log("File:", file);
 
     if (error) {
       triggerNotification(error, "error");
@@ -185,6 +182,8 @@ const AccountSettings = () => {
     const payload = new FormData();
     payload.append("profile_pic", profilePicture);
 
+    console.log("Payload:", payload);
+
     try {
       const response = await axios.put(
         `${ApiURL}/update/documents-details/profile-pic/${user.user_id}`,
@@ -205,6 +204,72 @@ const AccountSettings = () => {
   };
 
   // API call for updating personal details
+  // const updatePersonalDetails = async (event) => {
+  //   event.preventDefault();
+
+  //   const {
+  //     first_name,
+  //     last_name,
+  //     email,
+  //     phone_number,
+  //     currentPassword,
+  //     newPassword,
+  //     confirmNewPassword,
+  //   } = personalDetails;
+
+  //   // Password Validation
+  //   if (newPassword) {
+  //     if (currentPassword === newPassword) {
+  //       triggerNotification(
+  //         "New password cannot be the same as the current password.",
+  //         "error"
+  //       );
+  //       return;
+  //     }
+  //     if (newPassword !== confirmNewPassword) {
+  //       triggerNotification("New passwords do not match.", "error");
+  //       return;
+  //     }
+  //   }
+
+  //   const { confirmNewPassword: _, ...filteredPersonalDeatils } =
+  //     personalDetails;
+
+  //   // Remove keys with empty, null, or undefined values
+  //   const cleanedPersonalDetails = Object.fromEntries(
+  //     Object.entries(filteredPersonalDeatils).filter(([_, value]) => value)
+  //   );
+  //   // Check if data to update exists
+  //   if (Object.keys(cleanedPersonalDetails).length === 0) {
+  //     // Optionally trigger a notification for no data to send
+  //     // triggerNotification("No changes to update.", "info");
+  //     return;
+  //   }
+
+  //   console.log("cleanedPersonalDetails:", cleanedPersonalDetails);
+
+  //   try {
+  //     const response = await axios.put(
+  //       `${ApiURL}/update/personal-details/${user.user_id}`,
+  //       cleanedPersonalDetails
+  //     );
+  //     console.log("Response personal details:", response);
+
+  //     if (response.status === 200) {
+  //       triggerNotification(
+  //         "Personal details updated successfully!",
+  //         "success"
+  //       );
+  //     } else {
+  //       throw new Error(
+  //         response.statusText || "Failed to update personal details."
+  //       );
+  //     }
+  //   } catch (error) {
+  //     triggerNotification(error.message, "error");
+  //   }
+  // };
+
   const updatePersonalDetails = async (event) => {
     event.preventDefault();
 
@@ -217,6 +282,28 @@ const AccountSettings = () => {
       newPassword,
       confirmNewPassword,
     } = personalDetails;
+
+    if (email || phone_number) {
+      // Ensure email and phone are verified before proceeding
+      if (!isEmailVerified && email !== profileDataPlaceholder.email) {
+        triggerNotification(
+          "Please verify your email before updating.",
+          "error"
+        );
+        return;
+      }
+
+      if (
+        !isPhoneVerified &&
+        phone_number !== profileDataPlaceholder.phone_number
+      ) {
+        triggerNotification(
+          "Please verify your phone number before updating.",
+          "error"
+        );
+        return;
+      }
+    }
 
     // Password Validation
     if (newPassword) {
@@ -233,28 +320,32 @@ const AccountSettings = () => {
       }
     }
 
-    const { confirmNewPassword: _, ...filteredPersonalDeatils } =
+    const { confirmNewPassword: _, ...filteredPersonalDetails } =
       personalDetails;
 
     // Remove keys with empty, null, or undefined values
     const cleanedPersonalDetails = Object.fromEntries(
-      Object.entries(filteredPersonalDeatils).filter(([_, value]) => value)
+      Object.entries(filteredPersonalDetails).filter(([_, value]) => value)
     );
+
     // Check if data to update exists
     if (Object.keys(cleanedPersonalDetails).length === 0) {
-      // Optionally trigger a notification for no data to send
       // triggerNotification("No changes to update.", "info");
       return;
     }
 
-    console.log("cleanedPersonalDetails:", cleanedPersonalDetails);
+    // Include current and new passwords in the payload
+    const payload = {
+      ...cleanedPersonalDetails,
+      currentPassword,
+      newPassword,
+    };
 
     try {
       const response = await axios.put(
         `${ApiURL}/update/personal-details/${user.user_id}`,
-        cleanedPersonalDetails
+        payload
       );
-      console.log("Response personal details:", response);
 
       if (response.status === 200) {
         triggerNotification(
@@ -267,7 +358,10 @@ const AccountSettings = () => {
         );
       }
     } catch (error) {
-      triggerNotification(error.message, "error");
+      triggerNotification(
+        error.response?.data?.message || error.message,
+        "error"
+      );
     }
   };
 

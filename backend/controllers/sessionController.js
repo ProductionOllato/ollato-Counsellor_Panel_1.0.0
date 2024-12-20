@@ -179,8 +179,8 @@ const cancelBookingByCounsellor = async (req, res) => {
     .withMessage("Counsellor ID must be a valid integer")
     .run(req);
   await body("reason_of_cancellation")
-    .isLength({ min: 10 })
-    .withMessage("Reason must be at least 10 characters long")
+    .isLength({ min: 5 })
+    .withMessage("Reason must be at least 5 characters long")
     .run(req);
 
   const errors = validationResult(req);

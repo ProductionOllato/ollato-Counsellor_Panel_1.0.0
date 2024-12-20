@@ -82,16 +82,99 @@ exports.addCounsellorAvailability = async (req, res) => {
   }
 };
 
+// exports.updateAvailability = async (req, res) => {
+//   const {
+//     counsellor_id, // Required to identify the counsellor
+//     date, // Optional, used for matching
+//     start_time, // Optional, used for matching
+//     end_time, // Optional, used for matching
+//     mode, // Optional, used for matching or updating
+//     duration, // Optional, used for updating
+//     status, // Optional, used for updating
+//   } = req.body;
+
+//   console.log("Received data update availability: ", req.body);
+
+//   // Validate required fields
+//   if (!counsellor_id) {
+//     return res.status(400).json({ msg: "counsellor_id is required" });
+//   }
+
+//   try {
+//     // Dynamic WHERE clause to identify the row
+//     let whereClause = "counsellor_id = ?";
+//     const whereParams = [counsellor_id];
+
+//     if (date) {
+//       whereClause += " AND date = ?";
+//       whereParams.push(date);
+//     }
+//     if (start_time) {
+//       whereClause += " AND start_time = ?";
+//       whereParams.push(start_time);
+//     }
+//     if (end_time) {
+//       whereClause += " AND end_time = ?";
+//       whereParams.push(end_time);
+//     }
+
+//     // Validate that we have fields to update
+//     const updates = [];
+//     const updateParams = [];
+
+//     if (mode) {
+//       updates.push("mode = ?");
+//       updateParams.push(mode);
+//     }
+//     if (duration) {
+//       updates.push("duration = ?");
+//       updateParams.push(duration);
+//     }
+//     if (status) {
+//       updates.push("status = ?");
+//       updateParams.push(status);
+//     }
+
+//     if (updates.length === 0) {
+//       return res
+//         .status(400)
+//         .json({ msg: "At least one field to update must be provided" });
+//     }
+
+//     // Construct the full SQL query
+//     const query = `
+//       UPDATE counsellor_availability
+//       SET ${updates.join(", ")}
+//       WHERE ${whereClause}
+//     `;
+//     console.log("WHERE Clause:", whereClause);
+//     console.log("SQL Query:", query);
+//     // Combine update and where parameters
+//     const params = [...updateParams, ...whereParams];
+//     console.log("WHERE Params:", whereParams);
+//     // Execute the query
+//     const [result] = await db.query(query, params);
+
+//     console.log("Update result:", result);
+//     console.log("No rows matched the WHERE clause:", whereClause, whereParams);
+//     console.log("Update Fields:", updates);
+//     console.log("Update Params:", updateParams);
+
+//     if (result.affectedRows === 0) {
+//       console.warn("No matching availability found for the given criteria");
+//       return res.status(404).json({ msg: "No matching availability found" });
+//     }
+
+//     res.status(200).json({ msg: "Availability updated successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ msg: "Internal server error" });
+//   }
+// };
+
 exports.updateAvailability = async (req, res) => {
-  const {
-    counsellor_id, // Required to identify the counsellor
-    date, // Optional, used for matching
-    start_time, // Optional, used for matching
-    end_time, // Optional, used for matching
-    mode, // Optional, used for matching or updating
-    duration, // Optional, used for updating
-    status, // Optional, used for updating
-  } = req.body;
+  const { counsellor_id, date, start_time, end_time, mode, duration, status } =
+    req.body;
 
   console.log("Received data update availability: ", req.body);
 
@@ -147,15 +230,14 @@ exports.updateAvailability = async (req, res) => {
       SET ${updates.join(", ")}
       WHERE ${whereClause}
     `;
+    console.log("WHERE Clause:", whereClause);
     console.log("SQL Query:", query);
     // Combine update and where parameters
     const params = [...updateParams, ...whereParams];
-    console.log("SQL Parameters:", params);
+    console.log("Update Params:", params);
+
     // Execute the query
     const [result] = await db.query(query, params);
-    // console.log("Result update availability :", result);
-    console.log("Update result:", result);
-    console.log("No rows matched the WHERE clause:", whereClause, whereParams);
 
     if (result.affectedRows === 0) {
       console.warn("No matching availability found for the given criteria");
@@ -164,8 +246,8 @@ exports.updateAvailability = async (req, res) => {
 
     res.status(200).json({ msg: "Availability updated successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Internal server error" });
+    console.error("Error updating availability:", error);
+    res.status(500).json({ msg: "Internal server error." });
   }
 };
 

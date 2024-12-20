@@ -6,13 +6,11 @@ const AvailabilityForm = ({ onSubmit }) => {
   const { triggerNotification } = useNotification();
 
   const [formData, setFormData] = useState({
-    // start_date: "",
-    // end_date: "",
     date: "",
     start_time: "",
     end_time: "",
-    mode: "video", // default mode is 'video'
-    duration: "60", // default duration is 60 mins
+    mode: "video",
+    duration: "60", 
   });
 
   // Handle input changes
@@ -244,7 +242,7 @@ const AvailabilityForm = ({ onSubmit }) => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-[#1E3E62] hover:bg-[#0a1c31] text-white py-2 px-6 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-[#1E3E62]/50"
+            className="bg-[#1E3E62] text-base hover:bg-[#0a1c31] text-white py-2 px-6 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-[#1E3E62]/50"
           >
             Add Availability
           </button>

@@ -18,13 +18,13 @@ const buildUpdateQuery = (table, fields, id) => {
 // Update personal details
 exports.updatePersonalDetails = async (req, res) => {
   const { id } = req.params;
+  console.log("Request params:", req.params);
   // let updates = req.body;
   let { currentPassword, newPassword, ...updates } = req.body;
-  console.log("Request body - PersonalDetails:", req.body);
 
-  if (!id || Object.keys(updates).length === 0) {
+  if (!id) {
     return res.status(400).json({
-      message: "Invalid request. ID and at least one field are required.",
+      message: "Invalid request. ID is required.",
     });
   }
 
@@ -49,6 +49,7 @@ exports.updatePersonalDetails = async (req, res) => {
         currentPassword,
         user[0].password
       );
+      console.log("Is password valid:", isPasswordValid);
 
       if (!isPasswordValid) {
         return res

@@ -156,26 +156,74 @@ const AvailabilityManagements = () => {
 
   //
   const handleEditSlot = (slot) => {
-    setSelectedSlot(slot); // Set the slot to be edited
-    setShowEditModal(true); // Open the modal
+    setSelectedSlot(slot);
+    setShowEditModal(true);
   };
 
   //handle update slot
+  // const handleUpdateSlot = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   console.log("Selected Slot:", selectedSlot);
+
+  //   const payload = {
+  //     counsellor_id: selectedSlot.counsellor_id,
+  //     date: selectedSlot.date,
+  //     start_time: selectedSlot.start_time,
+  //     end_time: selectedSlot.end_time,
+  //     mode: selectedSlot.mode,
+  //     duration: selectedSlot.duration,
+  //     status: selectedSlot.status,
+  //   };
+  //   console.log("Payload update availability:", payload);
+
+  //   try {
+  //     const response = await axios.put(
+  //       `${APIURL}/counsellor/update-availability`,
+  //       payload
+  //     );
+  //     console.log("Response update availability:", response);
+
+  //     if (response.status === 200) {
+  //       // Update the availability in the state after successful update
+  //       setAvailability((prev) =>
+  //         prev.map((slot) =>
+  //           slot.sr_no === selectedSlot.sr_no ? selectedSlot : slot
+  //         )
+  //       );
+  //       setShowEditModal(false); // Close the modal
+  //       triggerNotification("Availability updated successfully!", "success");
+  //     } else {
+  //       throw new Error(
+  //         response.data.message || "Failed to update availability."
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message || "Failed to update availability.");
+  //     triggerNotification(
+  //       error.message || "Failed to update availability.",
+  //       "error"
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleUpdateSlot = async (e) => {
     e.preventDefault();
     setLoading(true);
     console.log("Selected Slot:", selectedSlot);
 
     const payload = {
-      counsellor_id: selectedSlot.counsellor_id,
-      date: selectedSlot.date,
+      counsellor_id: user.user_id, // Ensure you are sending the counsellor ID
+      dates: [selectedSlot.date],
       start_time: selectedSlot.start_time,
       end_time: selectedSlot.end_time,
       mode: selectedSlot.mode,
       duration: selectedSlot.duration,
       status: selectedSlot.status,
-      sr_no: selectedSlot.sr_no,
     };
+
     console.log("Payload update availability:", payload);
 
     try {
@@ -189,7 +237,7 @@ const AvailabilityManagements = () => {
         // Update the availability in the state after successful update
         setAvailability((prev) =>
           prev.map((slot) =>
-            slot.sr_no === selectedSlot.sr_no ? selectedSlot : slot
+            slot.sr_no === selectedSlot.sr_no ? { ...slot, ...payload } : slot
           )
         );
         setShowEditModal(false); // Close the modal
@@ -202,7 +250,7 @@ const AvailabilityManagements = () => {
     } catch (error) {
       console.error(error.message || "Failed to update availability.");
       triggerNotification(
-        error.message || "Failed to update availability.",
+        error.response?.data?.message || "Failed to update availability.",
         "error"
       );
     } finally {
@@ -210,7 +258,6 @@ const AvailabilityManagements = () => {
     }
   };
 
-  //
   const handleSaveSlot = async () => {
     if (!validateSlot()) return;
 
@@ -380,7 +427,7 @@ const AvailabilityManagements = () => {
                 <div className="overflow-x-auto mt-6">
                   <table className="min-w-full table-auto border-collapse border border-slate-200">
                     <thead>
-                      <tr className="bg-slate-50 border-b border-slate-300 text-center">
+                      <tr className="bg-slate-50 border-b border-slate-300 text-center text-base">
                         {[
                           { key: "sr_no", label: "Sr. No." },
                           { key: "date", label: "Date" },
@@ -391,7 +438,7 @@ const AvailabilityManagements = () => {
                         ].map((col) => (
                           <th
                             key={col.key}
-                            className="p-4 text-base font-normal leading-none text-slate-500 border-b border-slate-300 "
+                            className="p-2 text-base font-normal leading-none text-slate-500 border-b border-slate-300 "
                             onClick={() => handleSort(col.key)}
                           >
                             {col.label}
@@ -410,7 +457,7 @@ const AvailabilityManagements = () => {
                             )}
                           </th>
                         ))}
-                        <th className="p-4 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">
+                        <th className="p-2 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">
                           Actions
                         </th>
                       </tr>
@@ -419,24 +466,24 @@ const AvailabilityManagements = () => {
                       {tableData.length > 0 ? (
                         paginatedData.map((slot, index) => (
                           <tr key={slot.sr_no} className="hover:bg-slate-50">
-                            <td className="p-4 border-b border-slate-200">
+                            <td className="py-4 text-center border-b border-slate-200">
                               {(currentPage - 1) * slotsPerPage + index + 1}
                             </td>
-                            <td className="p-4 border-b border-slate-200">
+                            <td className="py-4 text-center  border-b border-slate-200">
                               {slot.date}
                             </td>
-                            <td className="p-4 border-b border-slate-200">
+                            <td className="py-4 text-center border-b border-slate-200">
                               {slot.start_time} to {slot.end_time}
                             </td>
-                            <td className="p-4 border-b border-slate-200">
+                            <td className="py-4 text-center border-b border-slate-200">
                               {slot.mode}
                             </td>
-                            <td className="p-4 border-b border-slate-200">
+                            <td className="py-4 text-center border-b border-slate-200">
                               {slot.duration}
                             </td>
-                            <td className="p-4 border-b border-slate-200">
+                            <td className="py-4 text-center border-b border-slate-200">
                               <span
-                                className={`py-1 px-2 rounded text-white text-sm ${
+                                className={`py-1 text-center px-2 rounded text-white text-sm ${
                                   slot.status === "available"
                                     ? "bg-[#347928]"
                                     : "bg-gray-500"
@@ -445,7 +492,7 @@ const AvailabilityManagements = () => {
                                 {slot.status}
                               </span>
                             </td>
-                            <td className="p-4 border-b border-slate-200 flex">
+                            <td className="py-2 border-b border-slate-200 flex justify-center">
                               <button
                                 onClick={() => handleEditSlot(slot)}
                                 className="bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
@@ -473,7 +520,7 @@ const AvailabilityManagements = () => {
                           </td>
                         </tr>
                       )}
-                      {tableData.length === 0 && (
+                      {/* {tableData.length === 0 && (
                         <tr>
                           <td
                             colSpan="8"
@@ -482,7 +529,7 @@ const AvailabilityManagements = () => {
                             No sessions found matching the search criteria.
                           </td>
                         </tr>
-                      )}
+                      )} */}
                     </tbody>
                   </table>
 
@@ -508,7 +555,7 @@ const AvailabilityManagements = () => {
                               id="date"
                               type="date"
                               name="date"
-                              value={selectedSlot?.date}
+                              value={selectedSlot.date}
                               onChange={handleInputChange}
                               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
@@ -517,13 +564,13 @@ const AvailabilityManagements = () => {
                           <TimeDropdown
                             label="Start Time"
                             name="start_time"
-                            value={selectedSlot?.start_time}
+                            value={selectedSlot.start_time}
                             onChange={handleInputChange}
                           />
                           <TimeDropdown
                             label="End Time"
                             name="end_time"
-                            value={selectedSlot?.end_time}
+                            value={selectedSlot.end_time}
                             onChange={handleInputChange}
                           />
 
@@ -537,7 +584,7 @@ const AvailabilityManagements = () => {
                             <select
                               id="mode"
                               name="mode"
-                              value={selectedSlot?.mode}
+                              value={selectedSlot.mode}
                               onChange={handleInputChange}
                               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
@@ -562,7 +609,7 @@ const AvailabilityManagements = () => {
                             <select
                               id="duration"
                               name="duration"
-                              value={selectedSlot?.duration}
+                              value={selectedSlot.duration}
                               onChange={handleInputChange}
                               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
@@ -587,7 +634,7 @@ const AvailabilityManagements = () => {
                             <select
                               id="status"
                               name="status"
-                              value={selectedSlot?.status}
+                              value={selectedSlot.status}
                               onChange={handleInputChange}
                               className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
@@ -600,14 +647,14 @@ const AvailabilityManagements = () => {
                             <button
                               type="button"
                               onClick={() => setShowEditModal(false)}
-                              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md mr-2 transition duration-150 ease-in-out"
+                              className="text-base bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md mr-2 transition duration-150 ease-in-out"
                             >
                               Cancel
                             </button>
                             <button
                               type="submit"
                               disabled={loading}
-                              className={`bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${
+                              className={`text-base bg-[#7047A3] hover:bg-[#4b3368] text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${
                                 loading ? "opacity-50 cursor-not-allowed" : ""
                               }`}
                             >
