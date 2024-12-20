@@ -12,11 +12,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
 }
 
 .forgot-logo {
-    width: 30%;
+    width: 15%;
     height: auto;
     object-fit: contain;
     margin: 0;
@@ -32,7 +31,7 @@
 }
 
 .forgot-form-container {
-    background-color: #fff;
+    background-color: #d5d3d3;
     padding: 32px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -43,7 +42,7 @@
 .forgot-heading {
     font-size: 24px;
     font-weight: bold;
-    color: #ff9a3c;
+    color: #000000;
     text-align: center;
     margin-bottom: 24px;
 }
@@ -54,7 +53,7 @@
 
 .forgot-form-label {
     font-size: 14px;
-    color: #ff9a3c;
+    color: #000000;
     margin-bottom: 8px;
     display: block;
 }
@@ -104,7 +103,7 @@
 
 .forgot-back-to-login-button {
     font-size: 14px;
-    color: #ff9a3c;
+    color: #000000;
     background: none;
     border: none;
     cursor: pointer;
@@ -118,11 +117,11 @@
 /* Responsive adjustments for large screens (desktop and large tablets) */
 @media (max-width: 1200px) {
     .forgot-logo {
-        width: 40%;
+        width: 30%;
     }
 
     .forgot-form-container {
-        padding: 24px;
+        padding: 14px;
     }
 
     .forgot-heading {
@@ -141,7 +140,7 @@
     }
 
     .forgot-logo {
-        width: 50%;
+        width: 40%;
     }
 
     .forgot-form-container {
