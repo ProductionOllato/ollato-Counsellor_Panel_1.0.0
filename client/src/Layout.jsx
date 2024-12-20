@@ -30,7 +30,7 @@ import Sidebar from "./components/Sidebar";
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-auto">
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
@@ -51,7 +51,7 @@ function Layout({ children }) {
           //   marginLeft: sidebarOpen ? "16rem" : "5rem", // Sidebar adjustment
           //   marginTop: "5rem", // Space below fixed header
           // }}
-          className="flex-1 bg-gray-100 p-6 pt-20 overflow-auto scrollbar-custom transition-all duration-300"
+          className="flex-1 bg-gray-100 p-6 pt-20 overflow-auto scrollbar-custom transition-all duration-300 overflow-y-auto"
         >
           {children}
         </main>
