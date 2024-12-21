@@ -147,7 +147,7 @@ export default function Dashboard() {
   if (profileStatus === "pending") {
     return (
       <>
-      <div className="flex-1 h-full p-4 md:p-6 flex items-center justify-center">
+      <div className="flex-1 h-full pt-10 mt-10 md:p-6 flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-2xl h-auto w-full max-w-md md:max-w-lg p-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center">
             Welcome to Your Dashboard

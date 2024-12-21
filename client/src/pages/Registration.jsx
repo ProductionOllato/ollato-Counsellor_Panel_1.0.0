@@ -302,8 +302,8 @@ const Registration = () => {
     <div className="min-h-screen flex flex-col-reverse md:flex-row bg-gray-100">
   {/* Form Section */}
   <div className="container">
-      <img src={LOGO} alt="Logo" className="logo-behind" />
     <div className="form-section">
+      <img src={LOGO} alt="Logo" className="logo" />
       {/* Registration Form */}
       <form onSubmit={handlePersonalDetailsSubmit}>
         {/* Header */}

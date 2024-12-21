@@ -1,5 +1,6 @@
+/* General header styles */
 .header {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(251, 236, 236, 0.8);
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +12,7 @@
   align-items: center;
   justify-content: space-evenly;
   transition: all 0.2s ease;
-  height: 90px;
+  height: 95px;
 }
 
 .logo {
@@ -20,16 +21,14 @@
 }
 
 .logo-image {
-  height: 80px;
-  width: auto;
-  object-fit: contain;
+  height: 100px;
+  width: 150px;
   transition: all 0.3s ease;
   image-rendering: crisp-edges;
+  /* margin-top: 5px; */
 }
 
-.logo-image:hover {
-  transform: scale(1.1);
-}
+
 
 .header-container {
   display: flex;
@@ -60,6 +59,7 @@
   color: transparent;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
+
 .sub-title {
   font-size: 20px;
   font-weight: 300;
@@ -68,6 +68,11 @@
   letter-spacing: 1px;
 }
 
+.sub-title-2 {
+  color: #000000;
+}
+
+/* Profile section */
 .profile-section {
   display: flex;
   align-items: center;
@@ -151,10 +156,12 @@
   background-color: rgba(240, 240, 240, 0.5);
 }
 
+/* For screens smaller than 768px */
 @media (max-width: 768px) {
-  .logo-image {
-    height: 50px;
-  }
+  /* .logo-image{
+    height: 80px;
+    width: 120px;
+  } */
 
   .profile-btn span {
     display: none;
@@ -176,8 +183,13 @@
   .title {
     font-size: 24px;
   }
+
+  .sub-title-2 {
+    font-size: 20px;
+  }
 }
 
+/* For screens smaller than 600px */
 @media (max-width: 600px) {
   .profile-pic {
     width: 28px;
@@ -189,50 +201,36 @@
   }
 
   .logo-image {
-    height: 40px;
+    height: 60px;
+    width: 100px;
   }
 
   .title {
     font-size: 20px;
   }
+
+  .sub-title-2 {
+    font-size: 15px;
+  }
 }
 
-/* Styles for screens with max-width: 769px */
+/* For screens smaller than 769px */
 @media (max-width: 769px) {
   .header {
-    background: rgba(255, 255, 255, 0.8);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 50;
-    width: 100%;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
-    padding: 5px 30px; /* Adjust padding for smaller screens */
+    padding: 5px 30px;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Align elements to the end (right) */
-    transition: all 0.2s ease;
+    justify-content: flex-end;
   }
 
   .logo-container {
     flex-shrink: 0;
   }
 
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-
   .logo-image {
-    height: 60px; /* Adjust logo size for smaller screens */
-    width: auto;
-    object-fit: contain;
-    transition: all 0.3s ease;
-    image-rendering: crisp-edges;
-  }
-
-  .logo-image:hover {
-    transform: scale(1.1);
+    margin-top: 20px;
+    height: 100px;
+    width: 170px;
   }
 
   .header-container {
@@ -248,7 +246,7 @@
     display: flex;
     justify-content: center;
     flex-grow: 1;
-    font-size: 20px; /* Smaller text for header */
+    font-size: 20px;
     font-weight: 400;
     color: #e9385b;
     text-transform: uppercase;
@@ -264,7 +262,7 @@
     display: flex;
     align-items: center;
     position: relative;
-    justify-content: flex-start; /* Align profile section to left */
+    justify-content: flex-start;
   }
 
   .profile-btn {
@@ -274,9 +272,9 @@
     background: rgba(255, 255, 255, 0.5);
     border: none;
     color: black;
-    font-size: 16px; /* Smaller font for mobile */
+    font-size: 16px;
     font-weight: 500;
-    padding: 8px 14px; /* Adjust padding */
+    padding: 8px 14px;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -293,59 +291,9 @@
     border-radius: 50%;
     border: 2px solid #fff;
   }
-
-  /* Dropdown menu for mobile profile button */
-  .profile-section:hover .dropdown-menu,
-  .profile-btn:hover + .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  .dropdown-menu {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background-color: #fff;
-    color: #333333;
-    padding: 12px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 200px;
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
-  }
-
-  .dropdown-btn {
-    background: none;
-    border: none;
-    color: #333333;
-    padding: 10px 16px;
-    text-align: left;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-
-  .dropdown-btn:hover {
-    background-color: rgba(188, 204, 204, 0.2);
-    color: #6a669d;
-  }
-
-  .dropdown-btn.disabled {
-    cursor: not-allowed;
-    color: #b0b0b0;
-    background-color: rgba(240, 240, 240, 0.5);
-  }
 }
 
-/* Styles for screens with min-width 409px */
+/* For screens smaller than 520px */
 @media (max-width: 520px) {
   .header {
     background: rgba(255, 255, 255, 0.8);
@@ -355,48 +303,24 @@
     z-index: 50;
     width: 100%;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
-    padding: 5px 30px; /* Adjust padding for smaller screen */
+    padding: 5px 30px;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Align elements to the start */
+    justify-content: flex-end;
     transition: all 0.2s ease;
   }
 
-  .logo-container {
-    flex-shrink: 0;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-
   .logo-image {
-    height: 60px; /* Adjust logo size for smaller screens */
-    width: auto;
-    object-fit: contain;
-    transition: all 0.3s ease;
-    image-rendering: crisp-edges;
-  }
-
-  .logo-image:hover {
-    transform: scale(1.1);
-  }
-
-  .header-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
+    height: 80px;
+    width: 140px;
+    margin-top: 10px;
   }
 
   .header-title {
     display: flex;
     justify-content: center;
     flex-grow: 1;
-    font-size: 20px; /* Smaller text for header */
+    font-size: 20px;
     font-weight: 400;
     color: #e9385b;
     text-transform: uppercase;
@@ -412,7 +336,7 @@
     display: flex;
     align-items: center;
     position: relative;
-    justify-content: flex-start; /* Align profile section to left */
+    justify-content: flex-start;
   }
 
   .profile-btn {
@@ -422,9 +346,9 @@
     background: rgba(255, 255, 255, 0.5);
     border: none;
     color: black;
-    font-size: 16px; /* Smaller font for mobile */
+    font-size: 16px;
     font-weight: 500;
-    padding: 8px 14px; /* Adjust padding */
+    padding: 8px 14px;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -442,53 +366,11 @@
     border: 2px solid #fff;
   }
 
-  /* Dropdown menu for mobile profile button */
-  .profile-section:hover .dropdown-menu,
-  .profile-btn:hover + .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+  .sub-title {
+    font-size: 15px;
   }
 
-  .dropdown-menu {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background-color: #fff;
-    color: #333333;
-    padding: 12px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 200px;
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
-  }
-
-  .dropdown-btn {
-    background: none;
-    border: none;
-    color: #333333;
-    padding: 10px 16px;
-    text-align: left;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-
-  .dropdown-btn:hover {
-    background-color: rgba(188, 204, 204, 0.2);
-    color: #6a669d;
-  }
-
-  .dropdown-btn.disabled {
-    cursor: not-allowed;
-    color: #b0b0b0;
-    background-color: rgba(240, 240, 240, 0.5);
+  .sub-title-2 {
+    font-size: 12px;
   }
 }

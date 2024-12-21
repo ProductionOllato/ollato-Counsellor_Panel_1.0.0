@@ -62,8 +62,8 @@ function Header({ sidebarOpen, setSidebarOpen }) {
           {/* Heading */}
           <div className="header-title">
             <h1 className="title">
-              Ollato's Mind Mapping - Counselor's Management Panel
-              {/* <p className="sub-title">Counselor's Management Panel </p> */}
+              {/* Ollato's Mind Mapping - Counselor's Management Panel */}
+              <p className="sub-title">Ollato's Mind Mapping </p> <p className="sub-title-2"> Counselor's Management Panel </p>
             </h1>
             {/* <h2 className="sub-title ">Counselor's Management Panel </h2> */}
           </div>
