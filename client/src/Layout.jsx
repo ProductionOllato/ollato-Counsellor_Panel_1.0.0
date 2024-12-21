@@ -26,6 +26,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import "./styles/Layout.css";
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -45,27 +46,74 @@ function Layout({ children }) {
 
   return (
     <>
-    <div className="flex h-screen overflow-auto">
-      {/* Sidebar */}
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <div className="layout-content flex h-screen overflow-auto">
+        {/* Sidebar */}
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      {/* Main Content Area */}
-      <div
-        className={`${sidebarOpen ? "ml-64" : ""} ${
-          isMobile ? "w-full" : "flex-1 flex flex-col"
-        }`}
-      >
-        {/* Header */}
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        {/* Main Content Area */}
+        <div
+          className={`layout-main ${sidebarOpen ? "ml-64" : "ml-20"} ${
+            isMobile ? "w-full" : "flex-1 flex flex-col"
+          } `}
+         
+        >
+          {/* Header */}
+          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        {/* Main Content */}
-        <main className="flex-1 bg-gray-100 p-6 pt-20 overflow-auto scrollbar-custom transition-all duration-300 overflow-y-auto">
-          {children}
-        </main>
+          {/* Main Content */}
+          <main className="flex-1 bg-gray-100 p-6 pt-20 overflow-auto scrollbar-custom transition-all duration-300 overflow-y-auto">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
     </>
   );
 }
 
 export default Layout;
+
+// import React, { useState, useEffect } from "react";
+// import Header from "./components/Header";
+// import Sidebar from "./components/Sidebar";
+
+// function Layout({ children }) {
+//   const [sidebarOpen, setSidebarOpen] = useState(true);
+//   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+
+//   // Detect window width changes and set state accordingly
+//   useEffect(() => {
+//     const handleResize = () => {
+//       setIsMobile(window.innerWidth <= 767);
+//     };
+
+//     window.addEventListener("resize", handleResize); // Add resize event listener
+
+//     return () => {
+//       window.removeEventListener("resize", handleResize); // Cleanup on unmount
+//     };
+//   }, []);
+
+//   return (
+//     <div className="flex h-screen overflow-auto">
+//       {/* Sidebar */}
+//       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+//       {/* Main Content Area */}
+//       <div
+//         className={`${sidebarOpen ? "ml-64" : "ml-20"} ${
+//           isMobile ? "w-full" : "flex-1 flex flex-col"
+//         }`}
+//       >
+//         {/* Header */}
+//         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+//         {/* Main Content */}
+//         <main className="flex-1 bg-gray-100 p-6 pt-20 overflow-auto scrollbar-custom transition-all duration-300">
+//           {children}
+//         </main>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Layout;

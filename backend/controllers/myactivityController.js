@@ -50,4 +50,5 @@ const getMyActivity = async (req, res) => {
   }
 };
 
+const getFeedback = async (req, res) => {};
 module.exports = { getMyActivity };

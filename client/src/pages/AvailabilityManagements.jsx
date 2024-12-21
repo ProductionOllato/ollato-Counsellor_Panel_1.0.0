@@ -5,6 +5,7 @@ import { CiEdit } from "react-icons/ci";
 import axios from "axios";
 import AvailabilityForm from "../components/AvailabilityForm";
 import { useAuth } from "../context/UserContext";
+import "../styles/AvailabilityManagements.css";
 
 const AvailabilityManagements = () => {
   const initialFormData = () => ({
@@ -350,7 +351,7 @@ const AvailabilityManagements = () => {
   };
 
   return (
-    <div className="w-full bg-white shadow-lg rounded-lg mt-4 pt-2 h-full">
+    <div className="availability-container w-full bg-white shadow-lg rounded-lg mt-10 pt-2 h-full">
       <div className="flex justify-center items-center mb-6 px-4 sm:px-6">
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-700 text-center">
           Availability Management

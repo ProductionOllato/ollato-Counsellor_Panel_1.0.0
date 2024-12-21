@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
 import { FaRegUser } from "react-icons/fa";
 import axios from "axios";
+import "../styles/Dashboard.css";
 
 export default function Dashboard() {
   const { user, profileComplete, profileStatus, approveProfile } = useAuth();
@@ -147,36 +148,35 @@ export default function Dashboard() {
   if (profileStatus === "pending") {
     return (
       <>
-      <div className="flex-1 h-full pt-10 mt-10 md:p-6 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-2xl h-auto w-full max-w-md md:max-w-lg p-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center">
-            Welcome to Your Dashboard
-          </h2>
-  
-          <hr className="border-t-2 border-gray-300 mb-6" />
-  
-          <div className="flex flex-col items-center">
-            <p className="text-[#b640b0] text-center text-base sm:text-lg font-semibold shadow">
-              Access Denied! Please complete your registration to get started.
-            </p>
-  
-            <button
-              onClick={completeProfile}
-              className="mt-6 sm:mt-10 bg-[#AE445A] hover:bg-[#4D4C7D] text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-md transition duration-200 ease-in-out shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#AE445A] focus:ring-opacity-50"
-            >
-              Complete Profile
-            </button>
+        <div className="dashboard-container flex-1 h-full pt-10 mt-10 md:p-6 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-2xl h-auto w-full max-w-md md:max-w-lg p-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center">
+              Welcome to Your Dashboard
+            </h2>
+
+            <hr className="border-t-2 border-gray-300 mb-6" />
+
+            <div className="flex flex-col items-center">
+              <p className="text-[#b640b0] text-center text-base sm:text-lg font-semibold shadow">
+                Access Denied! Please complete your registration to get started.
+              </p>
+
+              <button
+                onClick={completeProfile}
+                className="mt-6 sm:mt-10 bg-[#AE445A] hover:bg-[#4D4C7D] text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-md transition duration-200 ease-in-out shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#AE445A] focus:ring-opacity-50"
+              >
+                Complete Profile
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       </>
     );
   }
-  
 
   if (profileStatus === "waiting_approval") {
     return (
-      <div className="flex-1 h-full p-4 md:p-6">
+      <div className="dashboard-container flex-1 h-full p-4 md:p-6">
         <div className="bg-white rounded-lg shadow-2xl h-auto mb-6 p-6">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
             Welcome to your dashboard
@@ -197,18 +197,18 @@ export default function Dashboard() {
   if (profileComplete) {
     return (
       <>
-          <div className="flex-1 px-1 h-full mt-10">
-            <div className="p-4 rounded-lg w-full shadow-lg h-auto mb-6 mt-2 bg-white">
+        <div className="dashboard-container flex-1 px-1 h-full mt-10 sm:mt-12">
+          <div className="p-4 rounded-lg w-full shadow-lg h-auto mb-6 mt-2  bg-white">
             {/* Welcome Section */}
-              <div className="flex items-center justify-center h-full">
-                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 text-center font-sans">
-                  Welcome{" "}
-                  {user?.first_name.charAt(0).toUpperCase() +
-                    user?.first_name.slice(1)}{" "}
-                  {user?.last_name.charAt(0).toUpperCase() +
-                    user?.last_name.slice(1)}
-                </h2>
-              </div>
+            <div className="flex items-center justify-center h-full">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 text-center font-sans">
+                Welcome{" "}
+                {user?.first_name.charAt(0).toUpperCase() +
+                  user?.first_name.slice(1)}{" "}
+                {user?.last_name.charAt(0).toUpperCase() +
+                  user?.last_name.slice(1)}
+              </h2>
+            </div>
 
             <hr className="border-gray-300 mb-4" />
 
