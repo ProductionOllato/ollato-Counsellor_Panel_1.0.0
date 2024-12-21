@@ -197,7 +197,7 @@ export default function Dashboard() {
   if (profileComplete) {
     return (
       <>
-          <div className="flex-1 px-1 h-full">
+          <div className="flex-1 px-1 h-full mt-10">
             <div className="p-4 rounded-lg w-full shadow-lg h-auto mb-6 mt-2 bg-white">
             {/* Welcome Section */}
               <div className="flex items-center justify-center h-full">

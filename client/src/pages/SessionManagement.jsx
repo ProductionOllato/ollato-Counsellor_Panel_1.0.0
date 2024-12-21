@@ -1323,13 +1323,13 @@ function SessionManagement() {
             <div className="flex justify-end mt-6">
               <button
                 onClick={handleRescheduleSave}
-                className="bg-[#7047A3] text-white py-2 px-6 rounded-md transition hover:scale-105"
+                className="bg-[#7047A3] text-base text-white py-2 px-6 rounded-md transition hover:scale-105"
               >
                 Reschedule
               </button>
               <button
                 onClick={() => setRescheduleSession(null)}
-                className="bg-[#CDC1FF] text-[#213555] py-2 px-6 rounded-md transition hover:scale-105 ml-2"
+                className="bg-[#CDC1FF] text-base text-[#213555] py-2 px-6 rounded-md transition hover:scale-105 ml-2"
               >
                 Cancel
               </button>
