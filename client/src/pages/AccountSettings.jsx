@@ -37,6 +37,8 @@ const AccountSettings = () => {
     experience: "",
   });
 
+  const [documents, setDocuments] = useState([]);
+
   const [profilePreview, setProfilePreview] = useState(null);
   const [passwordVisibility, setPasswordVisibility] = useState({
     current: false,
@@ -413,6 +415,31 @@ const AccountSettings = () => {
     }
   };
 
+  const handleDocumentsChange = (e) => {
+    const { name, value } = e.target;
+    setDocuments((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const updateDocuments = async (event) => {
+    event.preventDefault()
+    console.log("documents:", document);
+
+
+    try {
+      const response = await axios.put(
+        `${ApiURL}/update/documents/${user.user_id}`,
+        document
+      )
+      if (response.status === 200) {
+        triggerNotification("Documents updated successfully!", "success");
+      }
+    } catch (error) {
+      console.error("Error during document submission:", error);
+      triggerNotification("Error during document submission. Please try again.", "error");
+
+    }
+  }
+
   const handleVerifyEmail = async () => {
     if (!personalDetails.email) {
       triggerNotification("Please enter an email address.", "error");
@@ -610,11 +637,10 @@ const AccountSettings = () => {
           {/* Step 1 */}
           <div className="flex-1 text-center">
             <span
-              className={`cursor-pointer ${
-                progressStep === 1
-                  ? "text-[#1E3E62] font-bold"
-                  : "text-gray-400"
-              }`}
+              className={`cursor-pointer ${progressStep === 1
+                ? "text-[#1E3E62] font-bold"
+                : "text-gray-400"
+                }`}
               onClick={() => setProgressStep(1)}
             >
               Personal Details
@@ -627,11 +653,10 @@ const AccountSettings = () => {
           {/* Step 2 */}
           <div className="flex-1 text-center">
             <span
-              className={`cursor-pointer ${
-                progressStep === 2
-                  ? "text-[#1E3E62] font-bold"
-                  : "text-gray-400"
-              }`}
+              className={`cursor-pointer ${progressStep === 2
+                ? "text-[#1E3E62] font-bold"
+                : "text-gray-400"
+                }`}
               onClick={() => setProgressStep(2)}
             >
               Password Reset
@@ -644,11 +669,10 @@ const AccountSettings = () => {
           {/* Step 3 */}
           <div className="flex-1 text-center">
             <span
-              className={`cursor-pointer ${
-                progressStep === 3
-                  ? "text-[#1E3E62] font-bold"
-                  : "text-gray-400"
-              }`}
+              className={`cursor-pointer ${progressStep === 3
+                ? "text-[#1E3E62] font-bold"
+                : "text-gray-400"
+                }`}
               onClick={() => setProgressStep(3)}
             >
               Professional Details
@@ -657,6 +681,24 @@ const AccountSettings = () => {
               <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
             )}
           </div>
+
+
+          {/* Step 4 */}
+          <div className="flex-1 text-center">
+            <span
+              className={`cursor-pointer ${progressStep === 4
+                ? "text-[#1E3E62] font-bold"
+                : "text-gray-400"
+                }`}
+              onClick={() => setProgressStep(4)}
+            >
+              Professional Details
+            </span>
+            {progressStep === 4 && (
+              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
+            )}
+          </div>
+
         </div>
       </div>
 
@@ -772,16 +814,15 @@ const AccountSettings = () => {
                   disabled={isEmailVerified}
                 />
                 {/* Email Verification Button */}
-                <div className="flex justify-start mt-2">
+                <div className="flex justify-start mt-2 text-[#131010]">
                   <button
                     type="button"
                     onClick={handleVerifyEmail}
                     disabled={isEmailVerified}
-                    className={`py-2 px-4 rounded transition duration-150 ${
-                      isEmailVerified
-                        ? "bg-[#BC7C7C] text-[#243642] cursor-not-allowed"
-                        : "bg-[#B3C8CF] text-[#131010] hover:bg-[#387478] hover:text-[#f1f5f9]"
-                    }`}
+                    className={`py-2 px-4 text-[0.8rem] rounded transition duration-150 ${isEmailVerified
+                      ? "bg-[#BC7C7C] text-[#243642] cursor-not-allowed"
+                      : "bg-[#B3C8CF] text-[#131010] hover:bg-[#387478] hover:text-[#f1f5f9]"
+                      }`}
                   >
                     {isEmailVerified ? "Email Verified" : "Verify Email"}
                   </button>
@@ -808,16 +849,15 @@ const AccountSettings = () => {
                   disabled={isPhoneVerified}
                 />
                 {/* Phone Verification Button */}
-                <div className="flex justify-start mt-2">
+                <div className="flex justify-start mt-2 text-[#131010]">
                   <button
                     type="button"
                     onClick={handleVerifyPhone}
                     disabled={isPhoneVerified}
-                    className={`py-2 px-4 rounded transition duration-150 ${
-                      isPhoneVerified
-                        ? "bg-[#BC7C7C] text-[#243642] cursor-not-allowed"
-                        : "bg-[#B3C8CF] text-[#131010] hover:bg-[#387478] hover:text-[#f1f5f9]"
-                    }`}
+                    className={`py-2 px-4 text-[0.8rem] rounded transition duration-150 ${isPhoneVerified
+                      ? "bg-[#BC7C7C] text-[#243642] cursor-not-allowed"
+                      : "bg-[#B3C8CF] text-[#131010] hover:bg-[#387478] hover:text-[#f1f5f9]"
+                      }`}
                   >
                     {isPhoneVerified ? "Phone Verified" : "Verify Phone"}
                   </button>
@@ -1030,6 +1070,37 @@ const AccountSettings = () => {
             </div>
           </form>
         )}
+        {progressStep === 4 && (
+          <form onSubmit={updateDocuments}>
+            <h2 className="text-xl font-bold text-gray-800">
+              Upload Documents
+            </h2>
+            <div>
+              <label
+                htmlFor="documents"
+                className="block text-[#131010] font-medium mb-2 mt-6"
+              >
+                Add Document
+              </label>
+              <input
+                type="file"
+                id="document"
+                name="document"
+                multiple
+                onChange={handleDocumentsChange}
+                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
+              />
+            </div>
+            <div className="flex justify-between mt-4 text-base">
+              <NavigationButton
+                label="Back"
+                onClick={() => setProgressStep((prev) => prev - 1)}
+              />
+              <NavigationButton label="Upload Document" isSubmit />
+            </div>
+          </form>
+        )}
+
       </div>
     </section>
   );

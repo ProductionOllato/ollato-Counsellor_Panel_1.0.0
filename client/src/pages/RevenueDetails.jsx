@@ -256,7 +256,7 @@ const RevenueDetails = () => {
                       Session ID
                     </th>
                     <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">
-                      Student ID
+                      Client ID
                     </th>
                     <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">
                       Payment Date

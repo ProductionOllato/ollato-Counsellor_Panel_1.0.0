@@ -68,18 +68,31 @@ const RegistrationDetails = () => {
     if (stepId <= currentStep) setCurrentStep(stepId);
   };
 
-  // Input change handlers
-  const handleChange = (e) => {
+  // Centralized input handler
+  const handleInputChange = (e, setState) => {
     const { name, value } = e.target;
-    setDocumentation((prev) => ({ ...prev, [name]: value }));
+    setState((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e, setState) => {
     const { name, files } = e.target;
     if (files?.[0]) {
-      setDocumentation((prev) => ({ ...prev, [name]: files[0] }));
+      setState((prev) => ({ ...prev, [name]: files[0] }));
     }
   };
+
+  // // Input change handlers
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setDocumentation((prev) => ({ ...prev, [name]: value }));
+  // };
+
+  // const handleFileChange = (e) => {
+  //   const { name, files } = e.target;
+  //   if (files?.[0]) {
+  //     setDocumentation((prev) => ({ ...prev, [name]: files[0] }));
+  //   }
+  // };
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
@@ -97,8 +110,8 @@ const RegistrationDetails = () => {
       triggerNotification("This details is already completed.", "error");
       return;
     }
-    const user_id = user?.user_id || 123;
-    console.log("User ID:", user_id);
+    const user_id = user?.user_id;
+    // console.log("User ID:", user_id);
 
     if (!user_id) {
       triggerNotification("User id  is missing. Please log in again.", "error");
@@ -226,10 +239,15 @@ const RegistrationDetails = () => {
     }
   };
 
+  const handleFinalSubmit = async (e) => {
+    e.preventDefault();
+    handleProfessionalSubmit(e);
+    handleDocumentationSubmit(e);
+  };
   return (
     <>
-      <div className="w-full h-full p-4 md:p-8 flex flex-col overflow-y-auto">
-        <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg mx-auto w-full max-w-lg lg:max-w-2xl">
+      <div className="w-full h-fit p-2 pt-2 mt-4 flex flex-col overflow-y-auto">
+        <div className="bg-white p-2 pt-4 rounded-lg shadow-lg mx-auto w-full max-w-lg lg:max-w-2xl">
           <h1 className="text-xl md:text-2xl text-[#2C394B] font-semibold mb-6 text-center">
             Registration Details
           </h1>
@@ -260,133 +278,147 @@ const RegistrationDetails = () => {
               ></div>
             </div>
           </div>
-
-          {/* Step 1: Professional Details */}
+          {/* Steps Content */}
           {currentStep === 1 && (
             <form
-              onSubmit={handleProfessionalSubmit}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              // onSubmit={handleProfessionalSubmit}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
             >
+              {/* Professional Details */}
               <InputField
                 label="License Number *"
                 name="license_number"
                 placeholder="Enter License Number"
                 value={educationDetails.license_number}
-                handleChange={(e) =>
-                  setEducationDetails((prev) => ({
-                    ...prev,
-                    license_number: e.target.value,
-                  }))
-                }
+                // handleChange={(e) =>
+                //   setEducationDetails((prev) => ({
+                //     ...prev,
+                //     license_number: e.target.value,
+                //   }))
+                // }
+                handleChange={(e) => handleInputChange(e, setEducationDetails)}
               />
               <InputField
                 label="Qualification *"
                 name="qualification"
                 placeholder="Enter Qualification"
                 value={educationDetails.qualification}
-                handleChange={(e) =>
-                  setEducationDetails((prev) => ({
-                    ...prev,
-                    qualification: e.target.value,
-                  }))
-                }
+                // handleChange={(e) =>
+                //   setEducationDetails((prev) => ({
+                //     ...prev,
+                //     qualification: e.target.value,
+                //   }))
+                // }
+                handleChange={(e) => handleInputChange(e, setEducationDetails)}
               />
               <InputField
                 label="Specification *"
                 name="specification"
                 placeholder="Enter Specification"
                 value={educationDetails.specification}
-                handleChange={(e) =>
-                  setEducationDetails((prev) => ({
-                    ...prev,
-                    specification: e.target.value,
-                  }))
-                }
+                // handleChange={(e) =>
+                //   setEducationDetails((prev) => ({
+                //     ...prev,
+                //     specification: e.target.value,
+                //   }))
+                // }
+                handleChange={(e) => handleInputChange(e, setEducationDetails)}
               />
               <InputField
                 label="Experience *"
                 name="experience"
                 placeholder="Enter Experience"
                 value={educationDetails.experience}
-                handleChange={(e) =>
-                  setEducationDetails((prev) => ({
-                    ...prev,
-                    experience: e.target.value,
-                  }))
-                }
+                // handleChange={(e) =>
+                //   setEducationDetails((prev) => ({
+                //     ...prev,
+                //     experience: e.target.value,
+                //   }))
+                // }
+                handleChange={(e) => handleInputChange(e, setEducationDetails)}
               />
               <div className="col-span-1 sm:col-span-2 flex justify-center mt-6">
                 <button
                   type="submit"
-                  className="bg-[#337357] text-white py-2 px-6 rounded hover:bg-[#285b45] transition duration-200"
+                  className="bg-[#3E5879] text-white text-base py-2 px-6 rounded hover:bg-[#4A628A] transition duration-200"
+                  onClick={() => setCurrentStep(2)}
                 >
                   Next
                 </button>
               </div>
             </form>
           )}
-
-          {/* Step 2: Documentation Details */}
+          {/* Steps Content */}
           {currentStep === 2 && (
             <form
-              onSubmit={handleDocumentationSubmit}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              // onSubmit={handleDocumentationSubmit}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
             >
+              {/* Documentation Details */}
               <InputField
                 label="Upload Profile Picture *"
                 name="profile_pic"
                 type="file"
-                handleChange={handleFileChange}
+                // handleChange={handleFileChange}
+                handleChange={(e) => handleFileChange(e, setDocumentation)}
               />
               <InputField
                 label="Upload Degree Certificate *"
                 name="degree_certificate"
                 type="file"
-                handleChange={handleFileChange}
+                // handleChange={handleFileChange}
+                handleChange={(e) => handleFileChange(e, setDocumentation)}
               />
               <InputField
                 label="Upload Resume *"
                 name="resume"
                 type="file"
-                handleChange={handleFileChange}
+                // handleChange={handleFileChange}
+                handleChange={(e) => handleFileChange(e, setDocumentation)}
               />
               <InputField
                 label="Aadhar Number *"
                 name="aadhar_number"
                 placeholder="Enter Aadhar Number"
                 value={documentation.aadhar_number}
-                handleChange={handleChange}
+                // handleChange={handleChange}
+                handleChange={(e) => handleInputChange(e, setDocumentation)}
               />
               <InputField
                 label="Upload Aadhar Card Front *"
                 name="aadhar_card_front"
                 type="file"
-                handleChange={handleFileChange}
+                // handleChange={handleFileChange}
+                handleChange={(e) => handleFileChange(e, setDocumentation)}
               />
               <InputField
                 label="Upload Aadhar Card Back *"
                 name="aadhar_card_back"
                 type="file"
-                handleChange={handleFileChange}
+                // handleChange={handleFileChange}
+                handleChange={(e) => handleFileChange(e, setDocumentation)}
               />
               <InputField
                 label="PAN Number *"
                 name="pan_number"
                 placeholder="Enter PAN Number"
                 value={documentation.pan_number}
-                handleChange={handleChange}
+                // handleChange={handleChange}
+                handleChange={(e) => handleInputChange(e, setDocumentation)}
               />
               <InputField
                 label="Upload PAN Card *"
                 name="pan_card"
                 type="file"
-                handleChange={handleFileChange}
+                // handleChange={handleFileChange}
+                handleChange={(e) => handleFileChange(e, setDocumentation)}
               />
               <InputField
                 label="Upload Signature *"
                 name="signature"
                 type="file"
-                handleChange={handleFileChange}
+                // handleChange={handleFileChange}
+                handleChange={(e) => handleFileChange(e, setDocumentation)}
               />
 
               <div className="col-span-1 sm:col-span-2">
@@ -427,7 +459,8 @@ const RegistrationDetails = () => {
               <div className="col-span-1 sm:col-span-2 flex justify-center mt-6">
                 <button
                   type="submit"
-                  className="bg-[#337357] text-white py-2 px-6 rounded hover:bg-[#285b45] transition duration-200"
+                  className="bg-[#3E5879] text-white py-2 px-6 rounded hover:bg-[#4A628A] transition duration-200 text-base"
+                  onClick={handleFinalSubmit}
                 >
                   Submit
                 </button>

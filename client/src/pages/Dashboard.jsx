@@ -17,10 +17,10 @@ export default function Dashboard() {
   // console.log("Profile Complete:", profileComplete);
   // console.log("Profile Status:", profileStatus);
 
-  useEffect(() => {
-    // Call approveProfile only once - testing
-    approveProfile();
-  }, [approveProfile]);
+  // useEffect(() => {
+  //   // Call approveProfile only once - testing
+  //   approveProfile();
+  // }, [approveProfile]);
 
   const completeProfile = () => {
     navigate("/registration-complete");
@@ -148,8 +148,8 @@ export default function Dashboard() {
   if (profileStatus === "pending") {
     return (
       <>
-        <div className="dashboard-container flex-1 h-full pt-10 mt-10 md:p-6 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-2xl h-auto w-full max-w-md md:max-w-lg p-6">
+        <div className="dashboard-container flex-1 min-h-fit mt-10 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-2xl h-auto w-full max-w-md md:max-w-lg p-6 pt-1">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center">
               Welcome to Your Dashboard
             </h2>
@@ -163,7 +163,7 @@ export default function Dashboard() {
 
               <button
                 onClick={completeProfile}
-                className="mt-6 sm:mt-10 bg-[#AE445A] hover:bg-[#4D4C7D] text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-md transition duration-200 ease-in-out shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#AE445A] focus:ring-opacity-50"
+                className="mt-6 sm:mt-10 bg-[#AE445A] hover:bg-[#3E5879] text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-md transition duration-200 ease-in-out shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#AE445A] focus:ring-opacity-50 text-base"
               >
                 Complete Profile
               </button>

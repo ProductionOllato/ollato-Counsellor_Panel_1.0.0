@@ -6,10 +6,10 @@ const UserContext = createContext({
   profileComplete: false,
   profileStatus: "pending",
   completedSteps: [],
-  login: () => {},
-  logout: () => {},
-  updateProfileStatus: () => {},
-  updateCompletedSteps: () => {},
+  login: () => { },
+  logout: () => { },
+  updateProfileStatus: () => { },
+  updateCompletedSteps: () => { },
 });
 
 export const UserProvider = ({ children }) => {

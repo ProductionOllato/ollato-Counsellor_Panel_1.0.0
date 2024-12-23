@@ -40,6 +40,7 @@ Welcome to the Counsellor Panel! This guide provides step-by-step instructions t
 - Only the **Logout** button will be active.
 - A notification will prompt you to complete your profile.
 - A **Complete Profile** button will be visible for continuing registration.
+- A **Support** for if you need assistance with the registration process.
 
 ### **Complete Profile:**
 
