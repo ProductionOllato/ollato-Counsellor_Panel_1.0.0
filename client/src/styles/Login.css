@@ -42,11 +42,12 @@
   text-align: center;
   font-size: 1.8rem;
   font-weight: 600;
-  color: #333;
+  color: #3E5879;
   margin-bottom: 1.5rem;
 }
 
 /* Form Groups */
+
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -69,7 +70,7 @@
 }
 
 .form-input:focus {
-  border-color: #ff9a3c; /* Highlight on focus */
+  border-color: #3E5879; 
   outline: none;
   box-shadow: 0 0 5px rgba(255, 154, 60, 0.3);
 }
@@ -90,7 +91,7 @@
 }
 
 .password-toggle:hover {
-  color: #ff9a3c;
+  color: #2D445F;
 }
 
 /* Forgot Password */
@@ -99,17 +100,16 @@
   margin-top: -10px;
 }
 
-.forgot-password-link {
-  font-size: 0.65rem;
-  color: #fff;
+.forgot-password .forgot-password-link { 
+  color: #3E5879; 
+  background: none;
+  border: none; 
   text-decoration: underline;
-  cursor: pointer;
-  transition: color 0.3s ease-in-out;
+  font-size: 14px; 
+  cursor: pointer; 
+  padding: 0; 
 }
 
-.forgot-password-link:hover {
-  color: #c48042;
-}
 
 /* Buttons */
 .form-action {
@@ -122,15 +122,15 @@
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
-  background: #ff9a3c;
+  background: #3E5879;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
   margin: 10px;
 }
-
-.form-button:hover {
+  
+.form-  :hover {
   background: #e88c2d;
 }
 
@@ -178,7 +178,7 @@
 }
 
 .toggle-login-method-link:hover {
-  color: #304e5f;
+  color: #fff;
 }
 
 /* Registration Link */
@@ -199,8 +199,8 @@
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   background: none;
-  color: #ff9a3c;
-  font-size: 1rem;
+  color: #3E5879;
+  font-size: 1rem;  
   font-weight: 600;
   text-decoration: underline;
   border: none;
@@ -209,7 +209,7 @@
 }
 
 .register-button:hover {
-  color: #c48042;
+  color: #2D445F;
 }
 
 /* Mobile Version (375px) */
@@ -295,7 +295,7 @@
   }
 
   .submit-button:hover {
-    background-color: #0056b3;
+    background-color: #2D445F;
   }
 
   .password-container {
@@ -331,7 +331,7 @@
   }
 
   .login-button:hover {
-    color: #0056b3;
+    color: #2D445F;
   }
 
   .login-container {
@@ -414,7 +414,7 @@
   }
 
   .form-heading {
-    font-size: 20px; /* Slightly larger font size for better visibility */
+    font-size: 20px; 
     font-weight: bold;
     color: #333;
   }
@@ -447,7 +447,7 @@
   .submit-button {
     width: 100%;
     padding: 12px;
-    background-color: #007bff;
+    background-color: #3E5879;
     border: none;
     color: white;
     font-size: 14px;
@@ -456,7 +456,7 @@
   }
 
   .submit-button:hover {
-    background-color: #0056b3;
+    background-color: #2D445F;
   }
 
   .password-container {
@@ -483,7 +483,7 @@
 
   .login-button {
     background-color: transparent;
-    color: #007bff;
+    color: #3E5879;
     font-size: 14px;
     border: none;
     cursor: pointer;
@@ -492,7 +492,7 @@
   }
 
   .login-button:hover {
-    color: #0056b3;
+    color: #2D445F;
   }
 
   /* Updated Login Container */
@@ -612,7 +612,7 @@
   .submit-button {
     width: 100%;
     padding: 12px;
-    background-color: #007bff;
+    background-color: #3E5879;
     border: none;
     color: white;
     font-size: 14px;
@@ -621,7 +621,7 @@
   }
 
   .submit-button:hover {
-    background-color: #0056b3;
+    background-color: #2D445F;
   }
 
   .password-container {
@@ -667,18 +667,18 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 480px; /* Adjusted max-width for 720px screens */
+    max-width: 480px; 
     padding: 15px;
     box-sizing: border-box;
     margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
-    height: auto; /* Adjusted height for better fit */
-    min-height: 100vh; /* Take full screen height */
+    height: auto; 
+    min-height: 100vh;
   }
 
   .login-container .login-header {
-    font-size: 20px; /* Adjusted font size for better readability */
+    font-size: 20px; 
     font-weight: bold;
     color: #333;
     margin-bottom: 15px;
@@ -725,7 +725,7 @@
   .form-section {
     background-color: #fff;
     width: 100%;
-    max-width: 600px; /* Adjusted max-width for 1024px screens */
+    max-width: 600px; 
     padding: 20px;
     box-sizing: border-box;
     display: flex;
@@ -744,7 +744,7 @@
   }
 
   .form-heading {
-    font-size: 22px; /* Slightly larger font size for better visibility */
+    font-size: 22px; 
     font-weight: bold;
     color: #333;
   }
@@ -777,7 +777,7 @@
   .submit-button {
     width: 100%;
     padding: 14px;
-    background-color: #007bff;
+    background-color: #3E5879;
     border: none;
     color: white;
     font-size: 16px;
@@ -786,7 +786,7 @@
   }
 
   .submit-button:hover {
-    background-color: #0056b3;
+    background-color: #2D445F;
   }
 
   .password-container {
@@ -822,7 +822,7 @@
   }
 
   .login-button:hover {
-    color: #0056b3;
+    color: #2D445F;
   }
 
   /* Updated Login Container for 1024px screens */
@@ -832,14 +832,14 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 600px; /* Adjusted max-width for 1024px screens */
+    max-width: 600px; 
     padding: 20px;
     box-sizing: border-box;
     margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
-    height: auto; /* Adjusted height for better fit */
-    min-height: 100vh; /* Take full screen height */
+    height: auto; 
+    min-height: 100vh;
   }
 
   .login-container .login-header {

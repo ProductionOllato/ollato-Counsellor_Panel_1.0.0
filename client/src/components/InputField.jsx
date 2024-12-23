@@ -12,7 +12,7 @@ const InputField = ({
 }) => (
   <div className="mb-4 flex flex-col">
     <label htmlFor={name} className="block text-[#2C394B]">
-      {label}
+      {label} 
       {props.required && "*"}
     </label>
     {type === "checkbox" && options.length > 0 ? (

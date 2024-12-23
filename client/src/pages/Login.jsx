@@ -276,7 +276,7 @@ function Login() {
                   <AiOutlineEye />
                 )}
               </span>
-            </div>
+            </div> 
             <div className="forgot-password">
               <button
                 type="button"

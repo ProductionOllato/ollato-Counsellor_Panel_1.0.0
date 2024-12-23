@@ -12,7 +12,7 @@ import { CgLogOut } from "react-icons/cg";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { BiSupport } from "react-icons/bi";
 import { CiLock } from "react-icons/ci";
-import LOGO from "../assets/Ollato_Logo_CC-03.png";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 import {
   Card,
@@ -29,6 +29,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
   // State to track screen width
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const sidebarItems = [
     { label: "Dashboard", icon: <RiHome8Line />, path: "/dashboard" },
@@ -67,7 +68,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   useEffect(() => {
     // Listen to window resize events and update the state for mobile screen size
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 910);
     };
 
     window.addEventListener("resize", handleResize);
@@ -87,6 +88,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
   return (
     <>
+      {/* Sidebar for large screens */}
       <Card
         className={`h-[calc(100vh)] ${
           sidebarOpen ? "w-64" : "w-20"
@@ -131,25 +133,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           ))}
         </List>
 
-        {/* Logout Button */}
-        <div
-          className={`px-4 ${!isMobile && sidebarOpen ? "block" : "hidden"}`}
-        >
-          <button
-            className="flex items-center w-full px-4 py-3 text-left rounded-md text-[#000000] hover:bg-[#B9B4C7] hover:text-[#000000] transition-all duration-300"
-            onClick={handleLogout}
-          >
-            <CgLogOut className="text-lg" />
-            {/* Show label only on desktop */}
-            {!isMobile && sidebarOpen && (
-              <Typography className="ml-4 text-1.5xl font-medium">
-                Logout
-              </Typography>
-            )}
-          </button>
-        </div>
-
-        {/* Sidebar Toggle Button */}
+        {/* Sidebar Toggle Button (Desktop) */}
         <button
           onClick={() => setSidebarOpen((prev) => !prev)}
           className={`absolute bottom-8 sm:bottom-1.5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${
@@ -161,23 +145,40 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         </button>
       </Card>
 
-      {/* Mobile Navbar (767px and below) */}
-<div className="fixed top-0 left-0 right-0 bg-[#d5cbe8] p-2 flex justify-around items-center md:hidden z-40 mt-24">
-  {sidebarItems.map(({ label, icon, path }) => (
-    <NavLink
-      key={path}
-      to={profileComplete ? path : "#"}
-      className="flex flex-col items-center justify-center text-center text-xs text-[#2f2346] bg-opacity-30 hover:text-pink-500 transition duration-300"
-    >
-      {/* Smaller icon size */}
-      <span className="text-lg">{icon}</span>
-      {/* Smaller label size */}
-      <p className="text-xs font-medium">{label}</p>
-    </NavLink>
-  ))}
-</div>
+      {/* Mobile Sidebar (767px and below) */}
+     {isMobile && (
+        <div className="fixed top-0 left-0 right-0 p-2 grid grid-cols-3 items-center md:hidden z-40 mt-24">
+          <button
+            onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+            className="text-3xl justify-self-start text-black bg-transparent focus:outline-none border-none"
+          >
+            <RxHamburgerMenu />
+          </button>
 
+          <div className="justify-self-center"></div>
 
+          <div className="justify-self-end"></div>
+
+          {isSidebarVisible && (
+            <div className="col-span-3 grid grid-cols-3 sm:grid-cols-4 gap-1 p-4 bg-[#ab97d4]">
+              {sidebarItems.map(({ label, icon, path }) => (
+                <NavLink
+                  key={path}
+                  to={profileComplete ? path : "#"}
+                  onClick={(e) => {
+                    if (!profileComplete) e.preventDefault();
+                    setIsSidebarVisible(false);
+                  }}
+                  className="flex flex-col items-center justify-center text-center text-xs text-[#2f2346] hover:text-pink-500 transition duration-300"
+                >
+                  <span className="text-lg">{icon}</span>
+                  <p className="text-xs font-medium">{label}</p>
+                </NavLink>
+              ))}
+            </div>
+          )}
+        </div>
+      )} 
     </>
   );
 };
