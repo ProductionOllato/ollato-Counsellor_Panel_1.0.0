@@ -148,7 +148,7 @@ export default function Dashboard() {
   if (profileStatus === "pending") {
     return (
       <>
-        <div className="dashboard-container flex-1 min-h-fit mt-10 flex items-center justify-center">
+        <div className="dashboard-container flex-1 min-h-fit mt-20 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-2xl h-auto w-full max-w-md md:max-w-lg p-6 pt-1">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 text-center">
               Welcome to Your Dashboard
@@ -176,7 +176,7 @@ export default function Dashboard() {
 
   if (profileStatus === "waiting_approval") {
     return (
-      <div className="dashboard-container flex-1 h-full p-4 md:p-6">
+      <div className="dashboard-container flex-1 h-full p-4 md:p-6 mt-20">
         <div className="bg-white rounded-lg shadow-2xl h-auto mb-6 p-6">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
             Welcome to your dashboard
