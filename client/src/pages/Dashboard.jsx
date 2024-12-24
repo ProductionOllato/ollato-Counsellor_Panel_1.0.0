@@ -17,10 +17,10 @@ export default function Dashboard() {
   // console.log("Profile Complete:", profileComplete);
   // console.log("Profile Status:", profileStatus);
 
-  // useEffect(() => {
-  //   // Call approveProfile only once - testing
-  //   approveProfile();
-  // }, [approveProfile]);
+  useEffect(() => {
+    // Call approveProfile only once - testing
+    approveProfile();
+  }, [approveProfile]);
 
   const completeProfile = () => {
     navigate("/registration-complete");

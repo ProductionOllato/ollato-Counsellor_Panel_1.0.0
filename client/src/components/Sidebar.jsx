@@ -90,9 +90,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     <>
       {/* Sidebar for large screens */}
       <Card
-        className={`h-[calc(100vh)] ${
-          sidebarOpen ? "w-64" : "w-20"
-        } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#ab97d4] rounded-none pt-10 backdrop-blur-lg bg-opacity-40 md:block hidden`}
+        className={`h-[calc(100vh)] ${sidebarOpen ? "w-64" : "w-20"
+          } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#ab97d4] rounded-none pt-10 backdrop-blur-lg bg-opacity-40 md:block hidden`}
         style={{ zIndex: 40 }}
       >
         <hr className="mb-12 border-gray-300 opacity-40" />
@@ -106,10 +105,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 if (!profileComplete) e.preventDefault();
               }}
               className={({ isActive }) =>
-                `block rounded-lg transition-all duration-300 ${
-                  isActive
-                    ? "bg-[#584976] bg-opacity-30 backdrop-blur-lg text-white shadow"
-                    : "hover:bg-pink-100 text-[#000000]"
+                `block rounded-lg transition-all duration-300 ${isActive
+                  ? "bg-[#584976] bg-opacity-30 backdrop-blur-lg text-white shadow"
+                  : "hover:bg-pink-100 text-[#000000]"
                 } ${!profileComplete ? "cursor-not-allowed opacity-70" : ""}`
               }
               aria-disabled={!profileComplete}
@@ -132,13 +130,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </NavLink>
           ))}
         </List>
-
+        {/* Logout button */}
+        <div className="mt-auto">
+          <button
+            className="flex items-center space-x-3 p-3 rounded transition-colors hover:bg-gray-700 hover:text-white text-gray-300"
+            onClick={handleLogout}
+          >
+            <CgLogOut className="text-lg" />
+            {sidebarOpen && <span>Logout</span>}
+          </button>
+        </div>
         {/* Sidebar Toggle Button (Desktop) */}
         <button
           onClick={() => setSidebarOpen((prev) => !prev)}
-          className={`absolute bottom-8 sm:bottom-1.5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${
-            !isMobile ? "block z-50" : "hidden"
-          }`}
+          className={`absolute bottom-8 sm:bottom-1.5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${!isMobile ? "block z-50" : "hidden"
+            }`}
           style={{ zIndex: 50 }}
         >
           {sidebarOpen ? <IoIosArrowBack /> : <IoIosArrowForward />}
@@ -146,7 +152,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       </Card>
 
       {/* Mobile Sidebar (767px and below) */}
-     {isMobile && (
+      {isMobile && (
         <div className="fixed top-0 left-0 right-0 p-2 grid grid-cols-3 items-center md:hidden z-40 mt-24">
           <button
             onClick={() => setIsSidebarVisible(!isSidebarVisible)}
@@ -178,7 +184,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             </div>
           )}
         </div>
-      )} 
+      )}
     </>
   );
 };
