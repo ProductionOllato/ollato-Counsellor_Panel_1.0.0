@@ -131,13 +131,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           ))}
         </List>
         {/* Logout button */}
-        <div className="mt-auto">
+        <div
+          className={`px-4 ${!isMobile && sidebarOpen ? "block" : "hidden"}`}
+        >
           <button
-            className="flex items-center space-x-3 p-3 rounded transition-colors hover:bg-gray-700 hover:text-white text-gray-300"
+            className="flex items-center w-full px-4 py-3 text-left rounded-md  transition-all duration-300 bg-transparent text-[#000000] hover:bg-[#584976] hover:bg-opacity-30 hover:text-[#111111] hover:shadow"
             onClick={handleLogout}
           >
             <CgLogOut className="text-lg" />
-            {sidebarOpen && <span>Logout</span>}
+            {/* Show label only on desktop */}
+            {!isMobile && sidebarOpen && (
+              <Typography className="ml-4 text-1.5xl font-medium">
+                Logout
+              </Typography>
+            )}
           </button>
         </div>
         {/* Sidebar Toggle Button (Desktop) */}
