@@ -1,4 +1,4 @@
-/* Base Styles for Registration Page */
+
 body {
   font-family: Arial, sans-serif;
   background-color: #fcf7fa;
@@ -7,11 +7,9 @@ body {
 }
 
 
-/* Main container for the form and sidebar */
 .min-h-screen {
   display: flex;
   flex-direction: column-reverse;
-  background-color: hsl(316, 23%, 91%);
   min-height: 100vh;
 }
 
@@ -36,24 +34,24 @@ body {
   margin-bottom: 20px;
 }
 
-.form-heading {
+.form-header .form-heading {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+  color: #3E5879;
 }
 
 /* Form Grid */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr;
-  /* grid-gap: 10px; */
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-
 }
 
+
 /* Input Fields */
+
 input,
 select {
   width: 100%;
@@ -62,18 +60,26 @@ select {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  transition: border-color 0.3s ease;
 }
 
-input[type="date"] {
-  cursor: pointer;
+
+.form-grid input:hover,
+.form-grid select:hover {
+  border-color: #3E5879; 
+}
+
+.form-grid input:hover::placeholder,
+.form-grid select:hover::placeholder {
+  color: #3E5879; 
 }
 
 button {
-  background-color: #4caf50;
+  background-color: #3E5879; 
   color: white;
   border: none;
   padding: 10px;
-  font-size: 10px;
+  font-size: 16px; 
   cursor: pointer;
   border-radius: 5px;
 }
@@ -104,10 +110,10 @@ button:disabled {
   margin-top: 20px;
 }
 
-.submit-button {
+.submit-button-container .submit-button {
   width: 100%;
   padding: 12px;
-  background-color: #007bff;
+  background-color: #3E5879;
   border: none;
   color: white;
   font-size: 16px;
@@ -116,7 +122,7 @@ button:disabled {
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #2C3E50; 
 }
 
 /* Login Link */
@@ -130,9 +136,9 @@ button:disabled {
   font-size: 14px;
 }
 
-.login-button {
+.login-link-container .login-button {
   background-color: transparent;
-  color: #007bff;
+  color: #3E5879;
   font-size: 16px;
   border: none;
   cursor: pointer;
@@ -141,7 +147,7 @@ button:disabled {
 }
 
 .login-button:hover {
-  color: #0056b3;
+  color: #3E5879; 
 }
 
 /* Sidebar */
@@ -161,7 +167,8 @@ button:disabled {
   margin: 0 20px 20px 0;
 }
 
-
+/* Responsive Design */
+/* Small Screens (up to 375px) */
 @media screen and (max-width: 375px) {
   .container {
     padding: 15px;
@@ -181,6 +188,7 @@ button:disabled {
 @media screen and (max-width: 768px) {
   .min-h-screen {
     flex-direction: column;
+
   }
 
   .form-section {
@@ -199,6 +207,11 @@ button:disabled {
   .logo {
     max-width: 60%;
   }
+
+  .form-grid input:hover,
+  .form-grid select:hover {
+    border-color: #3E5879; 
+  }
 }
 
 /* Medium Screens (up to 1024px) */
@@ -215,11 +228,10 @@ button:disabled {
 
   .form-grid {
     grid-template-columns: 1fr 1fr;
-    /* gap: 20px; */
   }
 
   .logo {
-    max-width: 40%; /* Medium-sized logo for tablets and similar devices */
+    max-width: 40%;
   }
 }
 
@@ -227,6 +239,7 @@ button:disabled {
 @media screen and (min-width: 1025px) {
   .min-h-screen {
     flex-direction: row;
+    
   }
 
   .form-section {
@@ -238,12 +251,18 @@ button:disabled {
     max-width: 25%;
     height: auto;
     margin: auto;
-    
   }
 
   .form-grid {
     grid-template-columns: 1fr 1fr;
   }
 
+  .form-header {
+    color: #007bff;
+  }
 
+  .form-grid input:hover,
+  .form-grid select:hover {
+    border-color: #3E5879;
+  }
 }
