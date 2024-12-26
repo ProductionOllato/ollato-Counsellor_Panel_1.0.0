@@ -1,0 +1,170 @@
+@media (min-width: 320px) and (max-width: 767px) {
+  .session-status-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .session-status-filter button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .filter-dropdown {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 1rem;
+  }
+
+  .filter-dropdown.active {
+    display: flex;
+  }
+
+  .session-table-container {
+    padding: 0.5rem;
+  }
+
+  .session-table {
+    display: none;
+  }
+
+  .session-table-header,
+  .session-table-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .session-table-header tr,
+  .session-table-body tr {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #ccc;
+    padding: 1rem 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .session-status-filter {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .session-table-container {
+    padding: 1rem;
+  }
+
+  .session-table {
+    table-layout: auto;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .session-status-filter {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .session-table-container {
+    padding: 1.5rem;
+  }
+
+  .session-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+  }
+
+  .session-table th,
+  .session-table td {
+    padding: 0.5rem 1rem;
+  }
+
+  .session-table-header {
+    background-color: #f3f4f6;
+  }
+}
+
+.desktop-filter {
+  display: none;
+}
+
+@media (min-width: 1070px) {
+  .desktop-filter {
+    display: flex;
+  }
+  .mobile-filter {
+    display: none;
+  }
+}
+/* 
+@media (min-width: 320px) and (max-width: 767px) {
+  .session-status-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .session-status-filter button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .filter-dropdown {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 1rem;
+  }
+
+  .filter-dropdown.active {
+    display: flex;
+  }
+
+  .session-table-container {
+    padding: 0.5rem;
+  }
+
+  .session-table {
+    display: block;
+  }
+
+  .session-table-header,
+  .session-table-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .session-table-header tr,
+  .session-table-body tr {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #ccc;
+    padding: 1rem 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .session-status-filter {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .session-table-container {
+    padding: 1rem;
+  }
+
+  .session-table {
+    table-layout: auto;
+    width: 100%;
+  }
+}
+
+ */

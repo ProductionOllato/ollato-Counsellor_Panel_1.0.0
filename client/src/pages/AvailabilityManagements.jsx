@@ -358,7 +358,7 @@ const AvailabilityManagements = () => {
         </h1>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 px-4 sm:px-6">
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 px-4 sm:px-6 ">
         <button
           onClick={() => {
             resetForm();

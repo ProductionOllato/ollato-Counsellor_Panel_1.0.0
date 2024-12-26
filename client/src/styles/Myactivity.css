@@ -149,66 +149,89 @@
 }
 
 .mobile-view-myactivity .session-card-myactivity {
-  /* border: 1px solid #e2e8f0;
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border-radius: 0.375rem;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-  display: flex;
+  /* display: flex;
   flex-direction: row;
-  justify-content: space-between; /* Align content in a single line */
-  align-items: center; /* Vertically center content */
-  border: 1px solid #e2e8f0;
+  justify-content: space-between;
+  align-items: center;  */
+  /* font-size: 1rem;
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto auto auto auto;
+  grid-template-rows: auto auto;
+  gap: 0.2rem;
+  border: 1px solid hsl(214, 83%, 12%);
   margin-bottom: 1rem;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 0.375rem;
-  background-color: #ffffff; /* White background for cards */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s; /* Add a hover effect for interactivity */
+  transition: transform 0.2s; */
+  font-size: 1rem;
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.2rem;
+  border: 1px solid hsl(214, 83%, 12%);
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .mobile-view-myactivity .session-card-myactivity:hover {
-  transform: scale(1.02); /* Slightly scale on hover for feedback */
+  /* transform: scale(1.02); */
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .mobile-view-myactivity .session-card-myactivity div {
-  margin: 0 0.5rem; /* Horizontal margin to space items in line */
+  /* margin: 0 0.5rem;  */
+  margin: 0.5rem 0;
+  font-size: 1rem;
 }
 
 .mobile-view-myactivity .session-card-myactivity strong {
-  min-width: 100px; /* Ensure consistent width for labels */
+  /* min-width: 100px; */
+  font-weight: 600;
+  color: hsl(214, 83%, 12%);
 }
 
 .feedback-btn-myactivity {
-  padding: 0.5rem 1rem;
-  background-color: #4caf50; /* Green background for button */
+  /* padding: 0.5rem 1rem;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 0.375rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s; */
+  width: fit-content;
+  padding: 0.6rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .feedback-btn-myactivity:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #45a049;
+  transform: scale(1.05);
 }
 
 .feedback-status-myactivity {
+  /* font-size: 0.9rem;
+  color: #6b7280;  */
   font-size: 0.9rem;
-  color: #6b7280; /* Gray text for status */
+  color: #6b7280;
+  font-style: italic;
 }
 
-@media (max-width: 600px) {
-  /* Ensure card stacks vertically for very small screens */
-  .mobile-view-myactivity .session-card-myactivity {
-    flex-direction: column;
-  }
-}
-
-/* .mobile-view-myactivity .session-card-myactivity div {
+.mobile-view-myactivity .session-card-myactivity div {
   margin: 0.5rem 0;
-} */
+}
 
 /* Responsive Breakpoints */
 @media (max-width: 768px) {
@@ -218,5 +241,98 @@
 
   .mobile-view-myactivity {
     display: block;
+  }
+}
+@media (max-width: 600px) {
+  .mobile-view-myactivity .session-card-myactivity {
+    grid-template-columns: 1fr; /* Stack items vertically on very small screens */
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 1235px) {
+  .feedback-btn-myactivity {
+    width: 120px;
+    font-size: 12px;
+  }
+}
+@media (max-width: 600px) {
+  .mobile-view-myactivity .session-card-myactivity {
+    grid-template-columns: 1fr 1fr; /* Two columns per row */
+    grid-template-rows: auto auto auto; /* Three rows in total */
+    gap: 0.5rem; /* Add spacing between items */
+    padding: 1rem; /* Ensure proper spacing within each card */
+  }
+
+  .mobile-view-myactivity .session-card-myactivity div {
+    display: flex; /* Align items in each row properly */
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .mobile-view-myactivity .session-card-myactivity strong {
+    flex-shrink: 0; /* Ensure labels don't shrink */
+    margin-right: 0.5rem; /* Space between label and value */
+  }
+}
+
+@media (max-width: 465px) {
+  .mobile-view-myactivity .session-card-myactivity {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    width: 100%; /* Full width for the card */
+    padding: 0.5rem;
+    border: 1px solid hsl(214, 83%, 12%);
+    border-radius: 0.5rem;
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    gap: 0.2rem; /* Space between rows */
+    margin-bottom: 1rem; /* Space between cards */
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .mobile-view-myactivity .session-card-myactivity:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly elevated on hover */
+  }
+
+  .mobile-view-myactivity .session-card-myactivity div {
+    display: flex;
+    flex-direction: row; /* Align label and value in a row */
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0;
+    width: 100%;
+    /* border-bottom: 1px solid hsl(214, 83%, 12%); */
+  }
+
+  .mobile-view-myactivity .session-card-myactivity strong {
+    font-weight: bold;
+    color: hsl(214, 83%, 12%);
+    margin-right: 1rem; /* Space between label and value */
+  }
+
+  .feedback-btn-myactivity {
+    width: 117px;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+    background-color: #4caf50;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+  }
+
+  .feedback-btn-myactivity:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+
+  .feedback-status-myactivity {
+    font-size: 0.85rem;
+    color: #6b7280;
+    text-align: center;
   }
 }

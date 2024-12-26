@@ -692,7 +692,7 @@ const AccountSettings = () => {
                 }`}
               onClick={() => setProgressStep(4)}
             >
-              Professional Details
+              Document Upload
             </span>
             {progressStep === 4 && (
               <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
@@ -902,7 +902,7 @@ const AccountSettings = () => {
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-4 text-gray-500"
+                    className="absolute right-3 top-4 text-gray-500 bg-transparent border-none"
                     onClick={() => togglePasswordVisibility("current")}
                   >
                     {passwordVisibility.current ? <FiEyeOff /> : <FiEye />}
@@ -929,7 +929,7 @@ const AccountSettings = () => {
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-4 text-gray-500"
+                    className="absolute right-3 top-4 text-gray-500 bg-transparent border-none"
                     onClick={() => togglePasswordVisibility("new")}
                   >
                     {passwordVisibility.new ? <FiEyeOff /> : <FiEye />}
@@ -956,7 +956,7 @@ const AccountSettings = () => {
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-4 text-gray-500"
+                    className="absolute right-3 top-4 text-gray-500 bg-transparent border-none"
                     onClick={() => togglePasswordVisibility("confirm")}
                   >
                     {passwordVisibility.confirm ? <FiEyeOff /> : <FiEye />}
@@ -1078,18 +1078,29 @@ const AccountSettings = () => {
             <div>
               <label
                 htmlFor="documents"
-                className="block text-[#131010] font-medium mb-2 mt-6"
+                className="block text-[#131010] font-medium mb-2 mt-6 "
               >
-                Add Document
+                Add updated Document
               </label>
-              <input
-                type="file"
-                id="document"
-                name="document"
-                multiple
-                onChange={handleDocumentsChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
-              />
+              <div>
+                {/* <label htmlFor="document_type">Type of Document:</label> */}
+                <input type="text"
+                  id="document_type"
+                  name="document_type"
+                  placeholder="Enter type of document"
+                  className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400" />
+              </div>
+              <div>
+                <input
+                  type="file"
+                  id="document"
+                  name="document"
+                  multiple
+                  onChange={handleDocumentsChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1E3E62] focus:border-[#1E3E62] transition placeholder-gray-400"
+                />
+              </div>
+
             </div>
             <div className="flex justify-between mt-4 text-base">
               <NavigationButton

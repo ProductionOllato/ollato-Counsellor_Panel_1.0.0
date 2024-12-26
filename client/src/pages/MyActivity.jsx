@@ -489,9 +489,9 @@ function MyActivity() {
                     className="session-card-myactivity"
                     key={session.session_id}
                   >
-                    <div>
+                    {/* <div>
                       <strong>#:</strong> {index + 1}
-                    </div>
+                    </div> */}
                     <div>
                       <strong>Session ID:</strong> {session.session_id}
                     </div>
