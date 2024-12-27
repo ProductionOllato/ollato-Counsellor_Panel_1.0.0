@@ -268,14 +268,14 @@ function MyActivity() {
 
   const filteredLogs = showHistory
     ? activityLogs.filter((session) =>
-        ["Completed", "Canceled"].includes(
-          determineStatus(
-            session.r_date || session.b_date,
-            session.feedbackGiven,
-            session.cancelled_r_counsellor
-          )
+      ["Completed", "Canceled"].includes(
+        determineStatus(
+          session.r_date || session.b_date,
+          session.feedbackGiven,
+          session.cancelled_r_counsellor
         )
       )
+    )
     : activityLogs;
 
   return (
@@ -396,6 +396,186 @@ function MyActivity() {
     //   )}
     // </div>
 
+    // <div className="container-myactivity">
+    //   <h1 className="header-myactivity">My Activity</h1>
+
+    //   {/* Toggle between history and upcoming */}
+    //   <div className="toggle-button-myactivity">
+    //     <button
+    //       onClick={() => setShowHistory((prev) => !prev)}
+    //       className="toggle-btn-myactivity"
+    //     >
+    //       {showHistory ? "Back to Activity" : "View History"}
+    //     </button>
+    //   </div>
+
+    //   <div className="table-container-myactivity">
+    //     {filteredLogs.length > 0 ? (
+    //       <>
+    //         {/* Desktop Table */}
+    //         <table className="activity-table-myactivity">
+    //           <thead>
+    //             <tr>
+    //               <th>#</th>
+    //               <th>Session ID</th>
+    //               <th>Date</th>
+    //               <th>Time Slot</th>
+    //               <th>Mode</th>
+    //               <th>Duration</th>
+    //               <th>Status</th>
+    //               <th>Action</th>
+    //             </tr>
+    //           </thead>
+    //           <tbody>
+    //             {filteredLogs.map((session, index) => {
+    //               const sessionDate = session.r_date || session.b_date;
+    //               const timeSlot = session.b_time_slot || session.r_time;
+    //               const mode = session.r_mode || session.b_mode;
+    //               const duration = session.r_duration || session.b_duration;
+
+    //               const status = determineStatus(
+    //                 sessionDate,
+    //                 session.feedbackGiven,
+    //                 session.cancelled_r_counsellor
+    //               );
+
+    //               return (
+    //                 <tr key={session.session_id}>
+    //                   <td>{index + 1}</td>
+    //                   <td>{session.session_id}</td>
+    //                   <td>{sessionDate}</td>
+    //                   <td>{timeSlot}</td>
+    //                   <td>{mode}</td>
+    //                   <td>{duration} min</td>
+    //                   <td>{status}</td>
+    //                   <td>
+    //                     {status === "Completed" && !session.feedbackGiven ? (
+    //                       <button
+    //                         onClick={() => setFeedbackSession(session)}
+    //                         className="feedback-btn-myactivity"
+    //                       >
+    //                         Give Feedback
+    //                       </button>
+    //                     ) : status === "Feedback Given" ? (
+    //                       <span className="feedback-status-myactivity">
+    //                         Feedback Already Given
+    //                       </span>
+    //                     ) : (
+    //                       <span>{status}</span>
+    //                     )}
+    //                   </td>
+    //                 </tr>
+    //               );
+    //             })}
+    //           </tbody>
+    //         </table>
+
+    //         {/* Mobile Card View */}
+    //         <div className="mobile-view-myactivity">
+    //           {filteredLogs.map((session, index) => {
+    //             const sessionDate = session.r_date || session.b_date;
+    //             const timeSlot = session.b_time_slot || session.r_time;
+    //             const mode = session.r_mode || session.b_mode;
+    //             const duration = session.r_duration || session.b_duration;
+
+    //             const status = determineStatus(
+    //               sessionDate,
+    //               session.feedbackGiven,
+    //               session.cancelled_r_counsellor
+    //             );
+
+    //             return (
+    //               <div
+    //                 className="session-card-myactivity"
+    //                 key={session.session_id}
+    //               >
+    //                 {/* <div>
+    //                   <strong>#:</strong> {index + 1}
+    //                 </div> */}
+    //                 <div>
+    //                   <strong>Session ID:</strong> {session.session_id}
+    //                 </div>
+    //                 <div>
+    //                   <strong>Date:</strong> {sessionDate}
+    //                 </div>
+    //                 <div>
+    //                   <strong>Time Slot:</strong> {timeSlot}
+    //                 </div>
+    //                 <div>
+    //                   <strong>Mode:</strong> {mode}
+    //                 </div>
+    //                 <div>
+    //                   <strong>Duration:</strong> {duration} min
+    //                 </div>
+    //                 <div>
+    //                   <strong>Status:</strong> {status}
+    //                 </div>
+    //                 <div>
+    //                   {status === "Completed" && !session.feedbackGiven ? (
+    //                     <button
+    //                       onClick={() => setFeedbackSession(session)}
+    //                       className="feedback-btn-myactivity"
+    //                     >
+    //                       Give Feedback
+    //                     </button>
+    //                   ) : status === "Feedback Given" ? (
+    //                     <span className="feedback-status-myactivity">
+    //                       Feedback Already Given
+    //                     </span>
+    //                   ) : (
+    //                     <span>{status}</span>
+    //                   )}
+    //                 </div>
+    //               </div>
+    //             );
+    //           })}
+    //         </div>
+    //       </>
+    //     ) : (
+    //       <div className="no-sessions-myactivity">
+    //         {showHistory
+    //           ? "No completed or canceled sessions found."
+    //           : "No upcoming sessions found."}
+    //       </div>
+    //     )}
+    //   </div>
+
+    //   {/* Feedback Modal */}
+    //   {feedbackSession && (
+    //     <div
+    //       className="modal-overlay-myactivity"
+    //       onClick={() => setFeedbackSession(null)}
+    //     >
+    //       <div
+    //         className="modal-content-myactivity"
+    //         onClick={(e) => e.stopPropagation()}
+    //       >
+    //         <h3 className="modal-title-myactivity">Feedback for Session</h3>
+    //         <textarea
+    //           value={feedbackText}
+    //           onChange={(e) => setFeedbackText(e.target.value)}
+    //           className="feedback-textarea-myactivity"
+    //           rows="4"
+    //           placeholder="Please provide your feedback."
+    //         ></textarea>
+    //         <div className="modal-actions-myactivity">
+    //           <button
+    //             onClick={() => setFeedbackSession(null)}
+    //             className="cancel-btn-myactivity"
+    //           >
+    //             Cancel
+    //           </button>
+    //           <button
+    //             onClick={() => handleGiveFeedback(feedbackSession.session_id)}
+    //             className="submit-btn-myactivity"
+    //           >
+    //             Submit Feedback
+    //           </button>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   )}
+    // </div>
     <div className="container-myactivity">
       <h1 className="header-myactivity">My Activity</h1>
 
@@ -489,9 +669,6 @@ function MyActivity() {
                     className="session-card-myactivity"
                     key={session.session_id}
                   >
-                    {/* <div>
-                      <strong>#:</strong> {index + 1}
-                    </div> */}
                     <div>
                       <strong>Session ID:</strong> {session.session_id}
                     </div>

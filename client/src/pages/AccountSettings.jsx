@@ -4,6 +4,7 @@ import { useNotification } from "../context/NotificationContext";
 import { useAuth } from "../context/UserContext";
 import OtpModal from "../components/OtpModal";
 import axios from "axios";
+import "../styles/AccountSettings.css";
 
 const AccountSettings = () => {
   const [personalDetails, setPersonalDetails] = useState({
@@ -54,6 +55,7 @@ const AccountSettings = () => {
   const [otp, setOtp] = useState("");
   const [otpModal, setOtpModal] = useState(false);
   const [otpType, setOtpType] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const ApiURL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
 
@@ -631,77 +633,117 @@ const AccountSettings = () => {
 
   return (
     <section className="bg-white shadow-lg rounded-lg w-full p-6 mt-6">
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between text-sm font-medium relative">
+
+      {/* Progress Navigation */}
+      <div className="mb-6 mt-4">
+        {/* Mobile View Dropdown-like Feature */}
+        <div className="block sm:hidden mb-4">
+          <div className="relative border border-gray-300 rounded-lg bg-white shadow-sm">
+            {/* Active Step Display */}
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="w-full text-left p-3 font-medium text-gray-700 transition duration-300 bg-gray-100 hover:bg-gray-200 rounded-lg"
+            >
+              {["Personal Details", "Password Reset", "Professional Details", "Document Upload"][progressStep - 1]}
+              <span className="float-right">{showDropdown ? "▲" : "▼"}</span>
+            </button>
+
+            {/* Dropdown Content */}
+            {showDropdown && (
+              <div className="absolute left-0 top-full w-full bg-[#f0dbdb] text-gray-700  border border-gray-200 shadow-lg rounded-lg mt-2 z-10">
+                {[
+                  { id: 1, label: "Personal Details" },
+                  { id: 2, label: "Password Reset" },
+                  { id: 3, label: "Professional Details" },
+                  { id: 4, label: "Document Upload" },
+                ].map((step) => (
+                  <button
+                    key={step.id}
+                    onClick={() => {
+                      setProgressStep(step.id);
+                      setShowDropdown(false);
+                    }}
+                    className={`block w-full mt-2 text-left px-4 py-2 text-sm font-medium transition duration-300 ${progressStep === step.id
+                      ? "bg-[#1E3E62]  text-white"
+                      : "text-gray-700 bg-transparent hover:bg-gray-100"
+                      }`}
+                  >
+                    {step.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Progress Bar for Larger Devices */}
+        <div className="hidden sm:flex items-center justify-between text-sm font-medium relative">
           {/* Step 1 */}
           <div className="flex-1 text-center">
             <span
-              className={`cursor-pointer ${progressStep === 1
-                ? "text-[#1E3E62] font-bold"
-                : "text-gray-400"
+              className={`cursor-pointer transition duration-300 ${progressStep === 1
+                ? "text-[#1E3E62] font-bold underline"
+                : "text-gray-400 hover:text-gray-600"
                 }`}
               onClick={() => setProgressStep(1)}
             >
               Personal Details
             </span>
             {progressStep === 1 && (
-              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
+              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-2/3 mx-auto"></div>
             )}
           </div>
 
           {/* Step 2 */}
           <div className="flex-1 text-center">
             <span
-              className={`cursor-pointer ${progressStep === 2
-                ? "text-[#1E3E62] font-bold"
-                : "text-gray-400"
+              className={`cursor-pointer transition duration-300 ${progressStep === 2
+                ? "text-[#1E3E62] font-bold underline"
+                : "text-gray-400 hover:text-gray-600"
                 }`}
               onClick={() => setProgressStep(2)}
             >
               Password Reset
             </span>
             {progressStep === 2 && (
-              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
+              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-2/3 mx-auto"></div>
             )}
           </div>
 
           {/* Step 3 */}
           <div className="flex-1 text-center">
             <span
-              className={`cursor-pointer ${progressStep === 3
-                ? "text-[#1E3E62] font-bold"
-                : "text-gray-400"
+              className={`cursor-pointer transition duration-300 ${progressStep === 3
+                ? "text-[#1E3E62] font-bold underline"
+                : "text-gray-400 hover:text-gray-600"
                 }`}
               onClick={() => setProgressStep(3)}
             >
               Professional Details
             </span>
             {progressStep === 3 && (
-              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
+              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-2/3 mx-auto"></div>
             )}
           </div>
-
 
           {/* Step 4 */}
           <div className="flex-1 text-center">
             <span
-              className={`cursor-pointer ${progressStep === 4
-                ? "text-[#1E3E62] font-bold"
-                : "text-gray-400"
+              className={`cursor-pointer transition duration-300 ${progressStep === 4
+                ? "text-[#1E3E62] font-bold underline"
+                : "text-gray-400 hover:text-gray-600"
                 }`}
               onClick={() => setProgressStep(4)}
             >
               Document Upload
             </span>
             {progressStep === 4 && (
-              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-1/3 mx-auto"></div>
+              <div className="bg-[#1E3E62] h-1 mt-2 rounded-full w-2/3 mx-auto"></div>
             )}
           </div>
-
         </div>
       </div>
-
+      {/* Form */}
       <div className="space-y-6 px-6">
         {progressStep === 1 && (
           <form onSubmit={handleFormSubmission} className="space-y-4 ">

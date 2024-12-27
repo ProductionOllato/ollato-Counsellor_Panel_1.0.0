@@ -1,338 +1,324 @@
+/* General Container */
 .container-myactivity {
-  margin-top: 2.5rem;
+  margin: 2.5rem auto;
   padding: 1rem;
-  background-color: #f7fafc; /* Light gray background */
-  min-height: 100vh; /* Full height */
+  background-color: #f9f9f9; /* Soft gray background */
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
+/* Header */
 .header-myactivity {
-  font-size: 1.5rem; /* Larger font size */
-  font-weight: bold; /* Bold text */
-  margin-bottom: 1.5rem; /* Space below header */
-  text-align: center; /* Centered text */
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
+/* Toggle Button Section */
 .toggle-button-myactivity {
   display: flex;
-  justify-content: flex-end; /* Align button to the right */
-  margin-bottom: 1rem; /* Space below button */
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 
 .toggle-btn-myactivity {
-  padding: 0.5rem 1rem; /* Padding for button */
-  background-color: #6b46c1; /* Purple background */
-  color: white; /* White text */
-  font-size: 0.875rem; /* Smaller font size */
-  border-radius: 0.375rem; /* Rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  transition: background-color 0.3s; /* Smooth transition */
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #6c5ce7; /* Vibrant purple */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.toggle-btn-myactivity:hover {
-  background-color: #805ad5; /* Lighter purple on hover */
+.toggle-btn-myactivity:hover,
+.toggle-btn-myactivity:focus {
+  background-color: #8e7fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.4); /* Focus ring */
 }
 
+/* Table Container */
 .table-container-myactivity {
-  overflow-x: auto; /* Allow horizontal scrolling */
+  overflow-x: auto;
 }
 
 .activity-table-myactivity {
-  width: 100%; /* Full width */
-  background-color: white; /* White background for table */
-  border-radius: 0.375rem; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.activity-table-myactivity thead {
+  background-color: #f1f1f1;
 }
 
 .activity-table-myactivity th,
 .activity-table-myactivity td {
-  padding: 0.75rem; /* Padding for cells */
-  text-align: left; /* Left align text */
+  padding: 1rem 0.5rem;
+  text-align: left;
+  font-size: 1rem;
+  color: #444;
+  border-bottom: 1px solid #ddd;
 }
 
-.activity-table-myactivity thead {
-  background-color: #edf2f7; /* Light gray for header */
+.activity-table-myactivity th {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
+.activity-table-myactivity tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Feedback Button */
 .feedback-btn-myactivity {
-  padding: 0.5rem 1rem; /* Padding for feedback button */
-  background-color: #e53e3e; /* Pink background */
-  color: white; /* White text */
-  border-radius: 0.375rem; /* Rounded corners */
-  transition: background-color 0.3s; /* Smooth transition */
-  font-size: 0.7rem;
+  padding: 0.5rem 1rem;
+  background-color: #38a169; /* Green */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.feedback-btn-myactivity:hover {
-  background-color: #c53030; /* Darker pink on hover */
+.feedback-btn-myactivity:hover,
+.feedback-btn-myactivity:focus {
+  background-color: #2f855a;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.4); /* Focus ring */
 }
 
+/* No Sessions Message */
 .no-sessions-myactivity {
-  text-align: center; /* Centered text */
-  padding: 1.5rem; /* Padding for no sessions message */
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+  padding: 2rem 0;
 }
 
+/* Mobile View Cards */
+.mobile-view-myactivity {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.session-card-myactivity {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.session-card-myactivity:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.session-card-myactivity div {
+  font-size: 0.9rem;
+}
+
+.session-card-myactivity strong {
+  font-weight: bold;
+  color: #2d3748;
+}
+
+/* Modal */
 .modal-overlay-myactivity {
-  position: fixed; /* Fixed positioning for modal */
+  position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
-  background-color: rgba(55, 65, 81, 0.7); /* Dark overlay */
-  display: flex; /* Flexbox for centering */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  z-index: 50; /* Ensure modal is on top */
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .modal-content-myactivity {
-  background-color: white; /* White background for modal */
-  padding: 1.5rem; /* Padding for modal */
-  border-radius: 0.375rem; /* Rounded corners */
-  max-width: 500px; /* Max width for modal */
-  width: 100%; /* Full width */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
 }
 
 .modal-title-myactivity {
-  font-size: 1.25rem; /* Larger font size for title */
-  font-weight: bold; /* Bold text */
-  margin-bottom: 1rem; /* Space below title */
-}
-
-.feedback-textarea-myactivity {
-  width: 100%; /* Full width */
-  padding: 0.5rem; /* Padding for textarea */
-  border: 1px solid #e2e8f0; /* Light border */
-  border-radius: 0.375rem; /* Rounded corners */
-  margin-bottom: 1rem; /* Space below textarea */
-  resize: none; /* Disable resizing */
-}
-
-.modal-actions-myactivity {
-  display: flex; /* Flexbox for buttons */
-  justify-content: flex-end; /* Align buttons to the right */
-}
-
-.cancel-btn-myactivity {
-  padding: 0.5rem 1rem; /* Padding for cancel button */
-  background-color: #e2e8f0; /* Light gray background */
-  color: black; /* Black text */
-  border-radius: 0.375rem; /* Rounded corners */
-  margin-right: 0.5rem; /* Space between buttons */
-  font-size: 0.8rem;
-}
-
-.submit-btn-myactivity {
-  padding: 0.5rem 1rem; /* Padding for submit button */
-  background-color: #021d38; /* Blue background */
-  color: white; /* White text */
-  border-radius: 0.375rem; /* Rounded corners */
-  transition: background-color 0.3s; /* Smooth transition */
-  font-size: 0.8rem;
-}
-
-.submit-btn:hover {
-  background-color: #2b6cb0; /* Darker blue on hover */
-}
-
-.feedback-status-myactivity {
-  color: #38a169; /* Green color for feedback status */
-  font-weight: 600; /* Semi-bold for emphasis */
-}
-
-/* Mobile View: Card Layout */
-.mobile-view-myactivity {
-  /* display: none; */
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-}
-
-.mobile-view-myactivity .session-card-myactivity {
-  /* display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;  */
-  /* font-size: 1rem;
-  display: grid;
-  width: 100%;
-  grid-template-columns: auto auto auto auto;
-  grid-template-rows: auto auto;
-  gap: 0.2rem;
-  border: 1px solid hsl(214, 83%, 12%);
+  font-size: 1.5rem;
+  font-weight: bold;
   margin-bottom: 1rem;
-  padding: 0.5rem;
-  border-radius: 0.375rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s; */
-  font-size: 1rem;
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0.2rem;
-  border: 1px solid hsl(214, 83%, 12%);
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.mobile-view-myactivity .session-card-myactivity:hover {
-  /* transform: scale(1.02); */
-  transform: scale(1.03);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.mobile-view-myactivity .session-card-myactivity div {
-  /* margin: 0 0.5rem;  */
-  margin: 0.5rem 0;
-  font-size: 1rem;
-}
-
-.mobile-view-myactivity .session-card-myactivity strong {
-  /* min-width: 100px; */
-  font-weight: 600;
-  color: hsl(214, 83%, 12%);
-}
-
-.feedback-btn-myactivity {
-  /* padding: 0.5rem 1rem;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  transition: background-color 0.3s; */
-  width: fit-content;
-  padding: 0.6rem 1rem;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.feedback-btn-myactivity:hover {
-  background-color: #45a049;
-  transform: scale(1.05);
-}
-
-.feedback-status-myactivity {
-  /* font-size: 0.9rem;
-  color: #6b7280;  */
-  font-size: 0.9rem;
-  color: #6b7280;
-  font-style: italic;
-}
-
-.mobile-view-myactivity .session-card-myactivity div {
-  margin: 0.5rem 0;
-}
-
-/* Responsive Breakpoints */
+/* Responsive Design */
 @media (max-width: 768px) {
   .activity-table-myactivity {
     display: none;
   }
 
   .mobile-view-myactivity {
-    display: block;
-  }
-}
-@media (max-width: 600px) {
-  .mobile-view-myactivity .session-card-myactivity {
-    grid-template-columns: 1fr; /* Stack items vertically on very small screens */
-    padding: 0.8rem;
-  }
-}
-
-@media (max-width: 1235px) {
-  .feedback-btn-myactivity {
-    width: 120px;
-    font-size: 12px;
-  }
-}
-@media (max-width: 600px) {
-  .mobile-view-myactivity .session-card-myactivity {
-    grid-template-columns: 1fr 1fr; /* Two columns per row */
-    grid-template-rows: auto auto auto; /* Three rows in total */
-    gap: 0.5rem; /* Add spacing between items */
-    padding: 1rem; /* Ensure proper spacing within each card */
-  }
-
-  .mobile-view-myactivity .session-card-myactivity div {
-    display: flex; /* Align items in each row properly */
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .mobile-view-myactivity .session-card-myactivity strong {
-    flex-shrink: 0; /* Ensure labels don't shrink */
-    margin-right: 0.5rem; /* Space between label and value */
-  }
-}
-
-@media (max-width: 465px) {
-  .mobile-view-myactivity .session-card-myactivity {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    width: 100%; /* Full width for the card */
-    padding: 0.5rem;
-    border: 1px solid hsl(214, 83%, 12%);
-    border-radius: 0.5rem;
-    background-color: #ffffff; /* White background */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    gap: 0.2rem; /* Space between rows */
-    margin-bottom: 1rem; /* Space between cards */
-    transition: transform 0.2s, box-shadow 0.2s;
+  }
+}
+
+@media (max-width: 576px) {
+  .session-card-myactivity {
+    grid-template-columns: 1fr;
   }
 
-  .mobile-view-myactivity .session-card-myactivity:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly elevated on hover */
+  .toggle-btn-myactivity {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  /* General container adjustments */
+  .container-myactivity {
+    padding: 1.5rem; /* Slightly reduce padding for better spacing */
+    margin: 0 auto;
   }
 
-  .mobile-view-myactivity .session-card-myactivity div {
-    display: flex;
-    flex-direction: row; /* Align label and value in a row */
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 0;
-    width: 100%;
-    /* border-bottom: 1px solid hsl(214, 83%, 12%); */
+  /* Header adjustments */
+  .header-myactivity {
+    font-size: 1.8rem; /* Slightly reduce header font size */
   }
 
-  .mobile-view-myactivity .session-card-myactivity strong {
-    font-weight: bold;
-    color: hsl(214, 83%, 12%);
-    margin-right: 1rem; /* Space between label and value */
+  /* Table adjustments */
+  .activity-table-myactivity th,
+  .activity-table-myactivity td {
+    font-size: 0.95rem; /* Adjust font size for better readability */
+    padding: 0.8rem; /* Reduce padding for compact spacing */
   }
 
+  /* Button adjustments */
+  .toggle-btn-myactivity {
+    font-size: 0.95rem; /* Adjust button font size */
+    padding: 0.5rem 1rem;
+  }
+
+  /* Modal adjustments */
+  .modal-content-myactivity {
+    max-width: 450px; /* Adjust modal width */
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  /* General container adjustments */
+  .container-myactivity {
+    padding: 1rem 0; /* Compact padding with balanced side spacing */
+    margin: 0 auto;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+
+  /* Header adjustments */
+  .header-myactivity {
+    font-size: 1.8rem; /* Adjust header font size for tablets */
+    margin-bottom: 1rem;
+  }
+
+  /* Table adjustments */
+  .activity-table-myactivity {
+    width: 100%; /* Ensure the table spans the full width of the container */
+    border-collapse: collapse;
+    font-size: 0.95rem; /* Slightly smaller font size */
+    margin-bottom: 1rem; /* Add spacing below the table */
+    table-layout: fixed; /* Prevent content overflow */
+    overflow-x: auto; /* Allow horizontal scrolling if content overflows */
+  }
+  .activity-table-myactivity th:first-child {
+    width: 3rem;
+  }
+  .activity-table-myactivity th,
+  .activity-table-myactivity td {
+    padding: 0.2rem; /* Compact padding for better use of space */
+    text-align: center;
+    word-wrap: break-word; /* Ensure long text wraps within cells */
+    white-space: normal; /* Allow text to wrap to the next line */
+    font-size: 0.89rem;
+    width: fit-content;
+  }
+
+  .session-card-myactivity {
+    grid-template-columns: repeat(2, 1fr); /* Display two cards per row */
+    padding: 0.8rem; /* Adjust padding for compactness */
+    gap: 0.5rem;
+    border: 1px solid #c7c7c7;
+  }
+
+  /* Button adjustments */
+  .toggle-btn-myactivity {
+    font-size: 0.9rem; /* Adjust font size */
+    padding: 0.6rem 1rem; /* Maintain usability */
+  }
+
+  /* Feedback Button */
   .feedback-btn-myactivity {
-    width: 117px;
-    padding: 0.5rem;
     font-size: 0.8rem;
-    text-align: center;
-    background-color: #4caf50;
-    color: #ffffff;
+    padding: 0.5rem;
+  }
+
+  /* Modal adjustments */
+  .modal-content-myactivity {
+    width: 85%; /* Use most of the screen width */
+    padding: 1rem;
+    max-width: 450px; /* Limit modal size */
+  }
+}
+
+@media screen and (min-width: 425px) and (max-width: 768px) {
+  .mobile-view-myactivity {
+    display: flex;
+  }
+  .table-container-myactivity {
+    padding: 2rem;
+  }
+  .session-card-myactivity {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0.5rem 2rem;
+    gap: 0.5rem;
+    border: 1px solid #c7c7c7;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .table-container-myactivity {
+    padding: 1rem;
+  }
+
+  .session-card-myactivity {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0.5rem 1rem;
+    gap: 0.4rem;
+    border: 1px solid #c7c7c7;
+  }
+
+  .feedback-btn-myactivity {
+    width: 100%;
+    padding: 0.5rem 0;
+    background-color: #38a169;
+    color: #fff;
     border: none;
-    border-radius: 0.375rem;
+    border-radius: 5px;
+    font-size: 0.7rem;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out, transform 0.2s;
-  }
-
-  .feedback-btn-myactivity:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-  }
-
-  .feedback-status-myactivity {
-    font-size: 0.85rem;
-    color: #6b7280;
-    text-align: center;
+    transition: background-color 0.3s ease;
   }
 }
