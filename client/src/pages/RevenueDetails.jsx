@@ -222,7 +222,7 @@ const RevenueDetails = () => {
                     placeholder="Search"
                   />
                   <button
-                    className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded"
+                    className="absolute h-8 w-8 right-1 top-4 my-auto px-2 flex items-center bg-transparent rounded"
                     type="button"
                   >
                     <svg
@@ -245,7 +245,7 @@ const RevenueDetails = () => {
             </div>
 
             {/* Table Body */}
-            <div className="overflow-x-auto w-full">
+            {/* <div className="overflow-x-auto w-full">
               <table className="min-w-full table-auto text-xs sm:text-sm text-gray-600">
                 <thead className="text-xs text-gray-700 uppercase border-b border-[#243642] bg-[#A6AEBF]">
                   <tr>
@@ -288,7 +288,70 @@ const RevenueDetails = () => {
                   ))}
                 </tbody>
               </table>
+            </div> */}
+            <div className="w-full">
+              {/* Desktop/Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="min-w-full table-auto text-xs sm:text-sm text-gray-600">
+                  <thead className="text-xs text-gray-700 uppercase border-b border-[#243642] bg-[#dae3f7]">
+                    <tr>
+                      <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Sr. No</th>
+                      <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Session ID</th>
+                      <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Client ID</th>
+                      <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Payment Date</th>
+                      <th className="px-3 py-2 text-center font-bold text-[#1A1A1D]">Payment Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-[#f8f8f8]">
+                    {filteredPaymentDetails.map((payment, index) => (
+                      <tr key={index} className="hover:bg-slate-50">
+                        <td className="px-3 py-2 text-sm text-[#1A1A1D] text-center">{payment.srNo}</td>
+                        <td className="px-3 py-2 text-sm text-[#1A1A1D] text-center">{payment.sessionId}</td>
+                        <td className="px-3 py-2 text-sm text-[#1A1A1D] text-center">{payment.studentId}</td>
+                        <td className="px-3 py-2 text-sm text-[#1A1A1D] text-center">{payment.paymentDate}</td>
+                        <td className="px-3 py-2 text-sm font-semibold text-slate-800 text-center">
+                          {payment.paymentAmount} Rs
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile/Card View */}
+              <div className="md:hidden space-y-4">
+                {filteredPaymentDetails.map((payment, index) => (
+                  <div
+                    key={index}
+                    className="bg-[#ffffff] border border-gray-300 rounded-lg shadow p-4 hover:bg-slate-50"
+                  >
+                    <div className="mb-2">
+                      <span className="font-bold text-[#1A1A1D]">Sr. No:</span>{" "}
+                      <span className="text-sm text-[#1A1A1D]">{payment.srNo}</span>
+                    </div>
+                    <div className="mb-2">
+                      <span className="font-bold text-[#1A1A1D]">Session ID:</span>{" "}
+                      <span className="text-sm text-[#1A1A1D]">{payment.sessionId}</span>
+                    </div>
+                    <div className="mb-2">
+                      <span className="font-bold text-[#1A1A1D]">Client ID:</span>{" "}
+                      <span className="text-sm text-[#1A1A1D]">{payment.studentId}</span>
+                    </div>
+                    <div className="mb-2">
+                      <span className="font-bold text-[#1A1A1D]">Payment Date:</span>{" "}
+                      <span className="text-sm text-[#1A1A1D]">{payment.paymentDate}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-[#1A1A1D]">Payment Amount:</span>{" "}
+                      <span className="text-sm font-semibold text-slate-800">
+                        {payment.paymentAmount} Rs
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+
           </div>
         </div>
       </div>

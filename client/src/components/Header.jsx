@@ -5,6 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 import "../styles/Header.css";
+import {
+  Typography,
+  Dialog,
+} from "@material-tailwind/react";
 
 function Header({ sidebarOpen, setSidebarOpen }) {
   const { user, logout, profileComplete } = useAuth();
@@ -13,6 +17,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
   const dropdownRef = useRef(null);
   const userIconRef = useRef(null);
   const navigate = useNavigate();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen((prevState) => !prevState);
@@ -23,8 +28,15 @@ function Header({ sidebarOpen, setSidebarOpen }) {
   };
 
   const handleLogout = () => {
+    triggerNotification("Logout successfully", "success");
     logout();
-    triggerNotification("Logged out successfully", "success");
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+  };
+  const confirmLogout = () => {
+    setShowLogoutConfirm(false);
+    handleLogout();
   };
 
   const handleSupportClick = () => {
@@ -102,10 +114,33 @@ function Header({ sidebarOpen, setSidebarOpen }) {
                 <DropdownButton onClick={handleSupportClick}>
                   Support
                 </DropdownButton>
-                <DropdownButton onClick={handleLogout}>Logout</DropdownButton>
+                <DropdownButton onClick={() => setShowLogoutConfirm(true)}>Logout</DropdownButton>
               </div>
             )}
           </div>
+          <Dialog
+            open={showLogoutConfirm}
+            handler={setShowLogoutConfirm}
+            className="bg-[#f3d6e0] rounded-lg shadow-lg p-6 h-fit w-fit fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
+          >
+            <Typography variant="h6" className="mb-4">
+              Are you sure you want to logout?
+            </Typography>
+            <div className="flex justify-end gap-4">
+              <button
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={() => setShowLogoutConfirm(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700"
+                onClick={confirmLogout}
+              >
+                Logout
+              </button>
+            </div>
+          </Dialog>
         </div>
       </nav>
     </>
