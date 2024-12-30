@@ -74,10 +74,12 @@ exports.requestPasswordReset = async (req, res) => {
 exports.validateResetToken = async (req, res) => {
   const { token } = req.params;
 
+  console.log("Received token:", token);
+
   try {
     // Hash the provided token for comparison
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-
+    console.log("Hashed token for validation:", hashedToken);
     // Check if the token exists and has not expired
     const [user] = await db.query(
       "SELECT email FROM personal_details WHERE reset_token = ? AND reset_token_expiry > NOW()",
@@ -100,13 +102,13 @@ exports.resetPassword = async (req, res) => {
   const { token } = req.params; // Token from the URL
   const { newPassword } = req.body; // New password from the request body
 
-  try {
-    if (!token || !newPassword) {
-      return res
-        .status(400)
-        .json({ message: "Token and new password are required" });
-    }
+  if (!token || !newPassword) {
+    return res
+      .status(400)
+      .json({ message: "Token and new password are required" });
+  }
 
+  try {
     // Hash the token for comparison
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 

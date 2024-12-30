@@ -1,5 +1,5 @@
 const express = require("express");
-const { sendOtp, verifyOtp } = require("../services/services");
+const { sendOtp, verifyOtp, loginWithOtp } = require("../services/services");
 const {
   sendEmailOtp,
   verifyEmailOtp,
@@ -7,9 +7,12 @@ const {
 
 const router = express.Router();
 
+
+
 router.post("/mobile-otp", sendOtp);
 router.post("/verify-mobile-otp", verifyOtp);
 router.post("/email-otp", sendEmailOtp);
 router.post("/verify-email-otp", verifyEmailOtp);
+router.post("/login-with-otp", loginWithOtp);
 
 module.exports = router;

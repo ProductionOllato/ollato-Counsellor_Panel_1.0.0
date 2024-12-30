@@ -47,7 +47,7 @@ function App() {
               errorElement={<ErrorPage />}
             />
             <Route
-              path="/forgot-password"
+              path="/reset-password"
               element={<ForgotPassword />}
               ErrorBoundary={ErrorBoundary}
             />

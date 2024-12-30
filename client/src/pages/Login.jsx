@@ -135,10 +135,10 @@ function Login() {
     }
   };
 
-  const handleVerifyOtp = async () => {
+  const handleVerifyOtpTOLogin = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${apiEndpointURL}/otp/verify-mobile-otp`, {
+      const response = await fetch(`${apiEndpointURL}/otp/login-with-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -175,151 +175,151 @@ function Login() {
     setFormData({ email: "", password: "", phoneNumber: "", otp: "" });
   };
 
-  const handleForgotPassword = () => navigate("/forgot-password");
+  const handleForgotPassword = () => navigate("/reset-password");
 
   return (
     <>
-    <div className="login-container">
-  <div className="login-logo-container">
-    <img src={LOGO} alt="Logo" className="login-logo" />
-  </div>
+      <div className="login-container">
+        <div className="login-logo-container">
+          <img src={LOGO} alt="Logo" className="login-logo" />
+        </div>
 
-  <div className="login-form-container">
-    <div className="login-form-wrapper">
-      <h1 className="login-title">
-        {showOtpLogin ? "Login with OTP" : "Welcome Back"}
-      </h1>
-      <form onSubmit={handleSubmit}>
-        {showOtpLogin ? (
-          <>
-            <div className="form-group">
-              <label className="form-label">Phone Number *</label>
-              <input
-                type="text"
-                name="phoneNumber"
-                placeholder="Enter your phone number"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            {otpSent && (
-              <div className="form-group">
-                <label className="form-label">Enter OTP *</label>
-                <input
-                  type="text"
-                  name="otp"
-                  placeholder="Enter OTP sent to your phone"
-                  value={formData.otp}
-                  onChange={handleChange}
-                  className="form-input"
-                />
-              </div>
-            )}
-            <div className="form-action">
+        <div className="login-form-container">
+          <div className="login-form-wrapper">
+            <h1 className="login-title">
+              {showOtpLogin ? "Login with OTP" : "Welcome Back"}
+            </h1>
+            <form onSubmit={handleSubmit}>
+              {showOtpLogin ? (
+                <>
+                  <div className="form-group">
+                    <label className="form-label">Phone Number *</label>
+                    <input
+                      type="text"
+                      name="phoneNumber"
+                      placeholder="Enter your phone number"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </div>
+                  {otpSent && (
+                    <div className="form-group">
+                      <label className="form-label">Enter OTP *</label>
+                      <input
+                        type="text"
+                        name="otp"
+                        placeholder="Enter OTP sent to your phone"
+                        value={formData.otp}
+                        onChange={handleChange}
+                        className="form-input"
+                      />
+                    </div>
+                  )}
+                  <div className="form-action">
+                    <button
+                      type="button"
+                      onClick={otpSent ? handleVerifyOtpTOLogin : handleSendOtp}
+                      className={`form-button ${loading ? "disabled" : ""}`}
+                      disabled={loading || (!otpSent && !formData.phoneNumber)}
+                    >
+                      {loading
+                        ? "Processing..."
+                        : otpSent
+                          ? "Verify OTP"
+                          : "Send OTP"}
+                    </button>
+                  </div>
+                  {otpSent && (
+                    <div className="form-resend">
+                      <button
+                        type="button"
+                        onClick={handleResendOtp}
+                        className={`resend-button ${loading ? "disabled" : ""}`}
+                        disabled={loading}
+                      >
+                        Resend OTP
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="form-group">
+                    <label className="form-label">Email *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                  </div>
+                  <div className="form-group password-group">
+                    <label className="form-label">Password *</label>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      placeholder="Enter your password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="form-input"
+                    />
+                    <span
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="password-toggle"
+                    >
+                      {showPassword ? (
+                        <AiOutlineEyeInvisible />
+                      ) : (
+                        <AiOutlineEye />
+                      )}
+                    </span>
+                  </div>
+                  <div className="forgot-password">
+                    <button
+                      type="button"
+                      onClick={handleForgotPassword}
+                      className="forgot-password-link"
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                  <div className="form-action">
+                    <button
+                      type="submit"
+                      className={`form-button ${loading ? "disabled" : ""}`}
+                      disabled={loading}
+                    >
+                      {loading ? "Logging in..." : "Login"}
+                    </button>
+                  </div>
+                </>
+              )}
+            </form>
+            <div className="toggle-login-method">
               <button
-                type="button"
-                onClick={otpSent ? handleVerifyOtp : handleSendOtp}
-                className={`form-button ${loading ? "disabled" : ""}`}
-                disabled={loading || (!otpSent && !formData.phoneNumber)}
+                className="toggle-login-method-link"
+                onClick={toggleLoginMethod}
               >
-                {loading
-                  ? "Processing..."
-                  : otpSent
-                  ? "Verify OTP"
-                  : "Send OTP"}
+                {showOtpLogin ? "Back to Email Login" : "Login with OTP"}
               </button>
             </div>
-            {otpSent && (
-              <div className="form-resend">
-                <button
-                  type="button"
-                  onClick={handleResendOtp}
-                  className={`resend-button ${loading ? "disabled" : ""}`}
-                  disabled={loading}
-                >
-                  Resend OTP
-                </button>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <div className="form-group">
-              <label className="form-label">Email *</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleChange}
-                className="form-input"
-              />
-            </div>
-            <div className="form-group password-group">
-              <label className="form-label">Password *</label>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                className="form-input"
-              />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
-              >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible />
-                ) : (
-                  <AiOutlineEye />
-                )}
-              </span>
-            </div> 
-            <div className="forgot-password">
+            <div className="register-link-container">
+              <p className="register-text">Don't have an account?</p>
               <button
-                type="button"
-                onClick={handleForgotPassword}
-                className="forgot-password-link"
+                className="register-button"
+                onClick={() => navigate("/registration")}
               >
-                Forgot Password?
+                <FaArrowRightFromBracket />
+                Register
               </button>
             </div>
-            <div className="form-action">
-              <button
-                type="submit"
-                className={`form-button ${loading ? "disabled" : ""}`}
-                disabled={loading}
-              >
-                {loading ? "Logging in..." : "Login"}
-              </button>
-            </div>
-          </>
-        )}
-      </form>
-      <div className="toggle-login-method">
-        <button
-          className="toggle-login-method-link"
-          onClick={toggleLoginMethod}
-        >
-          {showOtpLogin ? "Back to Email Login" : "Login with OTP"}
-        </button>
+          </div>
+        </div>
       </div>
-      <div className="register-link-container">
-        <p className="register-text">Don't have an account?</p>
-        <button
-          className="register-button"
-          onClick={() => navigate("/registration")}
-        >
-          <FaArrowRightFromBracket />
-          Register
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-</>
+    </>
   );
 }
 

@@ -13,22 +13,30 @@ function ResetPassword() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    const pathParts = location.pathname.split("/");
+    const tokenValue = pathParts[pathParts.length - 1]; // Get the last part of the path
+    setToken(tokenValue);
+  }, [location]);
+
+
+
   // Get token from URL query parameters
   // useEffect(() => {
   //   const params = new URLSearchParams(location.search);
   //   setToken(params.get("token"));
   // }, [location]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const tokenValue = params.get("token");
-    if (!tokenValue) {
-      triggerNotification("Invalid or missing token.", "error");
-      navigate("/forgot-password");
-    } else {
-      setToken(tokenValue);
-    }
-  }, [location, navigate, triggerNotification]);
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   const tokenValue = params.get("token");
+  //   if (!tokenValue) {
+  //     triggerNotification("Invalid or missing token.", "error");
+  //     navigate("/reset-password");
+  //   } else {
+  //     setToken(tokenValue);
+  //   }
+  // }, [location, navigate, triggerNotification]);
 
   const isPasswordStrong = (password) => password.length >= 8;
 
@@ -124,9 +132,8 @@ function ResetPassword() {
           <div className="mt-4 flex justify-center">
             <button
               type="submit"
-              className={`w-1/2 bg-[#406882] text-[#ffffff] p-2 rounded-md ${
-                loading ? "opacity-50" : ""
-              }`}
+              className={`w-1/2 bg-[#406882] text-[#ffffff] p-2 rounded-md ${loading ? "opacity-50" : ""
+                }`}
               disabled={loading}
             >
               {loading ? "Processing..." : "Reset Password"}

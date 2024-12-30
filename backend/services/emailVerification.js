@@ -95,3 +95,4 @@ exports.verifyEmailOtp = (req, res) => {
     return res.status(400).json({ message: "Invalid OTP. Please try again." });
   }
 };
+
