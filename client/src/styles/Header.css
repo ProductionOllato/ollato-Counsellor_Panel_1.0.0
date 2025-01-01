@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 50;
+  z-index: 40;
   width: 100%;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
   padding: 0px 40px;
@@ -20,8 +20,8 @@
 }
 
 .logo-image {
-  height: 100px;
-  width: 150px;
+  height: 90px;
+  width: 130px;
   transition: all 0.3s ease;
   image-rendering: crisp-edges;
 }
@@ -230,8 +230,8 @@
 
   .logo-image {
     margin-top: 20px;
-    height: 100px;
-    width: 170px;
+    height: 90px;
+    width: 150px;
   }
 
   .header-container {
@@ -301,7 +301,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 50;
+    z-index: 40;
     width: 100%;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
     padding: 5px 30px;

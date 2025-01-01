@@ -98,7 +98,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       <Card
         className={`h-[calc(100vh)] ${
           sidebarOpen ? "w-64" : "w-20"
-        } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#ab97d4] rounded-none pt-10 backdrop-blur-lg bg-opacity-40 md:block hidden`}
+        } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#ab97d4] rounded-none pt-8 backdrop-blur-lg bg-opacity-40 md:block hidden`}
         style={{ zIndex: 40 }}
       >
         <hr className="mb-12 border-gray-300 opacity-40" />
@@ -167,7 +167,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           {sidebarOpen ? <IoIosArrowBack /> : <IoIosArrowForward />}
         </button>
       </Card>
-
+      {/* logout messsage */}
       <Dialog
         open={showLogoutConfirm}
         handler={setShowLogoutConfirm}
@@ -177,8 +177,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           {/* SVG Icon for alert */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
+            width="50"
+            height="50"
             fill="currentColor"
             className="text-red-600 mb-6"
             viewBox="0 0 24 24"
@@ -186,7 +186,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm1 17h-2v-6h2v6zm0-8h-2V7h2v2z" />
           </svg>
 
-          {/* Typography Text */}
+          {/* Typography Text Logout Button*/}
           <Typography
             variant="h4"
             className="mb-6 text-gray-800 font-semibold text-lg sm:text-2xl"
@@ -214,34 +214,63 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
       {/* Mobile Sidebar (767px and below) */}
       {isMobile && (
-        <div className="fixed top-0 left-0 right-0 p-2 grid grid-cols-3 items-center md:hidden z-40 mt-24">
+        <div className="fixed top-0 left-0 w-full p-2 md:hidden z-50 mt-24">
+          {/* Hamburger Button */}
           <button
             onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-            className="text-3xl justify-self-start text-black bg-transparent focus:outline-none border-none"
+            className="text-3xl text-black font-semibold bg-transparent focus:outline-none border-none"
           >
             <RxHamburgerMenu />
           </button>
 
-          <div className="justify-self-center"></div>
-
-          <div className="justify-self-end"></div>
-
+          {/* Sidebar */}
           {isSidebarVisible && (
-            <div className="col-span-3 grid grid-cols-3 sm:grid-cols-4 gap-1 p-4 bg-[#ab97d4]">
-              {sidebarItems.map(({ label, icon, path }) => (
-                <NavLink
-                  key={path}
-                  to={profileComplete ? path : "#"}
-                  onClick={(e) => {
-                    if (!profileComplete) e.preventDefault();
-                    setIsSidebarVisible(false);
+            <div className="fixed top-0 left-0 w-[40%] h-full bg-[#f3e1e6] shadow-lg z-50 transition-transform transform duration-300">
+              {/* Close Button */}
+              <button
+                onClick={() => setIsSidebarVisible(false)}
+                className="absolute top-4 right-4 text-2xl font-bold text-[#17202a] bg-transparent focus:outline-none"
+              >
+                ✕
+              </button>
+
+              {/* Sidebar Content */}
+              <div className="flex flex-col h-full p-6 space-y-4 px-1 mt-10">
+                {sidebarItems.map(({ label, icon, path }) => (
+                  <NavLink
+                    key={path}
+                    to={profileComplete ? path : "#"}
+                    onClick={(e) => {
+                      if (!profileComplete) e.preventDefault();
+                      setIsSidebarVisible(false);
+                    }}
+                    className={({ isActive }) =>
+                      `flex items-center space-x-2 px-2 py-2 rounded-md font-semibold text-[#17202a] transition-all duration-300 ${
+                        isActive
+                          ? "bg-[#5e4d7e] bg-opacity-30 backdrop-blur-lg text-[#17202a] shadow-md"
+                          : "hover:bg-pink-100 hover:text-pink-500"
+                      } ${
+                        !profileComplete
+                          ? "cursor-not-allowed opacity-70 pointer-events-none"
+                          : ""
+                      }`
+                    }
+                  >
+                    <span className="text-lg">{icon}</span>
+                    <p className="text-sm font-medium">{label}</p>
+                  </NavLink>
+                ))}
+
+                {/* Logout Button */}
+                <button
+                  onClick={() => {
+                    setShowLogoutConfirm(true);
                   }}
-                  className="flex flex-col items-center justify-center text-center text-xs text-[#2f2346] hover:text-pink-500 transition duration-300"
+                  className="mt-auto py-2 px-4 bg-transparent text-[#17202a] text-sm font-medium rounded shadow hover:bg-pink-600 transition duration-300"
                 >
-                  <span className="text-lg">{icon}</span>
-                  <p className="text-xs font-medium">{label}</p>
-                </NavLink>
-              ))}
+                  Logout
+                </button>
+              </div>
             </div>
           )}
         </div>

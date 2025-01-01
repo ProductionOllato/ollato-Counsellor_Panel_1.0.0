@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
 import { FaRegUser } from "react-icons/fa";
+import { RiArrowDropDownFill } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
@@ -97,6 +98,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
               ) : (
                 <FaRegUser className="user-icon" />
               )}
+              <RiArrowDropDownFill className="text-lg font-bold" />
             </button>
 
             {/* Dropdown Menu */}
@@ -118,6 +120,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
               </div>
             )}
           </div>
+          {/* logout message */}
           <Dialog
             open={showLogoutConfirm}
             handler={setShowLogoutConfirm}
