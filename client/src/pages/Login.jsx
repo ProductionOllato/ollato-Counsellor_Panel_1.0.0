@@ -175,7 +175,7 @@ function Login() {
     setFormData({ email: "", password: "", phoneNumber: "", otp: "" });
   };
 
-  const handleForgotPassword = () => navigate("/reset-password");
+  const handleForgotPassword = () => navigate("/forgot-password");
 
   return (
     <>

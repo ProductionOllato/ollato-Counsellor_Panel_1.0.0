@@ -50,9 +50,11 @@ exports.requestPasswordReset = async (req, res) => {
     );
 
     // Generate reset password link
-    const resetLink = `${req.protocol}://${req.get(
-      "host"
-    )}/reset-password/${resetToken}`;
+    // const resetLink = `${req.protocol}://${req.get(
+    //   "host"
+    // )}/reset-password/${resetToken}`;
+
+    const resetLink = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
     // Send reset link email
     await transporter.sendMail({
