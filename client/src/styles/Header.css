@@ -62,7 +62,20 @@
   font-weight: 300;
   color: #e9385b;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  animation: blink 1s ease-in infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .sub-title-2 {

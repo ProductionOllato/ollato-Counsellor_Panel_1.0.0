@@ -40,6 +40,9 @@ const Registration = () => {
 
   const API_URL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
 
+
+  const isPasswordStrong = (password) => password.length >= 8;
+
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
     return emailRegex.test(email);
@@ -245,6 +248,10 @@ const Registration = () => {
       );
       return;
     }
+    if (!isPasswordStrong(formData.password)) {
+      triggerNotification("Password must be at least 8 characters long.", "error");
+      return;
+    }
 
     if (formData.password !== formData.confirm_password) {
       triggerNotification("Passwords do not match.", "error");
@@ -298,219 +305,219 @@ const Registration = () => {
   };
 
   return (
-   <>
-    <div className="min-h-screen flex flex-col-reverse md:flex-row bg-gray-100">
-  {/* Form Section */}
-  <div className="container">
-    <div className="form-section">
-      <img src={LOGO} alt="Logo" className="logo" />
-      {/* Registration Form */}
-      <form onSubmit={handlePersonalDetailsSubmit}>
-        {/* Header */}
-        <div className="form-header">
-          <h1 className="form-heading">Registration Form</h1>
-        </div>
+    <>
+      <div className="min-h-screen flex flex-col-reverse md:flex-row bg-gray-100">
+        {/* Form Section */}
+        <div className="container">
+          <div className="form-section">
+            <img src={LOGO} alt="Logo" className="logo" />
+            {/* Registration Form */}
+            <form onSubmit={handlePersonalDetailsSubmit}>
+              {/* Header */}
+              <div className="form-header">
+                <h1 className="form-heading">Registration Form</h1>
+              </div>
 
-        <div className="form-grid">
-          {/* Input Fields */}
-          <InputField
-            label="First Name"
-            name="first_name"
-            placeholder="Enter your first name"
-            value={formData.first_name}
-            handleChange={handleChange}
-          />
-          <InputField
-            label="Last Name"
-            name="last_name"
-            placeholder="Enter your last name"
-            value={formData.last_name}
-            handleChange={handleChange}
-          />
+              <div className="form-grid">
+                {/* Input Fields */}
+                <InputField
+                  label="First Name"
+                  name="first_name"
+                  placeholder="Enter your first name"
+                  value={formData.first_name}
+                  handleChange={handleChange}
+                />
+                <InputField
+                  label="Last Name"
+                  name="last_name"
+                  placeholder="Enter your last name"
+                  value={formData.last_name}
+                  handleChange={handleChange}
+                />
 
-          <div>
-            <InputField
-              label="Email"
-              name="email"
-              placeholder="Enter your email"
-              type="email"
-              value={formData.email}
-              handleChange={handleChange}
-              disabled={isEmailVerified}
-            />
-            {/* Email Verification Button */}
-            <div className="button-container">
-              <button
-                type="button"
-                onClick={handleVerifyEmail}
-                disabled={isEmailVerified || isVerifying}
-                className="verify-button"
-              >
-                {isEmailVerified ? "Email Verified" : "Verify Email"}
+                <div>
+                  <InputField
+                    label="Email"
+                    name="email"
+                    placeholder="Enter your email"
+                    type="email"
+                    value={formData.email}
+                    handleChange={handleChange}
+                    disabled={isEmailVerified}
+                  />
+                  {/* Email Verification Button */}
+                  <div className="button-container">
+                    <button
+                      type="button"
+                      onClick={handleVerifyEmail}
+                      disabled={isEmailVerified || isVerifying}
+                      className="verify-button"
+                    >
+                      {isEmailVerified ? "Email Verified" : "Verify Email"}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <InputField
+                    label="Phone Number"
+                    name="phone_number"
+                    placeholder="Enter your phone number"
+                    type="text"
+                    value={formData.phone_number}
+                    handleChange={handleChange}
+                    disabled={isPhoneVerified}
+                  />
+                  {/* Phone Verification Button */}
+                  <div className="button-container">
+                    <button
+                      type="button"
+                      onClick={handleVerifyPhone}
+                      disabled={isPhoneVerified || isVerifying}
+                      className="verify-button"
+                    >
+                      Verify Phone
+                    </button>
+                  </div>
+                </div>
+
+                {/* OTP Modal */}
+                {otpModal && (
+                  <OtpModal
+                    otp={otp}
+                    setOtp={setOtp}
+                    handleOtpVerification={handleOtpVerification}
+                    setOtpModal={setOtpModal}
+                    isVerifying={isVerifying}
+                  />
+                )}
+
+                {/* Gender Selection */}
+                <InputField
+                  label="Gender"
+                  name="gender"
+                  value={formData.gender}
+                  handleChange={handleChange}
+                  component="select"
+                >
+                  <option value="" disabled>
+                    Select Gender
+                  </option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </InputField>
+
+                {/* Date of Birth */}
+                <InputField
+                  label="Date of Birth"
+                  name="date_of_birth"
+                  value={formData.date_of_birth}
+                  handleChange={handleChange}
+                  type="date"
+                />
+
+                {/* State Selection */}
+                <InputField
+                  label="State"
+                  name="state"
+                  value={formData.state}
+                  handleChange={handleStateChange}
+                  component="select"
+                >
+                  <option value="" disabled>
+                    Select State
+                  </option>
+                  {statesAndDistricts.states.map((state) => (
+                    <option key={state.state} value={state.state}>
+                      {state.state}
+                    </option>
+                  ))}
+                </InputField>
+
+                {/* District Selection */}
+                <InputField
+                  label="District"
+                  name="district"
+                  value={formData.district}
+                  handleChange={(e) =>
+                    setFormData((prev) => ({ ...prev, district: e.target.value }))
+                  }
+                  component="select"
+                >
+                  <option value="" disabled>
+                    Select District
+                  </option>
+                  {districts.map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </InputField>
+
+                {/* Password Input */}
+                <div className="password-container">
+                  <InputField
+                    label="Password"
+                    name="password"
+                    placeholder="Enter Password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    handleChange={handleChange}
+                  />
+                  <span
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="eye-icon"
+                  >
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                  </span>
+                </div>
+
+                {/* Confirm Password Input */}
+                <div className="password-container">
+                  <InputField
+                    label="Confirm Password"
+                    name="confirm_password"
+                    placeholder="Confirm Password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={formData.confirm_password}
+                    handleChange={handleChange}
+                  />
+                  <span
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="eye-icon"
+                  >
+                    {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                  </span>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="submit-button-container">
+                <button type="submit" className="submit-button">
+                  Register
+                </button>
+              </div>
+            </form>
+
+            {/* Login Link */}
+            <div className="login-link-container">
+              <p className="login-text">Already have an account?</p>
+              <button onClick={() => navigate("/")} className="login-button">
+                <FaArrowRightFromBracket />
+                Login
               </button>
             </div>
           </div>
-
-          <div>
-            <InputField
-              label="Phone Number"
-              name="phone_number"
-              placeholder="Enter your phone number"
-              type="text"
-              value={formData.phone_number}
-              handleChange={handleChange}
-              disabled={isPhoneVerified}
-            />
-            {/* Phone Verification Button */}
-            <div className="button-container">
-              <button
-                type="button"
-                onClick={handleVerifyPhone}
-                disabled={isPhoneVerified || isVerifying}
-                className="verify-button"
-              >
-                Verify Phone
-              </button>
-            </div>
-          </div>
-
-          {/* OTP Modal */}
-          {otpModal && (
-            <OtpModal
-              otp={otp}
-              setOtp={setOtp}
-              handleOtpVerification={handleOtpVerification}
-              setOtpModal={setOtpModal}
-              isVerifying={isVerifying}
-            />
-          )}
-
-          {/* Gender Selection */}
-          <InputField
-            label="Gender"
-            name="gender"
-            value={formData.gender}
-            handleChange={handleChange}
-            component="select"
-          >
-            <option value="" disabled>
-              Select Gender
-            </option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </InputField>
-
-          {/* Date of Birth */}
-          <InputField
-            label="Date of Birth"
-            name="date_of_birth"
-            value={formData.date_of_birth}
-            handleChange={handleChange}
-            type="date"
-          />
-
-          {/* State Selection */}
-          <InputField
-            label="State"
-            name="state"
-            value={formData.state}
-            handleChange={handleStateChange}
-            component="select"
-          >
-            <option value="" disabled>
-              Select State
-            </option>
-            {statesAndDistricts.states.map((state) => (
-              <option key={state.state} value={state.state}>
-                {state.state}
-              </option>
-            ))}
-          </InputField>
-
-          {/* District Selection */}
-          <InputField
-            label="District"
-            name="district"
-            value={formData.district}
-            handleChange={(e) =>
-              setFormData((prev) => ({ ...prev, district: e.target.value }))
-            }
-            component="select"
-          >
-            <option value="" disabled>
-              Select District
-            </option>
-            {districts.map((district) => (
-              <option key={district} value={district}>
-                {district}
-              </option>
-            ))}
-          </InputField>
-
-          {/* Password Input */}
-          <div className="password-container">
-            <InputField
-              label="Password"
-              name="password"
-              placeholder="Enter Password"
-              type={showPassword ? "text" : "password"}
-              value={formData.password}
-              handleChange={handleChange}
-            />
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="eye-icon"
-            >
-              {showPassword ? <FiEyeOff /> : <FiEye />}
-            </span>
-          </div>
-
-          {/* Confirm Password Input */}
-          <div className="password-container">
-            <InputField
-              label="Confirm Password"
-              name="confirm_password"
-              placeholder="Confirm Password"
-              type={showConfirmPassword ? "text" : "password"}
-              value={formData.confirm_password}
-              handleChange={handleChange}
-            />
-            <span
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="eye-icon"
-            >
-              {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-            </span>
-          </div>
         </div>
 
-        {/* Submit Button */}
-        <div className="submit-button-container">
-          <button type="submit" className="submit-button">
-            Register
-          </button>
-        </div>
-      </form>
-
-      {/* Login Link */}
-      <div className="login-link-container">
-        <p className="login-text">Already have an account?</p>
-        <button onClick={() => navigate("/")} className="login-button">
-          <FaArrowRightFromBracket />
-          Login
-        </button>
-      </div>
-    </div>
-  </div>
-
-  {/* Sidebar (Logo on right) */}
-  {/* <div className="sidebar">
+        {/* Sidebar (Logo on right) */}
+        {/* <div className="sidebar">
     <img src={LOGO} alt="Logo" className="logo" />
   </div> */}
-</div>
+      </div>
 
-   </>
+    </>
   );
 };
 

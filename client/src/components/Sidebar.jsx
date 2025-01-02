@@ -98,7 +98,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       {/* Sidebar for large screens */}
       <Card
         className={`h-[calc(100vh)] ${sidebarOpen ? "w-64" : "w-20"
-          } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#ab97d4] rounded-none pt-8 backdrop-blur-lg bg-opacity-40 md:block hidden`}
+          } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#eecdc0] rounded-none pt-8 backdrop-blur-lg bg-opacity-40 md:block hidden`}
         style={{ zIndex: 40 }}
       >
         <hr className="mb-12 border-gray-300 opacity-40" />
@@ -172,7 +172,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         onConfirm={confirmLogout}
         title="Are you sure you want to logout?"
         message="You will be logged out of your account."
-        icon={<CgLogOut className="text-6xl text-red-600" />}
       />
 
       {/* Mobile Sidebar (767px and below) */}
@@ -188,7 +187,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
           {/* Sidebar */}
           {isSidebarVisible && (
-            <div className="fixed top-0 left-0 w-[40%] h-full bg-[#f3e1e6] shadow-lg z-50 transition-transform transform duration-300">
+            <div className="fixed top-0 left-0 w-[40%] h-full bg-[#fbf5f3] shadow-lg z-50 transition-transform transform duration-300">
               {/* Close Button */}
               <button
                 onClick={() => setIsSidebarVisible(false)}
@@ -227,7 +226,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   onClick={() => {
                     setShowLogoutConfirm(true);
                   }}
-                  className="mt-auto py-2 px-4 bg-transparent text-[#17202a] text-sm font-medium rounded shadow hover:bg-pink-600 transition duration-300"
+                  className="mt-auto py-2 px-4 bg-transparent text-[#17202a] text-sm font-medium rounded shadow hover:bg-[#FF8383] hover:bg-opacity-30 transition duration-300"
                 >
                   Logout
                 </button>

@@ -7,6 +7,7 @@ import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 import "../styles/Header.css";
 import { Typography, Dialog } from "@material-tailwind/react";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 function Header({ sidebarOpen, setSidebarOpen }) {
   const { user, logout, profileComplete } = useAuth();
@@ -121,49 +122,13 @@ function Header({ sidebarOpen, setSidebarOpen }) {
             )}
           </div>
           {/* logout message */}
-          <Dialog
+          <ConfirmationDialog
             open={showLogoutConfirm}
-            handler={setShowLogoutConfirm}
-            className="bg-[#eebdce] rounded-lg shadow-lg p-6 sm:p-8 h-fit w-full sm:w-3/4 md:w-2/3 lg:w-1/2 max-w-lg sm:max-w-xl md:max-w-2xl fixed inset-0 m-auto z-50 flex items-center justify-center"
-          >
-            <div className="flex flex-col items-center text-center">
-              {/* SVG Icon for alert */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="50"
-                height="50"
-                fill="currentColor"
-                className="text-red-600 mb-6"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm1 17h-2v-6h2v6zm0-8h-2V7h2v2z" />
-              </svg>
-
-              {/* Typography Text */}
-              <Typography
-                variant="h4"
-                className="mb-6 text-gray-800 font-semibold text-lg sm:text-2xl"
-              >
-                Are you sure you want to logout?
-              </Typography>
-
-              {/* Buttons */}
-              <div className="flex flex-col sm:flex-row justify-center gap-6 w-full sm:w-auto">
-                <button
-                  className="px-6 py-3 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 w-full sm:w-auto"
-                  onClick={confirmLogout}
-                >
-                  Logout
-                </button>
-                <button
-                  className="px-6 py-3 text-lg font-semibold text-gray-700 bg-gray-300 rounded-lg hover:bg-gray-400 w-full sm:w-auto"
-                  onClick={() => setShowLogoutConfirm(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </Dialog>
+            onClose={() => setShowLogoutConfirm(false)}
+            onConfirm={confirmLogout}
+            title="Are you sure you want to logout?"
+            message="You will be logged out of your account."
+          />
         </div>
       </nav>
     </>
