@@ -161,54 +161,6 @@ const AvailabilityManagements = () => {
     setShowEditModal(true);
   };
 
-  //handle update slot
-  // const handleUpdateSlot = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   console.log("Selected Slot:", selectedSlot);
-
-  //   const payload = {
-  //     counsellor_id: selectedSlot.counsellor_id,
-  //     date: selectedSlot.date,
-  //     start_time: selectedSlot.start_time,
-  //     end_time: selectedSlot.end_time,
-  //     mode: selectedSlot.mode,
-  //     duration: selectedSlot.duration,
-  //     status: selectedSlot.status,
-  //   };
-  //   console.log("Payload update availability:", payload);
-
-  //   try {
-  //     const response = await axios.put(
-  //       `${APIURL}/counsellor/update-availability`,
-  //       payload
-  //     );
-  //     console.log("Response update availability:", response);
-
-  //     if (response.status === 200) {
-  //       // Update the availability in the state after successful update
-  //       setAvailability((prev) =>
-  //         prev.map((slot) =>
-  //           slot.sr_no === selectedSlot.sr_no ? selectedSlot : slot
-  //         )
-  //       );
-  //       setShowEditModal(false); // Close the modal
-  //       triggerNotification("Availability updated successfully!", "success");
-  //     } else {
-  //       throw new Error(
-  //         response.data.message || "Failed to update availability."
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error(error.message || "Failed to update availability.");
-  //     triggerNotification(
-  //       error.message || "Failed to update availability.",
-  //       "error"
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleUpdateSlot = async (e) => {
     e.preventDefault();
@@ -351,375 +303,26 @@ const AvailabilityManagements = () => {
   };
 
   return (
-    // <div className="availability-container w-full bg-white shadow-lg rounded-lg mt-10 pt-2 h-full">
-    //   <div className="flex justify-center items-center mb-6 px-4 sm:px-6">
-    //     <h1 className="text-xl sm:text-2xl font-semibold text-gray-700 text-center">
-    //       Availability Management
-    //     </h1>
-    //   </div>
-
-    //   <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 px-4 sm:px-6 ">
-    //     <button
-    //       onClick={() => {
-    //         resetForm();
-    //         toggleView("add");
-    //       }}
-    //       className="bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto text-base"
-    //     >
-    //       Add Availability
-    //     </button>
-    //     <button
-    //       onClick={() => toggleView("show")}
-    //       className="bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto text-base"
-    //     >
-    //       Show Availability
-    //     </button>
-    //   </div>
-
-    //   {view === "add" && (
-    //     <section>
-    //       <AvailabilityForm
-    //         onSubmit={async (formData) => {
-    //           await handleAvailabilitySubmit(formData);
-    //         }}
-    //       />
-    //     </section>
-    //   )}
-
-    //   {view === "show" && (
-    //     <div>
-    //       {loading ? (
-    //         <p className="text-gray-700 font-semibold text-center">
-    //           Loading...
-    //         </p>
-    //       ) : (
-    //         <section className="bg-white antialiased mb-8">
-    //           <div className="w-full max-w-full px-4 sm:px-6">
-    //             <div className="relative border border-[#85A98F] rounded-sm">
-    //               <input
-    //                 type="text"
-    //                 placeholder="Search sessions..."
-    //                 value={searchQuery}
-    //                 onChange={handleSearch}
-    //                 aria-label="Search sessions"
-    //                 className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-[#D3F1DF] pl-10 pr-12 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-    //               />
-    //               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-    //                 <svg
-    //                   className="w-5 h-5 text-slate-400"
-    //                   xmlns="http://www.w3.org/2000/svg"
-    //                   fill="none"
-    //                   viewBox="0 0 24 24"
-    //                   stroke="currentColor"
-    //                   aria-hidden="true"
-    //                 >
-    //                   <path
-    //                     strokeLinecap="round"
-    //                     strokeLinejoin="round"
-    //                     strokeWidth="2"
-    //                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm10 2l-5.3-5.3"
-    //                   />
-    //                 </svg>
-    //               </span>
-    //             </div>
-    //           </div>
-
-    //           <div className="max-w-screen-xl mx-auto">
-    //             <div className="overflow-x-auto mt-6">
-    //               <table className="min-w-full table-auto border-collapse border border-slate-200">
-    //                 <thead>
-    //                   <tr className="bg-slate-50 border-b border-slate-300 text-center text-base">
-    //                     {[
-    //                       { key: "sr_no", label: "Sr. No." },
-    //                       { key: "date", label: "Date" },
-    //                       { key: "time_slot", label: "Time" },
-    //                       { key: "mode", label: "Mode" },
-    //                       { key: "duration", label: "Duration" },
-    //                       { key: "status", label: "Status" },
-    //                     ].map((col) => (
-    //                       <th
-    //                         key={col.key}
-    //                         className="p-2 text-base font-normal leading-none text-slate-500 border-b border-slate-300 "
-    //                         onClick={() => handleSort(col.key)}
-    //                       >
-    //                         {col.label}
-    //                         {sortConfig.key === col.key && (
-    //                           <span
-    //                             className={`ml-2 ${sortConfig.direction === "ascending"
-    //                               ? "text-blue-500"
-    //                               : "text-red-500"
-    //                               } text-sm`}
-    //                           >
-    //                             {sortConfig.direction === "ascending"
-    //                               ? "▲"
-    //                               : "▼"}
-    //                           </span>
-    //                         )}
-    //                       </th>
-    //                     ))}
-    //                     <th className="p-2 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">
-    //                       Actions
-    //                     </th>
-    //                   </tr>
-    //                 </thead>
-    //                 <tbody>
-    //                   {tableData.length > 0 ? (
-    //                     paginatedData.map((slot, index) => (
-    //                       <tr key={slot.sr_no} className="hover:bg-slate-50">
-    //                         <td className="py-4 text-center border-b border-slate-200">
-    //                           {(currentPage - 1) * slotsPerPage + index + 1}
-    //                         </td>
-    //                         <td className="py-4 text-center  border-b border-slate-200">
-    //                           {slot.date}
-    //                         </td>
-    //                         <td className="py-4 text-center border-b border-slate-200">
-    //                           {slot.start_time} to {slot.end_time}
-    //                         </td>
-    //                         <td className="py-4 text-center border-b border-slate-200">
-    //                           {slot.mode}
-    //                         </td>
-    //                         <td className="py-4 text-center border-b border-slate-200">
-    //                           {slot.duration}
-    //                         </td>
-    //                         <td className="py-4 text-center border-b border-slate-200">
-    //                           <span
-    //                             className={`py-1 text-center px-2 rounded text-white text-sm ${slot.status === "available"
-    //                               ? "bg-[#347928]"
-    //                               : "bg-gray-500"
-    //                               }`}
-    //                           >
-    //                             {slot.status}
-    //                           </span>
-    //                         </td>
-    //                         <td className="py-2 border-b border-slate-200 flex justify-center">
-    //                           <button
-    //                             onClick={() => handleEditSlot(slot)}
-    //                             className="bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
-    //                           >
-    //                             <CiEdit />
-    //                           </button>
-    //                           <button
-    //                             onClick={() =>
-    //                               handleDeleteSlot(slot.sr_no, slot)
-    //                             }
-    //                             className="bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm"
-    //                           >
-    //                             <MdDeleteForever />
-    //                           </button>
-    //                         </td>
-    //                       </tr>
-    //                     ))
-    //                   ) : (
-    //                     <tr>
-    //                       <td
-    //                         colSpan="8"
-    //                         className="text-center p-4 text-gray-500 font-medium"
-    //                       >
-    //                         No sessions found.
-    //                       </td>
-    //                     </tr>
-    //                   )}
-    //                   {/* {tableData.length === 0 && (
-    //                     <tr>
-    //                       <td
-    //                         colSpan="8"
-    //                         className="text-center p-4 text-gray-500 font-medium"
-    //                       >
-    //                         No sessions found matching the search criteria.
-    //                       </td>
-    //                     </tr>
-    //                   )} */}
-    //                 </tbody>
-    //               </table>
-
-    //               {/* Edit Modal */}
-    //               {showEditModal && (
-    //                 <div className="fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 w-full transition-opacity duration-300 opacity-100">
-    //                   <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-    //                     <h2 className="text-2xl font-semibold mb-6 text-gray-900">
-    //                       Edit Availability
-    //                     </h2>
-    //                     <form
-    //                       onSubmit={handleUpdateSlot}
-    //                       className="space-y-6 grid grid-cols-2"
-    //                     >
-    //                       <div className="mb-5">
-    //                         <label
-    //                           htmlFor="date"
-    //                           className="block text-sm font-medium text-gray-800"
-    //                         >
-    //                           Date
-    //                         </label>
-    //                         <input
-    //                           id="date"
-    //                           type="date"
-    //                           name="date"
-    //                           value={selectedSlot.date}
-    //                           onChange={handleInputChange}
-    //                           className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    //                         />
-    //                       </div>
-
-    //                       <TimeDropdown
-    //                         label="Start Time"
-    //                         name="start_time"
-    //                         value={selectedSlot.start_time}
-    //                         onChange={handleInputChange}
-    //                       />
-    //                       <TimeDropdown
-    //                         label="End Time"
-    //                         name="end_time"
-    //                         value={selectedSlot.end_time}
-    //                         onChange={handleInputChange}
-    //                       />
-
-    //                       <div className="mb-5">
-    //                         <label
-    //                           htmlFor="mode"
-    //                           className="block text-sm font-medium text-gray-800"
-    //                         >
-    //                           Mode
-    //                         </label>
-    //                         <select
-    //                           id="mode"
-    //                           name="mode"
-    //                           value={selectedSlot.mode}
-    //                           onChange={handleInputChange}
-    //                           className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    //                         >
-    //                           {[
-    //                             { value: "video", label: "Video" },
-    //                             { value: "in-person", label: "In-person" },
-    //                           ].map((option) => (
-    //                             <option key={option.value} value={option.value}>
-    //                               {option.label}
-    //                             </option>
-    //                           ))}
-    //                         </select>
-    //                       </div>
-
-    //                       <div className="mb-5">
-    //                         <label
-    //                           htmlFor="duration"
-    //                           className="block text-sm font-medium text-gray-800"
-    //                         >
-    //                           Duration
-    //                         </label>
-    //                         <select
-    //                           id="duration"
-    //                           name="duration"
-    //                           value={selectedSlot.duration}
-    //                           onChange={handleInputChange}
-    //                           className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    //                         >
-    //                           {[
-    //                             { value: "60", label: "60 Minutes" },
-    //                             { value: "45", label: "45 Minutes" },
-    //                           ].map((option) => (
-    //                             <option key={option.value} value={option.value}>
-    //                               {option.label}
-    //                             </option>
-    //                           ))}
-    //                         </select>
-    //                       </div>
-
-    //                       <div className="mb-5">
-    //                         <label
-    //                           htmlFor="status"
-    //                           className="block text-sm font-medium text-gray-800"
-    //                         >
-    //                           Status
-    //                         </label>
-    //                         <select
-    //                           id="status"
-    //                           name="status"
-    //                           value={selectedSlot.status}
-    //                           onChange={handleInputChange}
-    //                           className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    //                         >
-    //                           <option value="available">Available</option>
-    //                           <option value="unavailable">Unavailable</option>
-    //                         </select>
-    //                       </div>
-
-    //                       <div className="flex justify-end mt-6 col-span-2">
-    //                         <button
-    //                           type="button"
-    //                           onClick={() => setShowEditModal(false)}
-    //                           className="text-base bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md mr-2 transition duration-150 ease-in-out"
-    //                         >
-    //                           Cancel
-    //                         </button>
-    //                         <button
-    //                           type="submit"
-    //                           disabled={loading}
-    //                           className={`text-base bg-[#7047A3] hover:bg-[#4b3368] text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${loading ? "opacity-50 cursor-not-allowed" : ""
-    //                             }`}
-    //                         >
-    //                           {loading ? "Updating..." : "Update"}
-    //                         </button>
-    //                       </div>
-    //                     </form>
-    //                   </div>
-    //                 </div>
-    //               )}
-
-    //               {/* Pagination Controls */}
-    //               {totalPages > 1 && (
-    //                 <div className="flex justify-center mt-4 text-base">
-    //                   <button
-    //                     onClick={() =>
-    //                       setCurrentPage((prev) => Math.max(prev - 1, 1))
-    //                     }
-    //                     disabled={currentPage === 1}
-    //                     className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-l text-base"
-    //                   >
-    //                     Previous
-    //                   </button>
-    //                   <span className="mx-4 ">
-    //                     Page {currentPage} of {totalPages}
-    //                   </span>
-    //                   <button
-    //                     onClick={() =>
-    //                       setCurrentPage((prev) =>
-    //                         Math.min(prev + 1, totalPages)
-    //                       )
-    //                     }
-    //                     disabled={currentPage === totalPages}
-    //                     className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-r text-base"
-    //                   >
-    //                     Next
-    //                   </button>
-    //                 </div>
-    //               )}
-    //             </div>
-    //           </div>
-    //         </section>
-    //       )}
-    //     </div>
-    //   )}
-    // </div>
-
-    <div className="availability-container w-full bg-white shadow-lg rounded-lg mt-10 pt-2 h-full">
-      <div className="flex justify-center items-center mb-6 px-4 sm:px-6">
-        <h1 className="text-xl sm:text-2xl font-semibold text-gray-700 text-center">
+    <div className="availability-management-container w-full bg-white shadow-lg rounded-lg mt-10 pt-2 h-full">
+      <div className="availability-header flex justify-center items-center mb-6 px-4 sm:px-6">
+        <h1 className="availability-title text-xl sm:text-2xl font-semibold text-gray-700 text-center">
           Availability Management
         </h1>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 px-4 sm:px-6 ">
+      <div className="availability-actions flex flex-wrap justify-center gap-4 sm:gap-6 mb-8 px-4 sm:px-6 ">
         <button
           onClick={() => {
             resetForm();
             toggleView("add");
           }}
-          className="bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto text-base"
+          className="availability-add-button bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto text-base"
         >
           Add Availability
         </button>
         <button
           onClick={() => toggleView("show")}
-          className="bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto text-base"
+          className="availability-show-button bg-[#8174A0] hover:bg-[#A888B5] text-white py-2 px-6 rounded w-full sm:w-auto text-base"
         >
           Show Availability
         </button>
@@ -738,24 +341,24 @@ const AvailabilityManagements = () => {
       {view === "show" && (
         <div>
           {loading ? (
-            <p className="text-gray-700 font-semibold text-center">
+            <p className="availability-loading text-gray-700 font-semibold text-center">
               Loading...
             </p>
           ) : (
-            <section className="bg-white antialiased mb-8">
+            <section className="availability-table-section bg-white antialiased mb-8">
               <div className="w-full max-w-full px-4 sm:px-6">
-                <div className="relative border border-[#85A98F] rounded-sm">
+                <div className="availability-search-container relative border border-[#85A98F] rounded-sm">
                   <input
                     type="text"
                     placeholder="Search sessions..."
                     value={searchQuery}
                     onChange={handleSearch}
                     aria-label="Search sessions"
-                    className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-[#D3F1DF] pl-10 pr-12 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                    className="search-input w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-[#D3F1DF] pl-10 pr-12 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                   />
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                     <svg
-                      className="w-5 h-5 text-slate-400"
+                      className="search-icon w-5 h-5 text-slate-400"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -773,10 +376,10 @@ const AvailabilityManagements = () => {
                 </div>
               </div>
 
-              <div className="max-w-screen-xl mx-auto">
+              <div className="availability-table-container max-w-screen-xl mx-auto">
                 <div className="overflow-x-auto mt-6">
                   {/* Table View for Larger Devices */}
-                  <table className="min-w-full table-auto border-collapse border border-slate-200 hidden lg:table">
+                  <table className="availability-table min-w-full table-auto border-collapse border border-slate-200 hidden lg:table">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-300 text-center text-base">
                         {[
@@ -844,7 +447,7 @@ const AvailabilityManagements = () => {
                             <td className="py-2 border-b border-slate-200 flex justify-center">
                               <button
                                 onClick={() => handleEditSlot(slot)}
-                                className="bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
+                                className="action-edit-button bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
                               >
                                 <CiEdit />
                               </button>
@@ -852,7 +455,7 @@ const AvailabilityManagements = () => {
                                 onClick={() =>
                                   handleDeleteSlot(slot.sr_no, slot)
                                 }
-                                className="bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm"
+                                className="action-delete-button bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm"
                               >
                                 <MdDeleteForever />
                               </button>
@@ -873,10 +476,10 @@ const AvailabilityManagements = () => {
                   </table>
 
                   {/* Mobile Card View */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4 mt-6">
+                  <div className="mobile-card-view grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4 mt-6">
                     {paginatedData.length > 0 ? (
                       paginatedData.map((slot, index) => (
-                        <div key={slot.sr_no} className="bg-white border border-gray-200 rounded-lg p-4 shadow-md">
+                        <div key={slot.sr_no} className="session-card bg-white border border-gray-200 rounded-lg p-4 shadow-md">
                           <div className="flex justify-between">
                             <span className="font-semibold">Session ID:</span>
                             <span>{slot.session_id}</span>
@@ -906,13 +509,13 @@ const AvailabilityManagements = () => {
                           <div className="flex justify-center mt-2">
                             <button
                               onClick={() => handleEditSlot(slot)}
-                              className="bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
+                              className="mobile-action-edit-button bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
                             >
                               <CiEdit />
                             </button>
                             <button
                               onClick={() => handleDeleteSlot(slot.sr_no, slot)}
-                              className="bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm"
+                              className="mobile-action-delete-button bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm"
                             >
                               <MdDeleteForever />
                             </button>
@@ -920,7 +523,7 @@ const AvailabilityManagements = () => {
                         </div>
                       ))
                     ) : (
-                      <div className="text-center p-4 text-gray-500 font-medium">
+                      <div className="mobile-no-sessions text-center p-4 text-gray-500 font-medium">
                         No sessions found.
                       </div>
                     )}
@@ -928,147 +531,19 @@ const AvailabilityManagements = () => {
 
                   {/* Edit Modal */}
                   {showEditModal && (
-                    // <div className="fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 w-full transition-opacity duration-300 opacity-100 sm:max-w-fit">
-                    //   <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-                    //     <h2 className="text-2xl font-semibold mb-6 text-gray-900">
-                    //       Edit Availability
-                    //     </h2>
-                    //     <form
-                    //       onSubmit={handleUpdateSlot}
-                    //       className="space-y-6 grid grid-cols-2"
-                    //     >
-                    //       <div className="mb-5">
-                    //         <label
-                    //           htmlFor="date"
-                    //           className="block text-sm font-medium text-gray-800"
-                    //         >
-                    //           Date
-                    //         </label>
-                    //         <input
-                    //           id="date"
-                    //           type="date"
-                    //           name="date"
-                    //           value={selectedSlot.date}
-                    //           onChange={handleInputChange}
-                    //           className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
-                    //         />
-                    //       </div>
-
-                    //       <TimeDropdown
-                    //         label="Start Time"
-                    //         name="start_time"
-                    //         value={selectedSlot.start_time}
-                    //         onChange={handleInputChange}
-                    //       />
-                    //       <TimeDropdown
-                    //         label="End Time"
-                    //         name="end_time"
-                    //         value={selectedSlot.end_time}
-                    //         onChange={handleInputChange}
-                    //       />
-
-                    //       <div className="mb-5">
-                    //         <label
-                    //           htmlFor="mode"
-                    //           className="block text-sm font-medium text-gray-800"
-                    //         >
-                    //           Mode
-                    //         </label>
-                    //         <select
-                    //           id="mode"
-                    //           name="mode"
-                    //           value={selectedSlot.mode}
-                    //           onChange={handleInputChange}
-                    //           className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
-                    //         >
-                    //           {[
-                    //             { value: "video", label: "Video" },
-                    //             { value: "in-person", label: "In-person" },
-                    //           ].map((option) => (
-                    //             <option key={option.value} value={option.value}>
-                    //               {option.label}
-                    //             </option>
-                    //           ))}
-                    //         </select>
-                    //       </div>
-
-                    //       <div className="mb-5">
-                    //         <label
-                    //           htmlFor="duration"
-                    //           className="block text-sm font-medium text-gray-800"
-                    //         >
-                    //           Duration
-                    //         </label>
-                    //         <select
-                    //           id="duration"
-                    //           name="duration"
-                    //           value={selectedSlot.duration}
-                    //           onChange={handleInputChange}
-                    //           className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
-                    //         >
-                    //           {[
-                    //             { value: "60", label: "60 Minutes" },
-                    //             { value: "45", label: "45 Minutes" },
-                    //           ].map((option) => (
-                    //             <option key={option.value} value={option.value}>
-                    //               {option.label}
-                    //             </option>
-                    //           ))}
-                    //         </select>
-                    //       </div>
-
-                    //       <div className="mb-5">
-                    //         <label
-                    //           htmlFor="status"
-                    //           className="block text-sm font-medium text-gray-800"
-                    //         >
-                    //           Status
-                    //         </label>
-                    //         <select
-                    //           id="status"
-                    //           name="status"
-                    //           value={selectedSlot.status}
-                    //           onChange={handleInputChange}
-                    //           className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
-                    //         >
-                    //           <option value="available">Available</option>
-                    //           <option value="unavailable">Unavailable</option>
-                    //         </select>
-                    //       </div>
-
-                    //       <div className="flex justify-end mt-6 col-span-2">
-                    //         <button
-                    //           type="button"
-                    //           onClick={() => setShowEditModal(false)}
-                    //           className="text-base bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md mr-2 transition duration-150 ease-in-out"
-                    //         >
-                    //           Cancel
-                    //         </button>
-                    //         <button
-                    //           type="submit"
-                    //           disabled={loading}
-                    //           className={`text-base bg-[#7047A3] hover:bg-[#4b3368] text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${loading ? "opacity-50 cursor-not-allowed" : ""
-                    //             }`}
-                    //         >
-                    //           {loading ? "Updating..." : "Update"}
-                    //         </button>
-                    //       </div>
-                    //     </form>
-                    //   </div>
-                    // </div>
-                    <div className="fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 w-full transition-opacity duration-300 opacity-100">
-                      <div className="bg-white p-4 sm:p-8 rounded-lg shadow-lg w-full max-w-xs sm:max-w-md">
-                        <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-gray-900">
+                    <div className="modal-overlay-availability fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 w-full transition-opacity duration-300 opacity-100">
+                      <div className="modal-content-availability bg-white p-4 sm:p-8 rounded-lg shadow-lg w-full max-w-xs sm:max-w-md">
+                        <h2 className="modal-title-availability text-xl sm:text-2xl font-semibold mb-4 text-gray-900">
                           Edit Availability
                         </h2>
                         <form
                           onSubmit={handleUpdateSlot}
-                          className="space-y-4 sm:space-y-6 grid grid-cols-1 sm:grid-cols-2"
+                          className="modal-form-availability space-y-4 sm:space-y-6 grid grid-cols-1 sm:grid-cols-2"
                         >
-                          <div className="mb-4">
+                          <div className="form-group-availability mb-4">
                             <label
                               htmlFor="date"
-                              className="block text-sm font-medium text-gray-800"
+                              className="form-label-availability block text-sm font-medium text-gray-800"
                             >
                               Date
                             </label>
@@ -1078,7 +553,7 @@ const AvailabilityManagements = () => {
                               name="date"
                               value={selectedSlot.date}
                               onChange={handleInputChange}
-                              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
+                              className="form-input-availability w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
                             />
                           </div>
 
@@ -1095,10 +570,10 @@ const AvailabilityManagements = () => {
                             onChange={handleInputChange}
                           />
 
-                          <div className="mb-4">
+                          <div className="form-group-availability mb-4">
                             <label
                               htmlFor="mode"
-                              className="block text-sm font-medium text-gray-800"
+                              className="form-label-availability block text-sm font-medium text-gray-800"
                             >
                               Mode
                             </label>
@@ -1107,7 +582,7 @@ const AvailabilityManagements = () => {
                               name="mode"
                               value={selectedSlot.mode}
                               onChange={handleInputChange}
-                              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
+                              className="form-select-availability w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
                             >
                               {[
                                 { value: "video", label: "Video" },
@@ -1120,10 +595,10 @@ const AvailabilityManagements = () => {
                             </select>
                           </div>
 
-                          <div className="mb-4">
+                          <div className="form-group-availability mb-4">
                             <label
                               htmlFor="duration"
-                              className="block text-sm font-medium text-gray-800"
+                              className="form-label-availability block text-sm font-medium text-gray-800"
                             >
                               Duration
                             </label>
@@ -1132,7 +607,7 @@ const AvailabilityManagements = () => {
                               name="duration"
                               value={selectedSlot.duration}
                               onChange={handleInputChange}
-                              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
+                              className="form-select-availability w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
                             >
                               {[
                                 { value: "60", label: "60 Minutes" },
@@ -1145,10 +620,10 @@ const AvailabilityManagements = () => {
                             </select>
                           </div>
 
-                          <div className="mb-4">
+                          <div className="form-group-availability mb-4">
                             <label
                               htmlFor="status"
-                              className="block text-sm font-medium text-gray-800"
+                              className="form-label-availability block text-sm font-medium text-gray-800"
                             >
                               Status
                             </label>
@@ -1157,7 +632,7 @@ const AvailabilityManagements = () => {
                               name="status"
                               value={selectedSlot.status}
                               onChange={handleInputChange}
-                              className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
+                              className="form-select-availability w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
                             >
                               <option value="available">Available</option>
                               <option value="unavailable">Unavailable</option>
@@ -1168,15 +643,14 @@ const AvailabilityManagements = () => {
                             <button
                               type="button"
                               onClick={() => setShowEditModal(false)}
-                              className="text-base bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md mr-2 transition duration-150 ease-in-out"
+                              className="modal-cancel-button text-base bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md mr-2 transition duration-150 ease-in-out"
                             >
                               Cancel
                             </button>
                             <button
                               type="submit"
                               disabled={loading}
-                              className={`text-base bg-[#7047A3] hover:bg-[#4b3368] text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${loading ? "opacity-50 cursor-not-allowed" : ""
-                                }`}
+                              className={`modal-save-button text-base bg-[#7047A3] hover:bg-[#4b3368] text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                             >
                               {loading ? "Updating..." : "Update"}
                             </button>
@@ -1188,27 +662,23 @@ const AvailabilityManagements = () => {
 
                   {/* Pagination Controls */}
                   {totalPages > 1 && (
-                    <div className="flex justify-center mt-4 text-base">
+                    <div className="pagination-controls flex justify-center mt-4 text-base">
                       <button
-                        onClick={() =>
-                          setCurrentPage((prev) => Math.max(prev - 1, 1))
-                        }
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-l text-base"
+                        className="pagination-prev bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-l text-base"
                       >
                         Previous
                       </button>
-                      <span className="mx-4 ">
+                      <span className="pagination-info mx-4 ">
                         Page {currentPage} of {totalPages}
                       </span>
                       <button
                         onClick={() =>
-                          setCurrentPage((prev) =>
-                            Math.min(prev + 1, totalPages)
-                          )
+                          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                         }
                         disabled={currentPage === totalPages}
-                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-r text-base"
+                        className="pagination-next bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-r text-base"
                       >
                         Next
                       </button>
@@ -1219,38 +689,12 @@ const AvailabilityManagements = () => {
             </section>
           )}
         </div>
-
       )}
     </div>
   )
 };
 
 export default AvailabilityManagements;
-
-// const TimeDropdown = ({ label, value, onChange, name }) => (
-//   <div className="mb-5">
-//     <label className="block text-sm font-semibold text-gray-700 mb-1">
-//       {label}
-//     </label>
-//     <select
-//       name={name}
-//       value={value}
-//       onChange={onChange}
-//       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
-//     >
-//       {Array.from({ length: 48 }, (_, i) => {
-//         const hours = String(Math.floor(i / 2)).padStart(2, "0");
-//         const minutes = i % 2 === 0 ? "00" : "30";
-//         const time = `${hours}:${minutes}`;
-//         return (
-//           <option key={time} value={time}>
-//             {time}
-//           </option>
-//         );
-//       })}
-//     </select>
-//   </div>
-// );
 
 const TimeDropdown = ({ label, value, onChange, name }) => (
   <div className="mb-5">

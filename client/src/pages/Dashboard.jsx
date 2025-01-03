@@ -14,13 +14,10 @@ export default function Dashboard() {
   const [userDetails, setUserDetails] = useState(null);
   const [sessions, setSessions] = useState([]);
 
-  // console.log("Profile Complete:", profileComplete);
-  // console.log("Profile Status:", profileStatus);
-
-  useEffect(() => {
-    // Call approveProfile only once - testing
-    approveProfile();
-  }, [approveProfile]);
+  // useEffect(() => {
+  //   // Call approveProfile only once - testing
+  //   approveProfile();
+  // }, [approveProfile]);
 
   const completeProfile = () => {
     navigate("/registration-complete");
@@ -70,8 +67,7 @@ export default function Dashboard() {
     async function fetchUserDetails() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/personal-info/${
-            user.user_id
+          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/personal-info/${user.user_id
           }`
         );
         const userData = response.data?.data || {};
@@ -94,8 +90,7 @@ export default function Dashboard() {
     async function fetchProfessionDetails() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/professional-info/${
-            user.user_id
+          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/professional-info/${user.user_id
           }`
         );
         const userData = response.data?.data || {};
@@ -287,13 +282,10 @@ export default function Dashboard() {
               {sessions.map((session, index) => (
                 <div
                   key={index}
-                  className={`flex flex-col justify-between items-center p-4 border-2 cursor-pointer bg-white rounded-lg shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ${
-                    session.color === "green" ? "border-green-500" : ""
-                  } ${session.color === "blue" ? "border-blue-500" : ""} ${
-                    session.color === "yellow" ? "border-yellow-500" : ""
-                  } ${session.color === "orange" ? "border-orange-500" : ""} ${
-                    session.color === "red" ? "border-red-500" : ""
-                  }`}
+                  className={`flex flex-col justify-between items-center p-4 border-2 cursor-pointer bg-white rounded-lg shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ${session.color === "green" ? "border-green-500" : ""
+                    } ${session.color === "blue" ? "border-blue-500" : ""} ${session.color === "yellow" ? "border-yellow-500" : ""
+                    } ${session.color === "orange" ? "border-orange-500" : ""} ${session.color === "red" ? "border-red-500" : ""
+                    }`}
                 >
                   {/* Content Section */}
                   <div className="flex-1 w-full text-center">

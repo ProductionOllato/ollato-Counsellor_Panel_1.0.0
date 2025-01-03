@@ -1,0 +1,134 @@
+/* Overlay Styles */
+.otp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Container Styles */
+.otp-modal-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  text-align: center;
+}
+
+/* Close Button Styles */
+.close-otp-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem; /* Corrected from 'rem' to '1.5rem' */
+  cursor: pointer;
+  color: black;
+}
+
+/* Title and Message Styles */
+.otp-modal-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.otp-modal-message {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+/* Input Wrapper Styles */
+.otp-modal-input-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Input Styles */
+.otp-modal-input {
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+
+.otp-modal-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+/* Timer and Resend Button Styles */
+.otp-timer {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #e53e3e;
+}
+
+.otp-timer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 10px;
+}
+
+/* Button Wrapper Styles */
+.otp-modal-button-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Button Styles */
+.otp-modal-button {
+  background: #052b53;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.otp-modal-button:hover {
+  background: #0a3869;
+  transform: translateY(-2px);
+}
+
+/* Resend Button Styles */
+.otp-resend-button {
+  color: #082c4e;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.otp-resend-button:hover {
+  color: #010f07;
+  transform: translateY(-1px);
+}
+
+.otp-resend-button.disabled {
+  color: #a0aec0;
+  cursor: not-allowed;
+}

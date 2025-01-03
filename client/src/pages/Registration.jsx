@@ -11,7 +11,6 @@ import { useNotification } from "../context/NotificationContext";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
 
 const Registration = () => {
-  // State Variables
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -37,36 +36,27 @@ const Registration = () => {
 
   const { triggerNotification } = useNotification();
   const navigate = useNavigate();
-
   const API_URL = import.meta.env.VITE_APP_API_ENDPOINT_URL;
-
 
   const isPasswordStrong = (password) => password.length >= 8;
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
-    return emailRegex.test(email);
-  };
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const isValidPhoneNumber = (phoneNumber) => {
-    const phoneRegex = /^\d{10}$/; //  Validates 10-digit phone numbers
-    return phoneRegex.test(phoneNumber);
-  };
+  const isValidPhoneNumber = (phoneNumber) => /^\d{10}$/.test(phoneNumber);
 
-  // Utility Functions
+  // Validate input and update state
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // real-time validation for email
     if (name === "email" && value && !isValidEmail(value)) {
       triggerNotification("Invalid email format.", "error");
     }
 
-    // real-time validation for phone number
     if (name === "phone_number" && !/^\d*$/.test(value)) {
       triggerNotification("Phone number can only contain digits.", "error");
       return;
     }
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -87,7 +77,8 @@ const Registration = () => {
     setDistricts(selectedStateData ? selectedStateData.districts : []);
   };
 
-  const handleVerifyEmail = () => {
+  // OTP related functions
+  const handleVerifyEmail = async () => {
     if (!formData.email) {
       triggerNotification("Please enter an email address.", "error");
       return;
@@ -96,79 +87,36 @@ const Registration = () => {
       triggerNotification("Please enter a valid email address.", "error");
       return;
     }
-
-    sendEmailOtp(formData.email);
-    setOtpType("email");
+    await sendOtp("email", formData.email);
   };
 
-  const handleVerifyPhone = () => {
+  const handleVerifyPhone = async () => {
     if (!formData.phone_number) {
       triggerNotification("Please enter a phone number.", "error");
       return;
     }
-
     if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification(
-        "Please enter a valid 10-digit phone number.",
-        "error"
-      );
+      triggerNotification("Please enter a valid 10-digit phone number.", "error");
       return;
     }
-
-    sendPhoneOtp(formData.phone_number);
-    setOtpType("phone");
+    await sendOtp("phone", formData.phone_number);
   };
 
-  const sendEmailOtp = async (email) => {
-    try {
-      const response = await fetch(`${API_URL}/otp/email-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (response.ok) {
-        triggerNotification("OTP sent to your email.", "success");
-        setOtpModal(true);
-      } else {
-        const errorData = await response.json();
-        triggerNotification(
-          errorData.message || "Failed to send OTP.",
-          "error"
-        );
-      }
-    } catch (error) {
-      console.error("Error sending OTP:", error);
-      triggerNotification("Error sending OTP. Please try again.", "error");
-    }
-  };
+  const sendOtp = async (type, identifier) => {
+    const endpoint = type === "email" ? "otp/email-otp" : "otp/mobile-otp";
+    const response = await fetch(`${API_URL}/${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [type === "email" ? "email" : "phoneNumber"]: identifier }),
+    });
 
-  const sendPhoneOtp = async (phoneNumber) => {
-    if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification(
-        "Please enter a valid 10-digit phone number.",
-        "error"
-      );
-      return;
-    }
-    try {
-      const response = await fetch(`${API_URL}/otp/mobile-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber }),
-      });
-      if (response.ok) {
-        triggerNotification("OTP sent to your phone.", "success");
-        setOtpModal(true);
-      } else {
-        const errorData = await response.json();
-        triggerNotification(
-          errorData.message || "Failed to send OTP.",
-          "error"
-        );
-      }
-    } catch (error) {
-      console.error("Error sending OTP:", error);
-      triggerNotification("Error sending OTP. Please try again.", "error");
+    if (response.ok) {
+      triggerNotification(`OTP sent to your ${type}.`, "success");
+      setOtpType(type);
+      setOtpModal(true);
+    } else {
+      const errorData = await response.json();
+      triggerNotification(errorData.message || "Failed to send OTP.", "error");
     }
   };
 
@@ -178,15 +126,8 @@ const Registration = () => {
       return;
     }
     setIsVerifying(true);
-    const url =
-      otpType === "email"
-        ? `${API_URL}/otp/verify-email-otp`
-        : `${API_URL}/otp/verify-mobile-otp`;
-
-    const payload =
-      otpType === "email"
-        ? { enteredOtp: otp, email: formData.email }
-        : { enteredOtp: otp, phoneNumber: formData.phone_number };
+    const url = otpType === "email" ? `${API_URL}/otp/verify-email-otp` : `${API_URL}/otp/verify-mobile-otp`;
+    const payload = otpType === "email" ? { enteredOtp: otp, email: formData.email } : { enteredOtp: otp, phoneNumber: formData.phone_number };
 
     try {
       const response = await fetch(url, {
@@ -194,109 +135,79 @@ const Registration = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+
       if (response.ok) {
         triggerNotification("OTP verified successfully!", "success");
         setOtpModal(false);
         setOtp("");
-        if (otpType === "email") setIsEmailVerified(true);
-        else setIsPhoneVerified(true);
+
+        otpType === "email" ? setIsEmailVerified(true) : setIsPhoneVerified(true);
       } else {
         const errorData = await response.json();
         triggerNotification(errorData.message || "Invalid OTP.", "error");
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
-      triggerNotification(
-        "An error occurred during OTP verification.",
-        "error"
-      );
+      triggerNotification("An error occurred during OTP verification.", "error");
     } finally {
       setIsVerifying(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (otpType === "email") {
+      await sendOtp("email", formData.email);
+    } else if (otpType === "phone") {
+      await sendOtp("phone", formData.phone_number);
     }
   };
 
   const handlePersonalDetailsSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.first_name ||
-      !formData.last_name ||
-      !formData.email ||
-      !formData.phone_number ||
-      !formData.gender ||
-      !formData.date_of_birth ||
-      !formData.state ||
-      !formData.district ||
-      !formData.password ||
-      !formData.confirm_password
-    ) {
+    if (Object.values(formData).some(field => !field)) {
       triggerNotification("Please fill in all the required fields.", "error");
       return;
     }
 
-    // Validate email
     if (!isValidEmail(formData.email)) {
       triggerNotification("Please enter a valid email address.", "error");
-      return; // Early return
+      return;
     }
-
-    // Validate phone number
     if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification(
-        "Please enter a valid 10-digit phone number.",
-        "error"
-      );
+      triggerNotification("Please enter a valid 10-digit phone number.", "error");
       return;
     }
     if (!isPasswordStrong(formData.password)) {
       triggerNotification("Password must be at least 8 characters long.", "error");
       return;
     }
-
     if (formData.password !== formData.confirm_password) {
       triggerNotification("Passwords do not match.", "error");
       return;
     }
-
     if (!isEmailVerified) {
-      triggerNotification(
-        "Please verify your email address before registering.",
-        "error"
-      );
+      triggerNotification("Please verify your email address before registering.", "error");
       return;
     }
-
     if (!isPhoneVerified) {
-      triggerNotification(
-        "Please verify your phone number before registering.",
-        "error"
-      );
+      triggerNotification("Please verify your phone number before registering.", "error");
       return;
     }
-
-    const payload = {
-      ...formData,
-    };
-
-    // console.log("Payload:", payload);
 
     try {
       const response = await fetch(`${API_URL}/auth/upload-personal-details`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       });
-      // console.log("Response:", response);
 
       if (response.ok) {
         triggerNotification("Registration successful!", "success");
         navigate("/");
       } else {
         const errorData = await response.json();
-        triggerNotification(
-          errorData.message || "Registration failed.",
-          "error"
-        );
+        triggerNotification(errorData.message || "Registration failed.", "error");
       }
     } catch (error) {
       console.error("Error submitting details:", error);
@@ -306,19 +217,19 @@ const Registration = () => {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col-reverse md:flex-row bg-gray-100">
+      <div className="registration-container min-h-screen flex flex-col-reverse md:flex-row bg-gray-100">
         {/* Form Section */}
-        <div className="container">
-          <div className="form-section">
-            <img src={LOGO} alt="Logo" className="logo" />
+        <div className="registration-form-container">
+          <div className="registration-form-section">
+            <img src={LOGO} alt="Logo" className="registration-logo" />
             {/* Registration Form */}
             <form onSubmit={handlePersonalDetailsSubmit}>
               {/* Header */}
-              <div className="form-header">
-                <h1 className="form-heading">Registration Form</h1>
+              <div className="registration-form-header">
+                <h1 className="registration-form-heading">Registration Form</h1>
               </div>
 
-              <div className="form-grid">
+              <div className="registration-form-grid">
                 {/* Input Fields */}
                 <InputField
                   label="First Name"
@@ -334,8 +245,8 @@ const Registration = () => {
                   value={formData.last_name}
                   handleChange={handleChange}
                 />
-
-                <div>
+                {/* email verification */}
+                <div >
                   <InputField
                     label="Email"
                     name="email"
@@ -346,18 +257,18 @@ const Registration = () => {
                     disabled={isEmailVerified}
                   />
                   {/* Email Verification Button */}
-                  <div className="button-container">
+                  <div className="registration-button-container">
                     <button
                       type="button"
                       onClick={handleVerifyEmail}
                       disabled={isEmailVerified || isVerifying}
-                      className="verify-button"
+                      className="registration-verify-button"
                     >
                       {isEmailVerified ? "Email Verified" : "Verify Email"}
                     </button>
                   </div>
                 </div>
-
+                {/* phone verification */}
                 <div>
                   <InputField
                     label="Phone Number"
@@ -369,12 +280,12 @@ const Registration = () => {
                     disabled={isPhoneVerified}
                   />
                   {/* Phone Verification Button */}
-                  <div className="button-container">
+                  <div className="registration-button-container">
                     <button
                       type="button"
                       onClick={handleVerifyPhone}
                       disabled={isPhoneVerified || isVerifying}
-                      className="verify-button"
+                      className="registration-verify-button"
                     >
                       Verify Phone
                     </button>
@@ -389,6 +300,8 @@ const Registration = () => {
                     handleOtpVerification={handleOtpVerification}
                     setOtpModal={setOtpModal}
                     isVerifying={isVerifying}
+                    message={`Please enter the 4-digit OTP sent to your ${otpType}.`}
+                    resendOtp={handleResendOtp}
                   />
                 )}
 
@@ -456,7 +369,7 @@ const Registration = () => {
                 </InputField>
 
                 {/* Password Input */}
-                <div className="password-container">
+                <div className="registration-password-container">
                   <InputField
                     label="Password"
                     name="password"
@@ -467,14 +380,14 @@ const Registration = () => {
                   />
                   <span
                     onClick={() => setShowPassword(!showPassword)}
-                    className="eye-icon"
+                    className="registration-eye-icon"
                   >
                     {showPassword ? <FiEyeOff /> : <FiEye />}
                   </span>
                 </div>
 
                 {/* Confirm Password Input */}
-                <div className="password-container">
+                <div className="registration-password-container">
                   <InputField
                     label="Confirm Password"
                     name="confirm_password"
@@ -485,7 +398,7 @@ const Registration = () => {
                   />
                   <span
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="eye-icon"
+                    className="registration-eye-icon"
                   >
                     {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                   </span>
@@ -493,17 +406,17 @@ const Registration = () => {
               </div>
 
               {/* Submit Button */}
-              <div className="submit-button-container">
-                <button type="submit" className="submit-button">
+              <div className="registration-submit-button-container">
+                <button type="submit" className="registration-submit-button">
                   Register
                 </button>
               </div>
             </form>
 
             {/* Login Link */}
-            <div className="login-link-container">
-              <p className="login-text">Already have an account?</p>
-              <button onClick={() => navigate("/")} className="login-button">
+            <div className="registration-login-link-container">
+              <p className="registration-login-text">Already have an account?</p>
+              <button onClick={() => navigate("/")} className="registration-login-button">
                 <FaArrowRightFromBracket />
                 Login
               </button>
@@ -513,7 +426,7 @@ const Registration = () => {
 
         {/* Sidebar (Logo on right) */}
         {/* <div className="sidebar">
-    <img src={LOGO} alt="Logo" className="logo" />
+      <img src={LOGO} alt="Logo" className="logo" />
   </div> */}
       </div>
 

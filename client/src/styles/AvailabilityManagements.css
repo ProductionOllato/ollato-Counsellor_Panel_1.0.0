@@ -1,5 +1,5 @@
 /* General Container */
-.availability-container {
+.availability-management-container {
   margin: 2.5rem auto;
   padding: 1rem;
   background-color: #f9f9f9; /* Soft gray background */
@@ -8,16 +8,20 @@
 }
 
 /* Header */
-h1 {
+.availability-header {
+  text-align: center;
+}
+
+.availability-title {
   font-size: 2rem;
   font-weight: bold;
   color: #333;
-  text-align: center;
   margin-bottom: 1.5rem;
 }
 
 /* Button Styles */
-button {
+.availability-add-button,
+.availability-show-button {
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   color: #fff;
@@ -28,12 +32,38 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+.availability-add-button:hover,
+.availability-show-button:hover {
   background-color: #8e7fff;
 }
 
+/* Loading Text */
+.availability-loading {
+  text-align: center;
+}
+
+/* Search Input */
+.search-input {
+  width: 100%;
+  background-color: transparent;
+  placeholder-color: #aaacb9;
+  color: #495057;
+  text-sm: inherit;
+  border: 1px solid #d3f1df;
+  padding-left: 2.5rem;
+  padding-right: 3rem;
+  transition: border-color 0.3s ease;
+}
+
+/* Search Icon */
+.search-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #aaacb9;
+}
+
 /* Table Styles */
-.activity-table-myactivity {
+.availability-table {
   width: 100%;
   border-collapse: collapse;
   background-color: #fff;
@@ -42,12 +72,12 @@ button:hover {
   overflow: hidden;
 }
 
-.activity-table-myactivity thead {
+.availability-table thead {
   background-color: #f1f1f1;
 }
 
-.activity-table-myactivity th,
-.activity-table-myactivity td {
+.availability-table th,
+.availability-table td {
   padding: 1rem 0.5rem;
   text-align: left;
   font-size: 1rem;
@@ -55,25 +85,25 @@ button:hover {
   border-bottom: 1px solid #ddd;
 }
 
-.activity-table-myactivity th {
+.availability-table th {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.activity-table-myactivity tbody tr:hover {
+.availability-table tbody tr:hover {
   background-color: #f9f9f9;
 }
 
 /* Mobile Card View */
-.mobile-view-myactivity {
+.mobile-card-view {
   display: none; /* Hide by default */
   flex-direction: column;
   gap: 1rem;
   margin-top: 1rem;
 }
 
-.session-card-myactivity {
+.session-card {
   padding: 1rem;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -82,13 +112,13 @@ button:hover {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.session-card-myactivity:hover {
+.session-card:hover {
   transform: scale(1.02);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Modal Styles */
-.modal-overlay-myactivity {
+.modal-overlay-availability {
   position: fixed;
   top: 0;
   left: 0;
@@ -101,7 +131,7 @@ button:hover {
   z-index: 1000;
 }
 
-.modal-content-myactivity {
+.modal-content-availability {
   background-color: #fff;
   padding: 1.5rem;
   border-radius: 8px;
@@ -110,19 +140,81 @@ button:hover {
   max-width: 500px;
 }
 
+/* Form Styles */
+.modal-form-availability {
+  margin: 0;
+}
+
+.form-label-availability {
+  display: inline-block;
+  text-sm: inherit;
+  font-medium: inherit;
+  color: #333;
+}
+
+.form-input-availability,
+.form-select-availability {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input-availability:focus,
+.form-select-availability:focus {
+  outline: none;
+  border-color: #03152b; /* Change border color on focus */
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5); /* Add shadow on focus */
+}
+
+/* Actions */
+.action-edit-button,
+.action-delete-button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pagination-prev,
+.pagination-next {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #6c5ce7; /* Vibrant purple */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Pagination Info */
+.pagination-info {
+  margin: 0 1rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
-  .activity-table-myactivity {
+  .availability-table {
     display: none; /* Hide table on mobile */
   }
 
-  .mobile-view-myactivity {
+  .mobile-card-view {
     display: flex; /* Show mobile view */
   }
 }
 
 @media (max-width: 576px) {
-  .session-card-myactivity {
+  .session-card {
     flex-direction: column; /* Stack items vertically */
   }
 }
