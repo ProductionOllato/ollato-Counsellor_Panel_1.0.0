@@ -3,6 +3,7 @@ import { useAuth } from "../context/UserContext";
 import InputField from "../components/InputField";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
+import "../styles/RegistrationDetails.css";
 
 const RegistrationDetails = () => {
   const navigate = useNavigate();
@@ -81,25 +82,26 @@ const RegistrationDetails = () => {
     }
   };
 
-  // // Input change handlers
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setDocumentation((prev) => ({ ...prev, [name]: value }));
-  // };
-
-  // const handleFileChange = (e) => {
-  //   const { name, files } = e.target;
-  //   if (files?.[0]) {
-  //     setDocumentation((prev) => ({ ...prev, [name]: files[0] }));
-  //   }
-  // };
-
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setDocumentation((prev) => ({
       ...prev,
       expertise: { ...prev.expertise, [name]: checked },
     }));
+  };
+
+
+  // Validation for Step 1
+  const handleValidation = (e) => {
+    e.preventDefault();
+    const { license_number, qualification, specification, experience } = educationDetails;
+
+    if (!license_number || !qualification || !specification || !experience) {
+      triggerNotification("Please fill all required fields.", "error");
+      return;
+    }
+
+    setCurrentStep(2);
   };
 
   // Step 1: Submit Professional Details
@@ -245,188 +247,160 @@ const RegistrationDetails = () => {
     handleDocumentationSubmit(e);
   };
   return (
-    <>
-      <div className="w-full h-fit p-2 pt-2 mt-4 flex flex-col overflow-y-auto">
-        <div className="bg-white p-2 pt-4 rounded-lg shadow-lg mx-auto w-full max-w-lg lg:max-w-2xl">
-          <h1 className="text-xl md:text-2xl text-[#2C394B] font-semibold mb-6 text-center">
-            Registration Details
-          </h1>
+    <div className="reg-container">
+      <div className="reg-form-wrapper">
+        <h1 className="reg-form-title">Registration Details</h1>
 
-          {/* Steps */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
-              {steps.map((step) => (
-                <div
-                  key={step.id}
-                  className={`flex-1 text-center cursor-pointer text-sm md:text-base ${
-                    step.id === currentStep
-                      ? "text-[#2C394B]"
-                      : step.id < currentStep
-                      ? "text-[#2fa047]"
-                      : "text-gray-400"
-                  }`}
-                  onClick={() => handleStepClick(step.id)}
-                >
-                  {step.title}
-                </div>
-              ))}
-            </div>
-            <div className="relative h-2 bg-gray-300 rounded">
+        {/* Steps */}
+        <div className="reg-steps-wrapper">
+          <div className="reg-steps">
+            {steps.map((step) => (
               <div
-                className="absolute h-full bg-[#2C394B] rounded"
-                style={{ width: `${progressPercentage}%` }}
-              ></div>
-            </div>
-          </div>
-          {/* Steps Content */}
-          {currentStep === 1 && (
-            <form
-              // onSubmit={handleProfessionalSubmit}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
-            >
-              {/* Professional Details */}
-              <InputField
-                label="License Number *"
-                name="license_number"
-                placeholder="Enter License Number"
-                value={educationDetails.license_number}
-                // handleChange={(e) =>
-                //   setEducationDetails((prev) => ({
-                //     ...prev,
-                //     license_number: e.target.value,
-                //   }))
-                // }
-                handleChange={(e) => handleInputChange(e, setEducationDetails)}
-              />
-              <InputField
-                label="Qualification *"
-                name="qualification"
-                placeholder="Enter Qualification"
-                value={educationDetails.qualification}
-                // handleChange={(e) =>
-                //   setEducationDetails((prev) => ({
-                //     ...prev,
-                //     qualification: e.target.value,
-                //   }))
-                // }
-                handleChange={(e) => handleInputChange(e, setEducationDetails)}
-              />
-              <InputField
-                label="Specification *"
-                name="specification"
-                placeholder="Enter Specification"
-                value={educationDetails.specification}
-                // handleChange={(e) =>
-                //   setEducationDetails((prev) => ({
-                //     ...prev,
-                //     specification: e.target.value,
-                //   }))
-                // }
-                handleChange={(e) => handleInputChange(e, setEducationDetails)}
-              />
-              <InputField
-                label="Experience *"
-                name="experience"
-                placeholder="Enter Experience"
-                value={educationDetails.experience}
-                // handleChange={(e) =>
-                //   setEducationDetails((prev) => ({
-                //     ...prev,
-                //     experience: e.target.value,
-                //   }))
-                // }
-                handleChange={(e) => handleInputChange(e, setEducationDetails)}
-              />
-              <div className="col-span-1 sm:col-span-2 flex justify-center mt-6">
-                <button
-                  type="submit"
-                  className="bg-[#3E5879] text-white text-base py-2 px-6 rounded hover:bg-[#4A628A] transition duration-200"
-                  onClick={() => setCurrentStep(2)}
-                >
-                  Next
-                </button>
+                key={step.id}
+                className={`reg-step ${step.id === currentStep
+                  ? "reg-current"
+                  : step.id < currentStep
+                    ? "reg-completed"
+                    : "reg-upcoming"
+                  }`}
+                onClick={() => handleStepClick(step.id)}
+              >
+                {step.title}
               </div>
-            </form>
-          )}
-          {/* Steps Content */}
-          {currentStep === 2 && (
-            <form
-              // onSubmit={handleDocumentationSubmit}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
-            >
-              {/* Documentation Details */}
-              <InputField
-                label="Upload Profile Picture *"
-                name="profile_pic"
-                type="file"
-                // handleChange={handleFileChange}
-                handleChange={(e) => handleFileChange(e, setDocumentation)}
-              />
-              <InputField
-                label="Upload Degree Certificate *"
-                name="degree_certificate"
-                type="file"
-                // handleChange={handleFileChange}
-                handleChange={(e) => handleFileChange(e, setDocumentation)}
-              />
-              <InputField
-                label="Upload Resume *"
-                name="resume"
-                type="file"
-                // handleChange={handleFileChange}
-                handleChange={(e) => handleFileChange(e, setDocumentation)}
-              />
-              <InputField
-                label="Aadhar Number *"
-                name="aadhar_number"
-                placeholder="Enter Aadhar Number"
-                value={documentation.aadhar_number}
-                // handleChange={handleChange}
-                handleChange={(e) => handleInputChange(e, setDocumentation)}
-              />
-              <InputField
-                label="Upload Aadhar Card Front *"
-                name="aadhar_card_front"
-                type="file"
-                // handleChange={handleFileChange}
-                handleChange={(e) => handleFileChange(e, setDocumentation)}
-              />
-              <InputField
-                label="Upload Aadhar Card Back *"
-                name="aadhar_card_back"
-                type="file"
-                // handleChange={handleFileChange}
-                handleChange={(e) => handleFileChange(e, setDocumentation)}
-              />
-              <InputField
-                label="PAN Number *"
-                name="pan_number"
-                placeholder="Enter PAN Number"
-                value={documentation.pan_number}
-                // handleChange={handleChange}
-                handleChange={(e) => handleInputChange(e, setDocumentation)}
-              />
-              <InputField
-                label="Upload PAN Card *"
-                name="pan_card"
-                type="file"
-                // handleChange={handleFileChange}
-                handleChange={(e) => handleFileChange(e, setDocumentation)}
-              />
-              <InputField
-                label="Upload Signature *"
-                name="signature"
-                type="file"
-                // handleChange={handleFileChange}
-                handleChange={(e) => handleFileChange(e, setDocumentation)}
-              />
+            ))}
+          </div>
+          <div className="reg-progress-bar">
+            <div
+              className="reg-progress-indicator"
+              style={{ width: `${progressPercentage}%` }}
+            ></div>
+          </div>
+        </div>
 
-              <div className="col-span-1 sm:col-span-2">
-                <label className="block font-medium text-gray-700 mb-2">
+        {/* Step 1: Professional Details */}
+        {currentStep === 1 && (
+          <form className="reg-form-grid">
+            {/* license_number */}
+            <InputField
+              label="License Number *"
+              name="license_number"
+              placeholder="Enter License Number"
+              value={educationDetails.license_number}
+              handleChange={(e) => handleInputChange(e, setEducationDetails)}
+            />
+            {/* qualification */}
+            <InputField
+              label="Qualification *"
+              name="qualification"
+              placeholder="Enter Qualification"
+              value={educationDetails.qualification}
+              handleChange={(e) => handleInputChange(e, setEducationDetails)}
+            />
+            {/* specification */}
+            <InputField
+              label="Specification *"
+              name="specification"
+              placeholder="Enter Specification"
+              value={educationDetails.specification}
+              handleChange={(e) => handleInputChange(e, setEducationDetails)}
+            />
+            {/* experience */}
+            <InputField
+              label="Experience *"
+              name="experience"
+              placeholder="Enter Experience"
+              value={educationDetails.experience}
+              handleChange={(e) => handleInputChange(e, setEducationDetails)}
+            />
+            {/* NEXT BUTTON */}
+            <div className="reg-form-action">
+              <button
+                type="button"
+                className="reg-button"
+                onClick={(e) => handleValidation(e)}
+              >
+                Next
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Step 2: Documentation Details */}
+        {currentStep === 2 && (
+          <form className="reg-form-grid">
+            {/* profile_pic */}
+            <InputField
+              label="Upload Profile Picture *"
+              name="profile_pic"
+              type="file"
+              handleChange={(e) => handleFileChange(e, setDocumentation)}
+            />
+            {/* degree_certificate */}
+            <InputField
+              label="Upload Degree Certificate *"
+              name="degree_certificate"
+              type="file"
+              handleChange={(e) => handleFileChange(e, setDocumentation)}
+            />
+            {/* resume */}
+            <InputField
+              label="Upload Resume *"
+              name="resume"
+              type="file"
+              handleChange={(e) => handleFileChange(e, setDocumentation)}
+            />
+            {/* aadhar_number */}
+            <InputField
+              label="Aadhar Number *"
+              name="aadhar_number"
+              placeholder="Enter Aadhar Number"
+              value={documentation.aadhar_number}
+              handleChange={(e) => handleInputChange(e, setDocumentation)}
+            />
+            {/* aadhar_card */}
+            <InputField
+              label="Upload Aadhar Card Front *"
+              name="aadhar_card_front"
+              type="file"
+              handleChange={(e) => handleFileChange(e, setDocumentation)}
+            />
+            {/* aadhar_card_back */}
+            <InputField
+              label="Upload Aadhar Card Back *"
+              name="aadhar_card_back"
+              type="file"
+              handleChange={(e) => handleFileChange(e, setDocumentation)}
+            />
+            {/* pan_number */}
+            <InputField
+              label="PAN Number *"
+              name="pan_number"
+              placeholder="Enter PAN Number"
+              value={documentation.pan_number}
+              handleChange={(e) => handleInputChange(e, setDocumentation)}
+            />
+            {/* pan_card */}
+            <InputField
+              label="Upload PAN Card *"
+              name="pan_card"
+              type="file"
+              handleChange={(e) => handleFileChange(e, setDocumentation)}
+            />
+            {/* signature */}
+            <InputField
+              label="Upload Signature *"
+              name="signature"
+              type="file"
+              handleChange={(e) => handleFileChange(e, setDocumentation)}
+            />
+            {/* Professional Expertise */}
+            <div className="reg-expertise-section">
+              <div className="reg-label-container">
+                <label className="reg-label">
                   Professional Expertise *
                 </label>
-                <div className="flex flex-wrap gap-4">
-                  <label className="flex items-center space-x-2">
+                <div className="reg-checkbox-container">
+                  <label className="reg-checkbox-label">
                     <input
                       type="checkbox"
                       name="careerCounsellor"
@@ -435,7 +409,7 @@ const RegistrationDetails = () => {
                     />
                     <span>Career Counsellor</span>
                   </label>
-                  <label className="flex items-center space-x-2">
+                  <label className="reg-checkbox-label">
                     <input
                       type="checkbox"
                       name="psychologist"
@@ -444,7 +418,7 @@ const RegistrationDetails = () => {
                     />
                     <span>Psychologist</span>
                   </label>
-                  <label className="flex items-center space-x-2">
+                  <label className="reg-checkbox-label">
                     <input
                       type="checkbox"
                       name="groupCounsellor"
@@ -455,21 +429,32 @@ const RegistrationDetails = () => {
                   </label>
                 </div>
               </div>
+            </div>
+            {/* BACK BUTTON AND SUBMIT */}
+            <div className="reg-form-action">
 
-              <div className="col-span-1 sm:col-span-2 flex justify-center mt-6">
-                <button
-                  type="submit"
-                  className="bg-[#3E5879] text-white py-2 px-6 rounded hover:bg-[#4A628A] transition duration-200 text-base"
-                  onClick={handleFinalSubmit}
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
+              {/* Back Button */}
+              <button
+                type="button"
+                className="reg-button-back"
+                onClick={() => setCurrentStep(1)}
+              >
+                Back
+              </button>
+
+              <button
+                type="submit"
+                className="reg-button"
+                onClick={handleFinalSubmit}
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        )}
       </div>
-    </>
+    </div>
+
   );
 };
 

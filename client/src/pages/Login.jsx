@@ -7,6 +7,7 @@ import Notification from "../components/Notification/Notification";
 import { useAuth } from "../context/UserContext.jsx";
 import { useNotification } from "../context/NotificationContext.jsx";
 import "../styles/Login.css"
+import axios from "axios";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -31,43 +32,36 @@ function Login() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (showOtpLogin) return;
 
     setLoading(true);
     try {
-      const response = await fetch(`${apiEndpointURL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+      const response = await axios.post(`${apiEndpointURL}/auth/login`, {
+        email: formData.email,
+        password: formData.password,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.user) {
-          login(data.user);
-          triggerNotification("Login successful! Redirecting...", "success");
-          navigate("/dashboard");
-        } else {
-          triggerNotification("Unexpected response format.", "error");
-        }
+      if (response.data.user) {
+        login(response.data.user);
+        triggerNotification("Login successful! Redirecting...", "success");
+        navigate("/dashboard");
       } else {
-        const errorData = await response.json();
+        triggerNotification("Unexpected response format.", "error");
+      }
+    } catch (error) {
+      if (error.response) {
         triggerNotification(
-          errorData.message || "Invalid login credentials.",
+          error.response.data?.message || "Invalid login credentials.",
+          "error"
+        );
+      } else {
+        triggerNotification(
+          "An error occurred during login. Please try again.",
           "error"
         );
       }
-    } catch (error) {
-      triggerNotification(
-        "An error occurred during login. Please try again.",
-        "error"
-      );
     } finally {
       setLoading(false);
     }
@@ -81,27 +75,24 @@ function Login() {
         return;
       }
 
-      const response = await fetch(`${apiEndpointURL}/otp/mobile-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber: formData.phoneNumber }),
+      await axios.post(`${apiEndpointURL}/otp/mobile-otp`, {
+        phoneNumber: formData.phoneNumber,
       });
 
-      if (response.ok) {
-        setOtpSent(true);
-        triggerNotification("OTP sent to your phone number.", "success");
-      } else {
-        const errorData = await response.json();
+      setOtpSent(true);
+      triggerNotification("OTP sent to your phone number.", "success");
+    } catch (error) {
+      if (error.response) {
         triggerNotification(
-          errorData.message || "Failed to send OTP.",
+          error.response.data?.message || "Failed to send OTP.",
+          "error"
+        );
+      } else {
+        triggerNotification(
+          "An error occurred while sending OTP. Please try again.",
           "error"
         );
       }
-    } catch (error) {
-      triggerNotification(
-        "An error occurred while sending OTP. Please try again.",
-        "error"
-      );
     } finally {
       setLoading(false);
     }
@@ -110,26 +101,23 @@ function Login() {
   const handleResendOtp = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${apiEndpointURL}/otp/mobile-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber: formData.phoneNumber }),
+      await axios.post(`${apiEndpointURL}/otp/mobile-otp`, {
+        phoneNumber: formData.phoneNumber,
       });
 
-      if (response.ok) {
-        triggerNotification("OTP resent successfully.", "success");
-      } else {
-        const errorData = await response.json();
+      triggerNotification("OTP resent successfully.", "success");
+    } catch (error) {
+      if (error.response) {
         triggerNotification(
-          errorData.message || "Failed to resend OTP.",
+          error.response.data?.message || "Failed to resend OTP.",
+          "error"
+        );
+      } else {
+        triggerNotification(
+          "An error occurred while resending OTP. Please try again.",
           "error"
         );
       }
-    } catch (error) {
-      triggerNotification(
-        "An error occurred while resending OTP. Please try again.",
-        "error"
-      );
     } finally {
       setLoading(false);
     }
@@ -138,32 +126,27 @@ function Login() {
   const handleVerifyOtpTOLogin = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${apiEndpointURL}/otp/login-with-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phoneNumber: formData.phoneNumber,
-          enteredOtp: formData.otp,
-        }),
+      const response = await axios.post(`${apiEndpointURL}/otp/login-with-otp`, {
+        phoneNumber: formData.phoneNumber,
+        enteredOtp: formData.otp,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("OTP verification response:", data);
-        // localStorage.setItem("token", data.token);
-        login(data.user);
-        triggerNotification("Login successful!", "success");
-        navigate("/dashboard");
-      } else {
-        const errorData = await response.json();
-        triggerNotification(errorData.message || "Invalid OTP.", "error");
-      }
+      login(response.data.user);
+      triggerNotification("Login successful!", "success");
+      navigate("/dashboard");
     } catch (error) {
+      if (error.response) {
+        triggerNotification(
+          error.response.data?.message || "Invalid OTP.",
+          "error"
+        );
+      } else {
+        triggerNotification(
+          "An error occurred during OTP verification. Please try again.",
+          "error"
+        );
+      }
       console.error("Error verifying OTP:", error);
-      triggerNotification(
-        "An error occurred during OTP verification. Please try again.",
-        "error"
-      );
     } finally {
       setLoading(false);
     }

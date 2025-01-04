@@ -39,7 +39,7 @@ app.use("/session", sessionBooking);
 app.use("/help", supportFromRoutes);
 app.use("/counsellor", counsellorAvailabilityRoutes);
 app.use("/update", updateProfileRoutes);
-app.use("/get", getCounsellorsRoutes);
+app.use("/get-counsellors", getCounsellorsRoutes);
 app.use("/myactivity", myActivityRoutes);
 
 const PORT = process.env.PORT || 5000;

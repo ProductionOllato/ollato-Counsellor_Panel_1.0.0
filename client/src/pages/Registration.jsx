@@ -6,9 +6,9 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import OtpModal from "../components/OtpModal";
 import InputField from "../components/InputField";
 import statesAndDistricts from "../../public/states-and-districts.json";
-import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
+import axios from "axios";
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -103,20 +103,24 @@ const Registration = () => {
   };
 
   const sendOtp = async (type, identifier) => {
+    // Determine the API endpoint and payload key based on type
     const endpoint = type === "email" ? "otp/email-otp" : "otp/mobile-otp";
-    const response = await fetch(`${API_URL}/${endpoint}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ [type === "email" ? "email" : "phoneNumber"]: identifier }),
-    });
+    const payloadKey = type === "email" ? "email" : "phoneNumber";
 
-    if (response.ok) {
+    try {
+      // Make the API call
+      const response = await axios.post(`${API_URL}/${endpoint}`, {
+        [payloadKey]: identifier,
+      });
+
       triggerNotification(`OTP sent to your ${type}.`, "success");
       setOtpType(type);
       setOtpModal(true);
-    } else {
-      const errorData = await response.json();
-      triggerNotification(errorData.message || "Failed to send OTP.", "error");
+    } catch (error) {
+      // Extract and handle the error
+      const errorMessage =
+        error.response?.data?.message || "Failed to send OTP. Please try again.";
+      triggerNotification(errorMessage, "error");
     }
   };
 
@@ -125,47 +129,55 @@ const Registration = () => {
       triggerNotification("Please enter a valid 4-digit OTP.", "error");
       return;
     }
+
     setIsVerifying(true);
-    const url = otpType === "email" ? `${API_URL}/otp/verify-email-otp` : `${API_URL}/otp/verify-mobile-otp`;
-    const payload = otpType === "email" ? { enteredOtp: otp, email: formData.email } : { enteredOtp: otp, phoneNumber: formData.phone_number };
+
+    const url =
+      otpType === "email"
+        ? `${API_URL}/otp/verify-email-otp`
+        : `${API_URL}/otp/verify-mobile-otp`;
+
+    const payload =
+      otpType === "email"
+        ? { enteredOtp: otp, email: formData.email }
+        : { enteredOtp: otp, phoneNumber: formData.phone_number };
 
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await axios.post(url, payload);
 
-      if (response.ok) {
-        triggerNotification("OTP verified successfully!", "success");
-        setOtpModal(false);
-        setOtp("");
-
-        otpType === "email" ? setIsEmailVerified(true) : setIsPhoneVerified(true);
-      } else {
-        const errorData = await response.json();
-        triggerNotification(errorData.message || "Invalid OTP.", "error");
-      }
+      triggerNotification("OTP verified successfully!", "success");
+      setOtpModal(false);
+      setOtp("");
+      otpType === "email" ? setIsEmailVerified(true) : setIsPhoneVerified(true);
     } catch (error) {
-      console.error("Error verifying OTP:", error);
-      triggerNotification("An error occurred during OTP verification.", "error");
+      const errorMessage =
+        error.response?.data?.message || "Invalid OTP. Please try again.";
+      triggerNotification(errorMessage, "error");
     } finally {
       setIsVerifying(false);
     }
   };
 
+
   const handleResendOtp = async () => {
-    if (otpType === "email") {
-      await sendOtp("email", formData.email);
-    } else if (otpType === "phone") {
-      await sendOtp("phone", formData.phone_number);
+    try {
+      if (otpType === "email") {
+        await sendOtp("email", formData.email);
+      } else if (otpType === "phone") {
+        await sendOtp("phone", formData.phone_number);
+      }
+      triggerNotification("OTP resent successfully!", "success");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to resend OTP. Please try again.";
+      triggerNotification(errorMessage, "error");
     }
   };
 
   const handlePersonalDetailsSubmit = async (e) => {
     e.preventDefault();
 
-    if (Object.values(formData).some(field => !field)) {
+    if (Object.values(formData).some((field) => !field)) {
       triggerNotification("Please fill in all the required fields.", "error");
       return;
     }
@@ -174,46 +186,51 @@ const Registration = () => {
       triggerNotification("Please enter a valid email address.", "error");
       return;
     }
+
     if (!isValidPhoneNumber(formData.phone_number)) {
       triggerNotification("Please enter a valid 10-digit phone number.", "error");
       return;
     }
+
     if (!isPasswordStrong(formData.password)) {
-      triggerNotification("Password must be at least 8 characters long.", "error");
+      triggerNotification(
+        "Password must be at least 8 characters long and meet complexity requirements.",
+        "error"
+      );
       return;
     }
+
     if (formData.password !== formData.confirm_password) {
       triggerNotification("Passwords do not match.", "error");
       return;
     }
+
     if (!isEmailVerified) {
       triggerNotification("Please verify your email address before registering.", "error");
       return;
     }
+
     if (!isPhoneVerified) {
       triggerNotification("Please verify your phone number before registering.", "error");
       return;
     }
 
     try {
-      const response = await fetch(`${API_URL}/auth/upload-personal-details`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post(`${API_URL}/auth/upload-personal-details`, formData);
 
-      if (response.ok) {
-        triggerNotification("Registration successful!", "success");
-        navigate("/");
-      } else {
-        const errorData = await response.json();
-        triggerNotification(errorData.message || "Registration failed.", "error");
-      }
+      triggerNotification("Registration successful!", "success");
+      navigate("/");
     } catch (error) {
-      console.error("Error submitting details:", error);
-      triggerNotification("An error occurred during registration.", "error");
+      if (error.response && error.response.status === 409) {
+        triggerNotification("This email is already registered. Please use a different email.", "error");
+      } else {
+        const errorMessage =
+          error.response?.data?.message || "An error occurred during registration.";
+        triggerNotification(errorMessage, "error");
+      }
     }
   };
+
 
   return (
     <>

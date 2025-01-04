@@ -59,11 +59,6 @@ export const UserProvider = ({ children }) => {
   }, [completedSteps]);
 
   const login = (user) => {
-    // if (!user || !user.profileStatus) {
-    //   console.error("Invalid user object in login:", user);
-    //   return;
-    // }
-
     setUser(user);
     setProfileStatus(user.profileStatus || "pending");
     setCompletedSteps(user.completedSteps || []);

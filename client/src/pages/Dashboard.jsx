@@ -14,8 +14,8 @@ export default function Dashboard() {
   const [userDetails, setUserDetails] = useState(null);
   const [sessions, setSessions] = useState([]);
 
+  // Call approveProfile only once - testing
   useEffect(() => {
-    // Call approveProfile only once - testing
     approveProfile();
   }, [approveProfile]);
 
@@ -67,11 +67,10 @@ export default function Dashboard() {
     async function fetchUserDetails() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/personal-info/${user.user_id
+          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get-counsellors/personal-info/${user.user_id
           }`
         );
         const userData = response.data?.data || {};
-        // console.log("User data:", userData);
 
         setUserDetails((prev) => ({
           ...prev,
@@ -90,12 +89,10 @@ export default function Dashboard() {
     async function fetchProfessionDetails() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get/professional-info/${user.user_id
+          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get-counsellors/professional-info/${user.user_id
           }`
         );
         const userData = response.data?.data || {};
-        // console.log("Profession data:", userData);
-
         setUserDetails((prev) => ({
           ...prev,
           qualification: userData.qualification || "",
@@ -188,7 +185,7 @@ export default function Dashboard() {
     );
   }
 
-  // Main Dashboard Content
+  // Main Dashboard Content after profile approval
   if (profileComplete) {
     return (
       <>

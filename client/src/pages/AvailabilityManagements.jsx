@@ -46,9 +46,8 @@ const AvailabilityManagements = () => {
     const fetchAvailabilityData = async () => {
       setLoading(true);
       try {
-        const response = await axios.post(
-          `${APIURL}/counsellor/get-availability`,
-          { counsellor_id: user.user_id }
+        const response = await axios.get(
+          `${APIURL}/counsellor/get-availability/${user.user_id}`,
         );
 
         if (response.status === 200 && response.data.data) {
@@ -119,21 +118,17 @@ const AvailabilityManagements = () => {
       counsellor_id,
       dates: [formData.date],
       mode: formData.mode,
-      duration: `${formData.duration} minutes`,
+      duration: `${formData.duration}`,
       status: "available",
       start_time: `${formData.start_time}:00`,
       end_time: `${formData.end_time}:00`,
     };
-
-    console.log("Payload:", payload);
-    console.log("FormData:", formData);
 
     try {
       const response = await axios.post(
         `${APIURL}/counsellor/set-availability`,
         payload
       );
-      console.log("Response set availability:", response);
 
       if (response.status === 200 || response.status === 201) {
         triggerNotification("Availability added successfully!", "success");
@@ -165,27 +160,20 @@ const AvailabilityManagements = () => {
   const handleUpdateSlot = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("Selected Slot:", selectedSlot);
-
     const payload = {
       counsellor_id: user.user_id,
       dates: [selectedSlot.date],
       start_time: selectedSlot.start_time,
       end_time: selectedSlot.end_time,
       mode: selectedSlot.mode,
-      duration: `${selectedSlot.duration} minutes`,
+      duration: `${selectedSlot.duration}`,
       status: selectedSlot.status,
     };
-
-    console.log("Payload update availability:", payload);
-
     try {
       const response = await axios.put(
         `${APIURL}/counsellor/update-availability`,
         payload
       );
-      console.log("Response update availability:", response);
-
       if (response.status === 200) {
         // Update the availability in the state after successful update
         setAvailability((prev) =>
@@ -378,7 +366,7 @@ const AvailabilityManagements = () => {
 
               <div className="availability-table-container max-w-screen-xl mx-auto">
                 <div className="overflow-x-auto mt-6">
-                  {/* Table View for Larger Devices */}
+                  {/* Table for Larger Devices */}
                   <table className="availability-table min-w-full table-auto border-collapse border border-slate-200 hidden lg:table">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-300 text-center text-base">
@@ -390,73 +378,39 @@ const AvailabilityManagements = () => {
                           { key: "duration", label: "Duration" },
                           { key: "status", label: "Status" },
                         ].map((col) => (
-                          <th
-                            key={col.key}
-                            className="p-2 text-base font-normal leading-none text-slate-500 border-b border-slate-300 "
-                            onClick={() => handleSort(col.key)}
-                          >
+                          <th key={col.key} className="p-2 text-base font-normal leading-none text-slate-500 border-b border-slate-300" onClick={() => handleSort(col.key)}>
                             {col.label}
                             {sortConfig.key === col.key && (
-                              <span
-                                className={`ml-2 ${sortConfig.direction === "ascending"
-                                  ? "text-blue-500"
-                                  : "text-red-500"
-                                  } text-sm`}
-                              >
-                                {sortConfig.direction === "ascending"
-                                  ? "▲"
-                                  : "▼"}
+                              <span className={`ml-2 ${sortConfig.direction === "ascending" ? "text-blue-500" : "text-red-500"} text-sm`}>
+                                {sortConfig.direction === "ascending" ? "▲" : "▼"}
                               </span>
                             )}
                           </th>
                         ))}
-                        <th className="p-2 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">
-                          Actions
-                        </th>
+                        <th className="p-2 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {tableData.length > 0 ? (
+                      {availability.length > 0 ? (
                         paginatedData.map((slot, index) => (
                           <tr key={slot.sr_no} className="hover:bg-slate-50">
                             <td className="py-4 text-center border-b border-slate-200">
                               {(currentPage - 1) * slotsPerPage + index + 1}
                             </td>
+                            <td className="py-4 text-center border-b border-slate-200">{slot.date}</td>
+                            <td className="py-4 text-center border-b border-slate-200">{slot.start_time} to {slot.end_time}</td>
+                            <td className="py-4 text-center border-b border-slate-200">{slot.mode}</td>
+                            <td className="py-4 text-center border-b border-slate-200">{slot.duration}</td>
                             <td className="py-4 text-center border-b border-slate-200">
-                              {slot.date}
-                            </td>
-                            <td className="py-4 text-center border-b border-slate-200">
-                              {slot.start_time} to {slot.end_time}
-                            </td>
-                            <td className="py-4 text-center border-b border-slate-200">
-                              {slot.mode}
-                            </td>
-                            <td className="py-4 text-center border-b border-slate-200">
-                              {slot.duration}
-                            </td>
-                            <td className="py-4 text-center border-b border-slate-200">
-                              <span
-                                className={`py-1 text-center px-2 rounded text-white text-sm ${slot.status === "available"
-                                  ? "bg-[#347928]"
-                                  : "bg-gray-500"
-                                  }`}
-                              >
+                              <span className={`py-1 text-center px-2 rounded text-white text-sm ${slot.status === "available" ? "bg-[#347928]" : "bg-gray-500"}`}>
                                 {slot.status}
                               </span>
                             </td>
                             <td className="py-2 border-b border-slate-200 flex justify-center">
-                              <button
-                                onClick={() => handleEditSlot(slot)}
-                                className="action-edit-button bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
-                              >
+                              <button onClick={() => handleEditSlot(slot)} className="action-edit-button bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm">
                                 <CiEdit />
                               </button>
-                              <button
-                                onClick={() =>
-                                  handleDeleteSlot(slot.sr_no, slot)
-                                }
-                                className="action-delete-button bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm"
-                              >
+                              <button onClick={() => handleDeleteSlot(slot.sr_no, slot)} className="action-delete-button bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm">
                                 <MdDeleteForever />
                               </button>
                             </td>
@@ -464,10 +418,7 @@ const AvailabilityManagements = () => {
                         ))
                       ) : (
                         <tr>
-                          <td
-                            colSpan="8"
-                            className="text-center p-4 text-gray-500 font-medium"
-                          >
+                          <td colSpan="7" className="text-center p-4 text-gray-500 font-medium">
                             No sessions found.
                           </td>
                         </tr>
@@ -477,7 +428,7 @@ const AvailabilityManagements = () => {
 
                   {/* Mobile Card View */}
                   <div className="mobile-card-view grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4 mt-6">
-                    {paginatedData.length > 0 ? (
+                    {availability.length > 0 ? (
                       paginatedData.map((slot, index) => (
                         <div key={slot.sr_no} className="session-card bg-white border border-gray-200 rounded-lg p-4 shadow-md">
                           <div className="flex justify-between">
@@ -610,8 +561,8 @@ const AvailabilityManagements = () => {
                               className="form-select-availability w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7047A3]"
                             >
                               {[
-                                { value: "60", label: "60 Minutes" },
-                                { value: "45", label: "45 Minutes" },
+                                { value: "60 Minutes", label: "60 Minutes" },
+                                { value: "45 Minutes", label: "45 Minutes" },
                               ].map((option) => (
                                 <option key={option.value} value={option.value}>
                                   {option.label}

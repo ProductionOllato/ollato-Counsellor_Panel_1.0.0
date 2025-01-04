@@ -10,6 +10,6 @@ const router = express.Router();
 router.post("/set-availability", addCounsellorAvailability);
 router.put("/update-availability", updateAvailability);
 router.delete("/delete-availability", deleteAvailability);
-router.post("/get-availability", getCounsellorAvailability);
+router.get("/get-availability/:counsellor_id", getCounsellorAvailability);
 
 module.exports = router;

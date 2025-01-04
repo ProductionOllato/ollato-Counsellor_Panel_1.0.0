@@ -37,8 +37,6 @@ exports.addCounsellorAvailability = async (req, res) => {
   const { counsellor_id, dates, mode, duration, status, start_time, end_time } =
     req.body;
 
-  console.log("Received data add CounsellorAvailability: ", req.body);
-
   // Validate the required fields
   if (!counsellor_id) {
     return res.status(400).json({ msg: "Counsellor ID is required" });
@@ -175,9 +173,6 @@ exports.addCounsellorAvailability = async (req, res) => {
 exports.updateAvailability = async (req, res) => {
   const { counsellor_id, date, start_time, end_time, mode, duration, status } =
     req.body;
-
-  console.log("Received data update availability: ", req.body);
-
   // Validate required fields
   if (!counsellor_id) {
     return res.status(400).json({ msg: "counsellor_id is required" });
@@ -230,11 +225,9 @@ exports.updateAvailability = async (req, res) => {
       SET ${updates.join(", ")}
       WHERE ${whereClause}
     `;
-    console.log("WHERE Clause:", whereClause);
-    console.log("SQL Query:", query);
+
     // Combine update and where parameters
     const params = [...updateParams, ...whereParams];
-    console.log("Update Params:", params);
 
     // Execute the query
     const [result] = await db.query(query, params);
@@ -254,9 +247,6 @@ exports.updateAvailability = async (req, res) => {
 exports.deleteAvailability = async (req, res) => {
   // const { sr_no } = req.params;
   const { sr_no } = req.body;
-
-  console.log("Received data delete availability: ", req.params);
-  console.log("Received data delete availability: ", req.body);
 
   if (!sr_no) {
     return res.status(400).json({ msg: "id is required" });
@@ -284,7 +274,7 @@ exports.deleteAvailability = async (req, res) => {
 };
 
 exports.getCounsellorAvailability = async (req, res) => {
-  const { counsellor_id } = req.body;
+  const { counsellor_id } = req.params;
 
   if (!counsellor_id) {
     return res.status(400).json({ msg: "counsellor_id is required" });
@@ -298,8 +288,6 @@ exports.getCounsellorAvailability = async (req, res) => {
 
     const [result] = await db.query(query, [counsellor_id]);
 
-    // console.log("Result:", result);
-
     if (result.length === 0) {
       return res.status(404).json({ msg: "No availability found" });
     }
@@ -310,8 +298,6 @@ exports.getCounsellorAvailability = async (req, res) => {
       item.date = date.toISOString().split("T")[0]; // Formats date as YYYY-MM-DD
       return item;
     });
-
-    // console.log("Formatted Result:", formattedResult);
 
     res
       .status(200)
