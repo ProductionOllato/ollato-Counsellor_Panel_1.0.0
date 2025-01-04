@@ -14,10 +14,10 @@ export default function Dashboard() {
   const [userDetails, setUserDetails] = useState(null);
   const [sessions, setSessions] = useState([]);
 
-  // useEffect(() => {
-  //   // Call approveProfile only once - testing
-  //   approveProfile();
-  // }, [approveProfile]);
+  useEffect(() => {
+    // Call approveProfile only once - testing
+    approveProfile();
+  }, [approveProfile]);
 
   const completeProfile = () => {
     navigate("/registration-complete");
