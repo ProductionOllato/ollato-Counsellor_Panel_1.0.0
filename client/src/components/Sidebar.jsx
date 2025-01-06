@@ -75,7 +75,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   useEffect(() => {
     // Listen to window resize events and update the state for mobile screen size
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 767);
+      setIsMobile(window.innerWidth < 768);
     };
 
     window.addEventListener("resize", handleResize);
