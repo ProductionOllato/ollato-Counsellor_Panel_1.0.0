@@ -1,0 +1,161 @@
+/* Overlay Styles */
+.otp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Softer background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Container Styles */
+.otp-modal-container {
+  background: linear-gradient(to top left, #fff, #f0f0f0); /* Soft gradient */
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  text-align: center;
+  font-family: 'Roboto', sans-serif; /* Modern font */
+}
+
+/* Close Button Styles */
+.close-otp-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem; /* Larger close icon */
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s;
+}
+
+.close-otp-modal:hover {
+  color: #e53e3e; /* Red color on hover */
+}
+
+/* Title and Message Styles */
+.otp-modal-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333; /* Darker text */
+}
+
+.otp-modal-message {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+/* OTP Input Wrapper Styles */
+.otp-modal-input-wrapper {
+  display: flex;
+  justify-content: center; /* Center the inputs */
+  align-items: center;
+  gap: 1rem; /* Space out the inputs more */
+  margin-bottom: 1.5rem; /* Add some space between inputs and the next section */
+  padding: 10px;
+  border-radius: 12px; /* Rounded corners for the wrapper */
+  background-color: #f8f8f8; /* Light background to create contrast */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow around the wrapper */
+}
+
+/* Input Styles */
+.otp-modal-input {
+  width: 60px; /* Slightly larger size for inputs */
+  height: 60px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 10px; /* Rounded borders for the inputs */
+  background-color: #fff; /* Clean background */
+  color: #333; /* Dark text for readability */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.otp-modal-input:focus {
+  border-color: #007bff; /* Blue border when focused */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4); /* Glow effect */
+  outline: none; /* Remove default outline */
+}
+
+.otp-modal-input:disabled {
+  background-color: #e0e0e0; /* Disabled inputs have a light gray background */
+  border-color: #ccc; /* Neutral border for disabled state */
+  cursor: not-allowed; /* Show disabled cursor */
+}
+
+/* Hover Effects */
+.otp-modal-input:hover {
+  border-color: #007bff; /* Blue border on hover */
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.2); /* Subtle glow on hover */
+}
+
+/* Timer and Resend Button Styles */
+.otp-timer {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #e53e3e;
+  font-weight: bold;
+}
+
+.otp-timer-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 10px;
+}
+
+/* Button Wrapper Styles */
+.otp-modal-button-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem; /* More space between buttons */
+}
+
+/* Button Styles */
+.otp-modal-button {
+  background: #052b53;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.otp-modal-button:hover {
+  background: #0a3869;
+  transform: translateY(-3px);
+}
+
+/* Resend Button Styles */
+.otp-resend-button {
+  color: #082c4e;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.otp-resend-button:hover {
+  color: #010f07;
+  transform: translateY(-2px);
+}
+
+.otp-resend-button.disabled {
+  color: #a0aec0;
+  cursor: not-allowed;
+}

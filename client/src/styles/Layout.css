@@ -1,0 +1,7 @@
+@media (max-width: 767px) {
+  .layout-main {
+    margin-left: 0;
+    width: 100%;
+    flex-direction: column;
+  }
+}

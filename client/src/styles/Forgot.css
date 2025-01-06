@@ -1,0 +1,196 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Forgot Password Page Layout */
+.forgot-container {
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(135deg, #6e7dff, #ff77b5);
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center; 
+}
+
+.forgot-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forgot-logo {
+    width: 50%;
+    height: auto;
+    object-fit: contain;
+    margin: 0;
+}
+
+.forgot-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.forgot-form-container {
+    background-color: #ffffff;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+
+.forgot-heading {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+
+.forgot-form-field {
+    margin-bottom: 16px;
+}
+
+.forgot-form-label {
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.forgot-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.forgot-input:focus {
+    border-color: #ff9a3c;
+    outline: none;
+}
+
+/* Submit Button */
+.forgot-submit-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.forgot-submit-button {
+    width: 50%;
+    padding: 12px;
+    background-color: #1d344a;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.forgot-submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Back to Login Button */
+.forgot-back-to-login {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.forgot-back-to-login-button {
+    font-size: 14px;
+    color: #000000;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.forgot-back-to-login-button:hover {
+    color: #d47e28;
+}
+
+/* Media Queries */
+
+/* For screens 1200px and below */
+@media (max-width: 1200px) {
+    .forgot-logo {
+        width: 50%;
+    }
+
+    .forgot-form-container {
+        padding: 14px;
+    }
+
+    .forgot-heading {
+        font-size: 22px;
+    }
+
+    .forgot-submit-button {
+        font-size: 14px;
+    }
+}
+
+/* For screens 768px and below */
+@media (max-width: 768px) {
+    .forgot-container {
+        flex-direction: column;
+    }
+
+    .forgot-logo {
+        width: 30%;
+    }
+
+    .forgot-form-container {
+        padding: 24px;
+    }
+
+    .forgot-heading {
+        font-size: 20px;
+    }
+
+    .forgot-submit-button {
+        font-size: 11px;
+    }
+}
+
+/* For screens 480px and below */
+@media (max-width: 480px) {
+    .forgot-logo {
+        width: 60%;
+    }
+
+    .forgot-form-container {
+        padding: 16px;
+    }
+
+    .forgot-heading {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .forgot-input {
+        padding: 10px;
+    }
+
+    .forgot-submit-button {
+        font-size: 12px;
+        padding: 10px;
+    }
+}

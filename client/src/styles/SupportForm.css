@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+/* body {
+  font-family: "Inter", sans-serif;
+  background: #f6f7fb; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  padding: 0 20px; 
+} */
+
+.formbold-main-wrapper {
+  width: 100%; /* Full width for main wrapper */
+  display: flex; /* Flexbox for centering */
+  justify-content: center; /* Center content */
+}
+
+.formbold-form-wrapper {
+  max-width: 600px; /* Maximum width for the form */
+  width: 100%; /* Full width */
+  background: white; /* White background for the form */
+  border-radius: 12px; /* Rounded corners */
+  padding: 30px; /* Padding inside the form */
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+}
+
+.form-title {
+  color: black; /* Title color */
+  font-size: 25px; /* Title font size */
+  font-weight: 900; /* Bold title */
+  text-align: center; /* Centered title */
+  padding-bottom: 20px; /* Space below title */
+}
+
+.formbold-input-flex {
+  display: flex; /* Flexbox for input layout */
+  gap: 20px; /* Space between inputs */
+  margin-bottom: 20px; /* Space below input group */
+}
+
+.formbold-input-flex > div {
+  flex: 1; /* Flex-grow for equal width */
+}
+
+.formbold-input-radio-wrapper {
+  margin-bottom: 18px; /* Space below radio button group */
+}
+
+.formbold-form-input {
+  width: 100%; /* Full width for inputs */
+  height: 45px; /* Input height */
+  padding: 12px 20px; /* Padding inside inputs */
+  border-radius: 8px; /* Rounded corners */
+  border: 1px solid #dde3ec; /* Light border */
+  background: #f9f9f9; /* Light background for inputs */
+  font-weight: 500; /* Medium font weight */
+  font-size: 16px; /* Font size for inputs */
+  color: #07074d; /* Dark text color */
+  outline: none; /* Remove outline */
+  transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth transition */
+}
+
+.formbold-form-input::placeholder {
+  color: #536387; /* Placeholder color */
+}
+
+.formbold-form-input:focus {
+  border-color: #6a64f1; /* Border color on focus */
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1); /* Shadow on focus */
+}
+
+.formbold-form-label {
+  color: #07074d; /* Label color */
+  font-size: 14px; /* Label font size */
+  line-height: 24px; /* Line height for labels */
+  display: block; /* Block display for labels */
+  margin-bottom: 8px; /* Space below labels */
+}
+
+.formbold-btn {
+  text-align: center; /* Centered text for button */
+  width: 100%; /* Full width for button */
+  font-size: 16px; /* Button font size */
+  padding: 14px 25px; /* Padding for button */
+  border: none; /* No border */
+  border-radius: 8px; /* Rounded corners */
+  font-weight: 500; /* Medium font weight */
+  background-color: #584976; /* Button background color */
+  color: white; /* Button text color */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth transition */
+  margin-top: 20px; /* Space above button */
+}
+
+.formbold-btn:hover {
+  background-color: #5e56e2; /* Darker background on hover */
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* Shadow on hover */
+}
+
+.formbold-btn:disabled {
+  background-color: #ccc; /* Disabled button background */
+  cursor: not-allowed; /* Not-allowed cursor for disabled button */
+}
+
+.formbold-btn:disabled:hover {
+  box-shadow: none; /* No shadow on hover for disabled button */
+}
+
+textarea {
+  resize: vertical; /* Allow vertical resizing */
+  width: 100%; /* Full width for textarea */
+  padding: 12px 20px; /* Padding for textarea */
+  border-radius: 8px; /* Rounded corners */
+  border: 1px solid #dde3ec; /* Light border */
+  background: #f9f9f9; /* Light background for textarea */
+  font-weight: 500; /* Medium font weight */
+  font-size: 16px; /* Font size for textarea */
+  color: #07074d; /* Dark text color */
+  outline: none; /* Remove outline */
+  transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Smooth transition */
+}
+
+textarea:focus {
+  border-color: #6a64f1; /* Border color on focus */
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1); /* Shadow on focus */
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 720px) {
+  .formbold-form-wrapper {
+    padding: 20px; /* Reduced padding for smaller screens */
+  }
+  .form-title {
+    font-size: 22px; /* Smaller title font size */
+  }
+  .formbold-input-flex {
+    flex-direction: column; /* Stack inputs vertically */
+    gap: 10px; /* Reduced gap between inputs */
+  }
+  .formbold-input-flex > div {
+    width: 100%; /* Full width for inputs */
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px; /* Padding for body on small screens */
+  }
+  .formbold-form-wrapper {
+    padding: 15px; /* Reduced padding for form */
+  }
+  .form-title {
+    font-size: 20px; /* Smaller title font size */
+  }
+  .formbold-form-input {
+    height: 40px; /* Reduced height for inputs */
+    font-size: 14px; /* Smaller font size for inputs */
+  }
+  .formbold-btn {
+    padding: 12px 20px; /* Reduced padding for button */
+    font-size: 14px; /* Smaller font size for button */
+  }
+}
+
+@media (max-width: 360px) {
+  .formbold-form-wrapper {
+    padding: 10px; /* Further reduced padding for form */
+  }
+  .form-title {
+    font-size: 18px; /* Smaller title font size */
+  }
+  .formbold-form-input {
+    height: 35px; /* Further reduced height for inputs */
+    font-size: 14px; /* Smaller font size for inputs */
+  }
+  .formbold-btn {
+    font-size: 12px; /* Smaller font size for button */
+    padding: 10px 15px; /* Reduced padding for button */
+  }
+}

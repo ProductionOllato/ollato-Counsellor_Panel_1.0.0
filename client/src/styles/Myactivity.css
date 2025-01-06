@@ -1,0 +1,414 @@
+/* General Container */
+.container-myactivity {
+  margin: 2.5rem auto;
+  padding: 1rem;
+  background-color: #f9f9f9; /* Soft gray background */
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Header */
+.header-myactivity {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Toggle Button Section */
+.toggle-button-myactivity {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.toggle-btn-myactivity {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #6c5ce7; /* Vibrant purple */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-btn-myactivity:hover,
+.toggle-btn-myactivity:focus {
+  background-color: #8e7fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.4); /* Focus ring */
+}
+
+/* Table Container */
+.table-container-myactivity {
+  overflow-x: auto;
+}
+
+.activity-table-myactivity {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.activity-table-myactivity thead {
+  background-color: #f1f1f1;
+}
+
+.activity-table-myactivity th,
+.activity-table-myactivity td {
+  padding: 1rem 0.5rem;
+  text-align: left;
+  font-size: 1rem;
+  color: #444;
+  border-bottom: 1px solid #ddd;
+}
+
+.activity-table-myactivity th {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.activity-table-myactivity tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Feedback Button */
+.feedback-btn-myactivity {
+  padding: 0.5rem 1rem;
+  background-color: #38a169; /* Green */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.feedback-btn-myactivity:hover,
+.feedback-btn-myactivity:focus {
+  background-color: #2f855a;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.4); /* Focus ring */
+}
+
+/* No Sessions Message */
+.no-sessions-myactivity {
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+  padding: 2rem 0;
+}
+
+/* Mobile View Cards */
+.mobile-view-myactivity {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.session-card-myactivity {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.session-card-myactivity:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.session-card-myactivity div {
+  font-size: 0.9rem;
+}
+
+.session-card-myactivity strong {
+  font-weight: bold;
+  color: #2d3748;
+}
+
+/* Modal Overlay */
+.modal-overlay-myactivity {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content-myactivity {
+  background: #fff;
+  border-radius: 8px;
+  width: 400px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal Title */
+.modal-title-myactivity {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Feedback Textarea */
+.feedback-textarea-myactivity {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  resize: none;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
+  margin-bottom: 20px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.feedback-textarea-myactivity:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+/* Modal Actions */
+.modal-actions-myactivity {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Cancel Button */
+.cancel-btn-myactivity {
+  background-color: #f44336;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.cancel-btn-myactivity:hover {
+  background-color: #d1453b;
+}
+
+/* Submit Button */
+.submit-btn-myactivity {
+  background-color: #447546;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.submit-btn-myactivity:hover {
+  background-color: #388e3c;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .activity-table-myactivity {
+    display: none;
+  }
+
+  .mobile-view-myactivity {
+    display: flex;
+  }
+}
+
+@media (max-width: 576px) {
+  .session-card-myactivity {
+    grid-template-columns: 1fr;
+  }
+
+  .toggle-btn-myactivity {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  /* General container adjustments */
+  .container-myactivity {
+    padding: 1.5rem; /* Slightly reduce padding for better spacing */
+    margin: 0 auto;
+  }
+
+  /* Header adjustments */
+  .header-myactivity {
+    font-size: 1.8rem; /* Slightly reduce header font size */
+  }
+
+  /* Table adjustments */
+  .activity-table-myactivity th,
+  .activity-table-myactivity td {
+    font-size: 0.95rem; /* Adjust font size for better readability */
+    padding: 0.8rem; /* Reduce padding for compact spacing */
+  }
+
+  /* Button adjustments */
+  .toggle-btn-myactivity {
+    font-size: 0.95rem; /* Adjust button font size */
+    padding: 0.5rem 1rem;
+  }
+
+  /* Modal adjustments */
+  .modal-content-myactivity {
+    max-width: 450px; /* Adjust modal width */
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  /* General container adjustments */
+  .container-myactivity {
+    padding: 1rem 0; /* Compact padding with balanced side spacing */
+    margin: 0 auto;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+  }
+
+  /* Header adjustments */
+  .header-myactivity {
+    font-size: 1.8rem; /* Adjust header font size for tablets */
+    margin-bottom: 1rem;
+  }
+
+  /* Table adjustments */
+  .activity-table-myactivity {
+    width: 100%; /* Ensure the table spans the full width of the container */
+    border-collapse: collapse;
+    font-size: 0.95rem; /* Slightly smaller font size */
+    margin-bottom: 1rem; /* Add spacing below the table */
+    table-layout: fixed; /* Prevent content overflow */
+    overflow-x: auto; /* Allow horizontal scrolling if content overflows */
+  }
+  .activity-table-myactivity th:first-child {
+    width: 3rem;
+  }
+  .activity-table-myactivity th,
+  .activity-table-myactivity td {
+    padding: 0.2rem; /* Compact padding for better use of space */
+    text-align: center;
+    word-wrap: break-word; /* Ensure long text wraps within cells */
+    white-space: normal; /* Allow text to wrap to the next line */
+    font-size: 0.89rem;
+    width: fit-content;
+  }
+
+  .session-card-myactivity {
+    grid-template-columns: repeat(2, 1fr); /* Display two cards per row */
+    padding: 0.8rem; /* Adjust padding for compactness */
+    gap: 0.5rem;
+    border: 1px solid #c7c7c7;
+  }
+
+  /* Button adjustments */
+  .toggle-btn-myactivity {
+    font-size: 0.9rem; /* Adjust font size */
+    padding: 0.6rem 1rem; /* Maintain usability */
+  }
+
+  /* Feedback Button */
+  .feedback-btn-myactivity {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  /* Modal adjustments */
+  .modal-content-myactivity {
+    width: 85%; /* Use most of the screen width */
+    padding: 1rem;
+    max-width: 450px; /* Limit modal size */
+  }
+}
+
+@media screen and (min-width: 425px) and (max-width: 768px) {
+  .mobile-view-myactivity {
+    display: flex;
+  }
+  .table-container-myactivity {
+    padding: 2rem;
+  }
+  .session-card-myactivity {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0.5rem 2rem;
+    gap: 0.5rem;
+    border: 1px solid #c7c7c7;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .table-container-myactivity {
+    padding: 1rem;
+  }
+
+  .session-card-myactivity {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0.5rem 1rem;
+    gap: 0.4rem;
+    border: 1px solid #c7c7c7;
+  }
+
+  .feedback-btn-myactivity {
+    width: 100%;
+    padding: 0.5rem 0;
+    background-color: #38a169;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+}
+
+/* star rating styles */
+.star-rating {
+  font-size: 2rem; /* Adjust the size of the stars */
+  cursor: pointer; /* Change cursor on hover */
+  pointer-events: auto;
+}
+
+.star {
+  color: lightgray; /* Default color for stars */
+  transition: color 0.3s; /* Smooth color transition */
+}
+
+.star.filled {
+  color: rgb(167, 142, 5); /* Color for filled stars */
+}
