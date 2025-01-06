@@ -1,29 +1,28 @@
 /* General Styles */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #f9fafb;
   margin: 0;
   padding: none;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 /* Main Container */
 .login-container {
   display: flex;
   flex-direction: row;
-  min-height: 100vh; 
+  min-height: 100vh;
   background: linear-gradient(135deg, #6e7dff, #ff77b5);
   justify-content: center;
   align-items: center;
-  padding: 0 20px; 
-  box-sizing: border-box; 
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* Logo Section */
 .login-logo-container {
   text-align: center;
   display: contents;
-  
 }
 
 .login-logo {
@@ -43,7 +42,7 @@ body {
   border: 1px solid #c8afaf;
   max-width: 500px;
   width: 100%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 .login-title {
@@ -106,7 +105,7 @@ body {
 }
 
 .forgot-password-link {
-  color: #3E5879;
+  color: #3e5879;
   text-decoration: underline;
   font-size: 14px;
   cursor: pointer;
@@ -136,27 +135,25 @@ body {
   cursor: not-allowed;
 }
 
-
 /* Registration Link Container */
 .register-link-container {
   text-align: center;
   margin-top: 2rem;
   display: flex;
   align-items: center;
-  justify-content: center; 
-  gap: 10px; 
+  justify-content: center;
+  gap: 10px;
 }
 
 /* Register Link Text */
 .register-text {
-  color: #3E5879;
+  color: #3e5879;
   font-size: 0.9rem;
   font-weight: 600;
 }
 
-
 .register-button svg {
-  margin-right: 8px;  /* Space between the icon and text */
+  margin-right: 8px; /* Space between the icon and text */
 }
 
 /* Register Button */
@@ -166,7 +163,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
-  display: flex; 
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -176,18 +173,42 @@ body {
 }
 
 .register-button svg {
-  margin-right: 8px; 
+  margin-right: 8px;
 }
 
+.toggle-login-method-link {
+  color: #3e5879;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.toggle-login-method-link:hover {
+  color: #5c0c3a;
+  text-decoration: underline;
+}
+
+.back-button {
+  background-color: transparent;
+  color: #3e5879;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-bottom: 15px;
+}
+
+.back-button:hover {
+  color: #5c0c3a;
+}
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-  body{
+  body {
     padding: none;
   }
   .login-container {
     flex-direction: column;
-    padding: 20px 0; 
+    padding: 20px 0;
   }
 
   .login-form-container {
@@ -195,15 +216,14 @@ body {
     max-width: 60%;
   }
 
-  .login-logo{
+  .login-logo {
     width: 30%;
-    margin: 10px;    
+    margin: 10px;
   }
 }
 
 @media (max-width: 480px) {
-  
-  body{
+  body {
     padding: none;
   }
 
@@ -215,14 +235,14 @@ body {
     font-size: 1.5rem;
   }
 
-  .login-logo{
+  .login-logo {
     width: 40%;
-    margin: 10px;    
+    margin: 10px;
   }
 }
 
-@media (max-width: 360px){
-  body{
+@media (max-width: 360px) {
+  body {
     padding: none;
   }
 
@@ -234,8 +254,8 @@ body {
     font-size: 1.5rem;
   }
 
-  .login-logo{
+  .login-logo {
     width: 40%;
-    margin: 10px;    
+    margin: 10px;
   }
 }

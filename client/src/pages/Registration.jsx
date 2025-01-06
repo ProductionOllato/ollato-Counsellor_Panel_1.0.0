@@ -9,6 +9,7 @@ import statesAndDistricts from "../data/states-and-districts.json";
 import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
+import axios from 'axios';
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -103,12 +104,11 @@ const Registration = () => {
   };
 
   const sendOtp = async (type, identifier) => {
-    // Determine the API endpoint and payload key based on type
     const endpoint = type === "email" ? "otp/email-otp" : "otp/mobile-otp";
     const payloadKey = type === "email" ? "email" : "phoneNumber";
 
     try {
-      // Make the API call
+
       const response = await axios.post(`${API_URL}/${endpoint}`, {
         [payloadKey]: identifier,
       });

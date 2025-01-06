@@ -173,10 +173,17 @@ function Login() {
         <form onSubmit={handleSubmit}>
           {showOtpLogin ? (
             <>
+              <button
+                type="button"
+                onClick={toggleLoginMethod}
+                className="back-button"
+              >
+                Back
+              </button>
               <div className="form-group">
                 <label className="form-label">Phone Number *</label>
                 <input
-                  type="text"
+                  type="tel"
                   name="phoneNumber"
                   placeholder="Enter your phone number"
                   value={formData.phoneNumber}
@@ -199,16 +206,12 @@ function Login() {
               )}
               <div className="form-action">
                 <button
-                  type="button"
+                  type="submit"
                   onClick={otpSent ? handleVerifyOtpTOLogin : handleSendOtp}
                   className={`form-button ${loading ? "disabled" : ""}`}
                   disabled={loading || (!otpSent && !formData.phoneNumber)}
                 >
-                  {loading
-                    ? "Processing..."
-                    : otpSent
-                    ? "Verify OTP"
-                    : "Send OTP"}
+                  {loading ? "Processing..." : otpSent ? "Verify OTP" : "Send OTP"}
                 </button>
               </div>
               {otpSent && (
