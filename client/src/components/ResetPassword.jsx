@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext.jsx";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import LOGO from "../assets/Ollato_Logo_CC-03.png";
 
 function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -37,7 +38,10 @@ function ResetPassword() {
     e.preventDefault();
 
     if (!isPasswordStrong(password)) {
-      triggerNotification("Password must be at least 8 characters long.", "error");
+      triggerNotification(
+        "Password must be at least 8 characters long.",
+        "error"
+      );
       return;
     }
 
@@ -48,28 +52,48 @@ function ResetPassword() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${apiEndpointURL}/reset/reset-password/${token}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ newPassword: password }),
-      });
+      const response = await fetch(
+        `${apiEndpointURL}/reset/reset-password/${token}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ newPassword: password }),
+        }
+      );
 
       if (response.ok) {
         triggerNotification("Password reset successfully.", "success");
         navigate("/");
       } else {
         const errorData = await response.json();
-        triggerNotification(errorData.message || "Failed to reset password.", "error");
+        triggerNotification(
+          errorData.message || "Failed to reset password.",
+          "error"
+        );
       }
     } catch (error) {
-      triggerNotification("An error occurred while resetting your password.", "error");
+      triggerNotification(
+        "An error occurred while resetting your password.",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100">
+    <div
+      className="min-h-screen flex flex-col justify-center items-center bg-gray-100"
+      style={{
+        background: "linear-gradient(135deg, #6e7dff, #ff77b5)",
+      }}
+    >
+      {/* Logo Container */}
+      <div className="login-logo-container mb-8">
+        <img src={LOGO} alt="Logo" className="login-logo w-32 h-auto mx-auto" />
+      </div>
+
+      {/* Form Container */}
       <div className="bg-white p-8 border border-gray-300 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <h1 className="text-2xl text-gray-800 font-semibold mb-6 text-center">
           Reset Password
@@ -96,7 +120,9 @@ function ResetPassword() {
             </button>
           </div>
           <div className="mb-4 relative">
-            <label className="block text-gray-700">Confirm New Password *</label>
+            <label className="block text-gray-700">
+              Confirm New Password *
+            </label>
             <input
               type={showPassword.confirmPassword ? "text" : "password"}
               name="confirmPassword"
@@ -118,7 +144,9 @@ function ResetPassword() {
           <div className="mt-4 flex justify-center">
             <button
               type="submit"
-              className={`w-1/2 bg-[#3E5879] text-white p-2 rounded-md transition-opacity duration-200 ${loading ? "opacity-50" : ""}`}
+              className={`w-1/2 bg-[#3E5879] text-white p-2 rounded-md transition-opacity duration-200 ${
+                loading ? "opacity-50" : ""
+              }`}
               disabled={loading}
             >
               {loading ? "Processing..." : "Reset Password"}

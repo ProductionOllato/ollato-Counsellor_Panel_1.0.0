@@ -15,7 +15,7 @@ function ForgotPassword() {
   const handleChange = (e) => setEmail(e.target.value);
 
   const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
     return emailRegex.test(email);
   };
 

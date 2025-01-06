@@ -242,7 +242,7 @@
   }
 
   .logo-image {
-    margin-top: 20px;
+    /* margin-top: 20px; */
     height: 90px;
     width: 150px;
   }
@@ -327,7 +327,7 @@
   .logo-image {
     height: 75px;
     width: 140px;
-    margin-top: 10px;
+    /* margin-top: 10px; */
   }
 
   .header-title {
