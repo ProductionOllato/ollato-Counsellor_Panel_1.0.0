@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Resgistration.css"
+import "../styles/Resgistration.css";
 import { useNavigate } from "react-router-dom";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { FiEye, FiEyeOff } from "react-icons/fi";
@@ -96,7 +96,10 @@ const Registration = () => {
       return;
     }
     if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification("Please enter a valid 10-digit phone number.", "error");
+      triggerNotification(
+        "Please enter a valid 10-digit phone number.",
+        "error"
+      );
       return;
     }
     await sendOtp("phone", formData.phone_number);
@@ -107,7 +110,9 @@ const Registration = () => {
     const response = await fetch(`${API_URL}/${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ [type === "email" ? "email" : "phoneNumber"]: identifier }),
+      body: JSON.stringify({
+        [type === "email" ? "email" : "phoneNumber"]: identifier,
+      }),
     });
 
     if (response.ok) {
@@ -126,8 +131,14 @@ const Registration = () => {
       return;
     }
     setIsVerifying(true);
-    const url = otpType === "email" ? `${API_URL}/otp/verify-email-otp` : `${API_URL}/otp/verify-mobile-otp`;
-    const payload = otpType === "email" ? { enteredOtp: otp, email: formData.email } : { enteredOtp: otp, phoneNumber: formData.phone_number };
+    const url =
+      otpType === "email"
+        ? `${API_URL}/otp/verify-email-otp`
+        : `${API_URL}/otp/verify-mobile-otp`;
+    const payload =
+      otpType === "email"
+        ? { enteredOtp: otp, email: formData.email }
+        : { enteredOtp: otp, phoneNumber: formData.phone_number };
 
     try {
       const response = await fetch(url, {
@@ -141,14 +152,19 @@ const Registration = () => {
         setOtpModal(false);
         setOtp("");
 
-        otpType === "email" ? setIsEmailVerified(true) : setIsPhoneVerified(true);
+        otpType === "email"
+          ? setIsEmailVerified(true)
+          : setIsPhoneVerified(true);
       } else {
         const errorData = await response.json();
         triggerNotification(errorData.message || "Invalid OTP.", "error");
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
-      triggerNotification("An error occurred during OTP verification.", "error");
+      triggerNotification(
+        "An error occurred during OTP verification.",
+        "error"
+      );
     } finally {
       setIsVerifying(false);
     }
@@ -165,7 +181,7 @@ const Registration = () => {
   const handlePersonalDetailsSubmit = async (e) => {
     e.preventDefault();
 
-    if (Object.values(formData).some(field => !field)) {
+    if (Object.values(formData).some((field) => !field)) {
       triggerNotification("Please fill in all the required fields.", "error");
       return;
     }
@@ -175,11 +191,17 @@ const Registration = () => {
       return;
     }
     if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification("Please enter a valid 10-digit phone number.", "error");
+      triggerNotification(
+        "Please enter a valid 10-digit phone number.",
+        "error"
+      );
       return;
     }
     if (!isPasswordStrong(formData.password)) {
-      triggerNotification("Password must be at least 8 characters long.", "error");
+      triggerNotification(
+        "Password must be at least 8 characters long.",
+        "error"
+      );
       return;
     }
     if (formData.password !== formData.confirm_password) {
@@ -187,11 +209,17 @@ const Registration = () => {
       return;
     }
     if (!isEmailVerified) {
-      triggerNotification("Please verify your email address before registering.", "error");
+      triggerNotification(
+        "Please verify your email address before registering.",
+        "error"
+      );
       return;
     }
     if (!isPhoneVerified) {
-      triggerNotification("Please verify your phone number before registering.", "error");
+      triggerNotification(
+        "Please verify your phone number before registering.",
+        "error"
+      );
       return;
     }
 
@@ -207,7 +235,10 @@ const Registration = () => {
         navigate("/");
       } else {
         const errorData = await response.json();
-        triggerNotification(errorData.message || "Registration failed.", "error");
+        triggerNotification(
+          errorData.message || "Registration failed.",
+          "error"
+        );
       }
     } catch (error) {
       console.error("Error submitting details:", error);
@@ -217,219 +248,238 @@ const Registration = () => {
 
   return (
     <>
-      <div className="registration-container min-h-screen flex flex-col-reverse md:flex-row bg-gray-100">
-        {/* Form Section */}
-        <div className="registration-form-container">
-          <div className="registration-form-section">
-            <img src={LOGO} alt="Logo" className="registration-logo" />
-            {/* Registration Form */}
-            <form onSubmit={handlePersonalDetailsSubmit}>
-              {/* Header */}
-              <div className="registration-form-header">
-                <h1 className="registration-form-heading">Registration Form</h1>
-              </div>
+      <div className="registration-container min-h-screen bg-gradient-to-r from-blue-500 to-pink-500">
+        <div className="container mx-auto flex justify-center items-center py-10">
+          {/* Logo Section */}
+          <div className="registration-logo-container w-full md:w-1/2 flex justify-center items-center">
+            <img
+              src={LOGO}
+              alt="Logo"
+              className="registration-logo w-3/4 max-w-md"
+            />
+          </div>
 
-              <div className="registration-form-grid">
-                {/* Input Fields */}
-                <InputField
-                  label="First Name"
-                  name="first_name"
-                  placeholder="Enter your first name"
-                  value={formData.first_name}
-                  handleChange={handleChange}
-                />
-                <InputField
-                  label="Last Name"
-                  name="last_name"
-                  placeholder="Enter your last name"
-                  value={formData.last_name}
-                  handleChange={handleChange}
-                />
-                {/* email verification */}
-                <div >
+          {/* Form Section */}
+          <div className="registration-form-container w-full md:w-1/2 p-1">
+            <div className="registration-form-section bg-white p-8 rounded-lg shadow-xl">
+              {/* Registration Form */}
+              <form onSubmit={handlePersonalDetailsSubmit}>
+                {/* Header */}
+                <div className="registration-form-header text-center mb-6">
+                  <h1 className="registration-form-heading text-3xl font-semibold text-blue-800">
+                    Registration Form
+                  </h1>
+                </div>
+
+                <div className="registration-form-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Input Fields */}
                   <InputField
-                    label="Email"
-                    name="email"
-                    placeholder="Enter your email"
-                    type="email"
-                    value={formData.email}
+                    label="First Name"
+                    name="first_name"
+                    placeholder="Enter your first name"
+                    value={formData.first_name}
                     handleChange={handleChange}
-                    disabled={isEmailVerified}
                   />
-                  {/* Email Verification Button */}
-                  <div className="registration-button-container">
-                    <button
-                      type="button"
-                      onClick={handleVerifyEmail}
-                      disabled={isEmailVerified || isVerifying}
-                      className="registration-verify-button"
+                  <InputField
+                    label="Last Name"
+                    name="last_name"
+                    placeholder="Enter your last name"
+                    value={formData.last_name}
+                    handleChange={handleChange}
+                  />
+
+                  {/* Email verification */}
+                  <div>
+                    <InputField
+                      label="Email"
+                      name="email"
+                      placeholder="Enter your email"
+                      type="email"
+                      value={formData.email}
+                      handleChange={handleChange}
+                      disabled={isEmailVerified}
+                    />
+                    <div className="registration-button-container">
+                      <button
+                        type="button"
+                        onClick={handleVerifyEmail}
+                        disabled={isEmailVerified || isVerifying}
+                        className="registration-verify-button"
+                      >
+                        {isEmailVerified ? "Email Verified" : "Verify Email"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Phone verification */}
+                  <div>
+                    <InputField
+                      label="Phone Number"
+                      name="phone_number"
+                      placeholder="Enter your phone number"
+                      type="text"
+                      value={formData.phone_number}
+                      handleChange={handleChange}
+                      disabled={isPhoneVerified}
+                    />
+                    <div className="registration-button-container">
+                      <button
+                        type="button"
+                        onClick={handleVerifyPhone}
+                        disabled={isPhoneVerified || isVerifying}
+                        className="registration-verify-button"
+                      >
+                        Verify Phone
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* OTP Modal */}
+                  {otpModal && (
+                    <OtpModal
+                      otp={otp}
+                      setOtp={setOtp}
+                      handleOtpVerification={handleOtpVerification}
+                      setOtpModal={setOtpModal}
+                      isVerifying={isVerifying}
+                      message={`Please enter the 4-digit OTP sent to your ${otpType}.`}
+                      resendOtp={handleResendOtp}
+                    />
+                  )}
+
+                  {/* Gender Selection */}
+                  <InputField
+                    label="Gender"
+                    name="gender"
+                    value={formData.gender}
+                    handleChange={handleChange}
+                    component="select"
+                  >
+                    <option value="" disabled>
+                      Select Gender
+                    </option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </InputField>
+
+                  {/* Date of Birth */}
+                  <InputField
+                    label="Date of Birth"
+                    name="date_of_birth"
+                    value={formData.date_of_birth}
+                    handleChange={handleChange}
+                    type="date"
+                  />
+
+                  {/* State Selection */}
+                  <InputField
+                    label="State"
+                    name="state"
+                    value={formData.state}
+                    handleChange={handleStateChange}
+                    component="select"
+                  >
+                    <option value="" disabled>
+                      Select State
+                    </option>
+                    {statesAndDistricts.states.map((state) => (
+                      <option key={state.state} value={state.state}>
+                        {state.state}
+                      </option>
+                    ))}
+                  </InputField>
+
+                  {/* District Selection */}
+                  <InputField
+                    label="District"
+                    name="district"
+                    value={formData.district}
+                    handleChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        district: e.target.value,
+                      }))
+                    }
+                    component="select"
+                  >
+                    <option value="" disabled>
+                      Select District
+                    </option>
+                    {districts.map((district) => (
+                      <option key={district} value={district}>
+                        {district}
+                      </option>
+                    ))}
+                  </InputField>
+
+                  {/* Password Input */}
+                  <div className="registration-password-container relative">
+                    <InputField
+                      label="Password"
+                      name="password"
+                      placeholder="Enter Password"
+                      type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      handleChange={handleChange}
+                    />
+                    <span
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="registration-eye-icon absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
                     >
-                      {isEmailVerified ? "Email Verified" : "Verify Email"}
-                    </button>
+                      {showPassword ? <FiEyeOff /> : <FiEye />}
+                    </span>
+                  </div>
+
+                  {/* Confirm Password Input */}
+                  <div className="registration-password-container relative">
+                    <InputField
+                      label="Confirm Password"
+                      name="confirm_password"
+                      placeholder="Confirm Password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={formData.confirm_password}
+                      handleChange={handleChange}
+                    />
+                    <span
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      className="registration-eye-icon absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
+                    >
+                      {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                    </span>
                   </div>
                 </div>
-                {/* phone verification */}
-                <div>
-                  <InputField
-                    label="Phone Number"
-                    name="phone_number"
-                    placeholder="Enter your phone number"
-                    type="text"
-                    value={formData.phone_number}
-                    handleChange={handleChange}
-                    disabled={isPhoneVerified}
-                  />
-                  {/* Phone Verification Button */}
-                  <div className="registration-button-container">
-                    <button
-                      type="button"
-                      onClick={handleVerifyPhone}
-                      disabled={isPhoneVerified || isVerifying}
-                      className="registration-verify-button"
-                    >
-                      Verify Phone
-                    </button>
-                  </div>
-                </div>
 
-                {/* OTP Modal */}
-                {otpModal && (
-                  <OtpModal
-                    otp={otp}
-                    setOtp={setOtp}
-                    handleOtpVerification={handleOtpVerification}
-                    setOtpModal={setOtpModal}
-                    isVerifying={isVerifying}
-                    message={`Please enter the 4-digit OTP sent to your ${otpType}.`}
-                    resendOtp={handleResendOtp}
-                  />
-                )}
-
-                {/* Gender Selection */}
-                <InputField
-                  label="Gender"
-                  name="gender"
-                  value={formData.gender}
-                  handleChange={handleChange}
-                  component="select"
-                >
-                  <option value="" disabled>
-                    Select Gender
-                  </option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </InputField>
-
-                {/* Date of Birth */}
-                <InputField
-                  label="Date of Birth"
-                  name="date_of_birth"
-                  value={formData.date_of_birth}
-                  handleChange={handleChange}
-                  type="date"
-                />
-
-                {/* State Selection */}
-                <InputField
-                  label="State"
-                  name="state"
-                  value={formData.state}
-                  handleChange={handleStateChange}
-                  component="select"
-                >
-                  <option value="" disabled>
-                    Select State
-                  </option>
-                  {statesAndDistricts.states.map((state) => (
-                    <option key={state.state} value={state.state}>
-                      {state.state}
-                    </option>
-                  ))}
-                </InputField>
-
-                {/* District Selection */}
-                <InputField
-                  label="District"
-                  name="district"
-                  value={formData.district}
-                  handleChange={(e) =>
-                    setFormData((prev) => ({ ...prev, district: e.target.value }))
-                  }
-                  component="select"
-                >
-                  <option value="" disabled>
-                    Select District
-                  </option>
-                  {districts.map((district) => (
-                    <option key={district} value={district}>
-                      {district}
-                    </option>
-                  ))}
-                </InputField>
-
-                {/* Password Input */}
-                <div className="registration-password-container">
-                  <InputField
-                    label="Password"
-                    name="password"
-                    placeholder="Enter Password"
-                    type={showPassword ? "text" : "password"}
-                    value={formData.password}
-                    handleChange={handleChange}
-                  />
-                  <span
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="registration-eye-icon"
+                {/* Submit Button */}
+                <div className="registration-submit-button-container flex justify-center mt-8">
+                  <button
+                    type="submit"
+                    className="registration-submit-button w-full py-3 bg-blue-600 text-white font-semibold rounded-lg"
                   >
-                    {showPassword ? <FiEyeOff /> : <FiEye />}
-                  </span>
+                    Register
+                  </button>
                 </div>
+              </form>
 
-                {/* Confirm Password Input */}
-                <div className="registration-password-container">
-                  <InputField
-                    label="Confirm Password"
-                    name="confirm_password"
-                    placeholder="Confirm Password"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={formData.confirm_password}
-                    handleChange={handleChange}
-                  />
-                  <span
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="registration-eye-icon"
-                  >
-                    {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-                  </span>
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <div className="registration-submit-button-container">
-                <button type="submit" className="registration-submit-button">
-                  Register
+              {/* Login Link */}
+              <div className="registration-login-link-container flex justify-center mt-6">
+                <p className="registration-login-text text-sm">
+                  Already have an account?
+                </p>
+                <button
+                  onClick={() => navigate("/")}
+                  className="registration-login-button flex items-center text-blue-600 ml-2"
+                >
+                  <FaArrowRightFromBracket className="mr-2" />
+                  Login
                 </button>
               </div>
-            </form>
-
-            {/* Login Link */}
-            <div className="registration-login-link-container">
-              <p className="registration-login-text">Already have an account?</p>
-              <button onClick={() => navigate("/")} className="registration-login-button">
-                <FaArrowRightFromBracket />
-                Login
-              </button>
             </div>
           </div>
         </div>
-
-        {/* Sidebar (Logo on right) */}
-        {/* <div className="sidebar">
-      <img src={LOGO} alt="Logo" className="logo" />
-  </div> */}
       </div>
-
     </>
   );
 };

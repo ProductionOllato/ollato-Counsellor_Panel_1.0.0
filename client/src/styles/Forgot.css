@@ -1,12 +1,21 @@
-/* Base container for the Forgot Password Page */
-.forgot-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #f7fafc;
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Left side container (Logo Section) */
+/* Forgot Password Page Layout */
+.forgot-container {
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(135deg, #6e7dff, #ff77b5);
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center; 
+}
+
 .forgot-left {
     flex: 1;
     display: flex;
@@ -15,13 +24,12 @@
 }
 
 .forgot-logo {
-    width: 15%;
+    width: 50%;
     height: auto;
     object-fit: contain;
     margin: 0;
 }
 
-/* Right side container (Form Section) */
 .forgot-right {
     flex: 1;
     display: flex;
@@ -31,13 +39,14 @@
 }
 
 .forgot-form-container {
-    background-color: #d5d3d3;
+    background-color: #ffffff;
     padding: 32px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
 }
+
 
 .forgot-heading {
     font-size: 24px;
@@ -46,6 +55,7 @@
     text-align: center;
     margin-bottom: 24px;
 }
+
 
 .forgot-form-field {
     margin-bottom: 16px;
@@ -73,6 +83,7 @@
     outline: none;
 }
 
+/* Submit Button */
 .forgot-submit-button-container {
     display: flex;
     justify-content: center;
@@ -82,7 +93,7 @@
 .forgot-submit-button {
     width: 50%;
     padding: 12px;
-    background-color: #406882;
+    background-color: #1d344a;
     color: white;
     font-size: 16px;
     border: none;
@@ -96,6 +107,7 @@
     cursor: not-allowed;
 }
 
+/* Back to Login Button */
 .forgot-back-to-login {
     margin-top: 20px;
     text-align: center;
@@ -114,10 +126,12 @@
     color: #d47e28;
 }
 
-/* Responsive adjustments for large screens (desktop and large tablets) */
+/* Media Queries */
+
+/* For screens 1200px and below */
 @media (max-width: 1200px) {
     .forgot-logo {
-        width: 30%;
+        width: 50%;
     }
 
     .forgot-form-container {
@@ -133,14 +147,14 @@
     }
 }
 
-/* Responsive adjustments for medium screens (tablets) */
+/* For screens 768px and below */
 @media (max-width: 768px) {
     .forgot-container {
         flex-direction: column;
     }
 
     .forgot-logo {
-        width: 40%;
+        width: 30%;
     }
 
     .forgot-form-container {
@@ -152,11 +166,11 @@
     }
 
     .forgot-submit-button {
-        font-size: 14px;
+        font-size: 11px;
     }
 }
 
-/* Responsive adjustments for small screens (phones) */
+/* For screens 480px and below */
 @media (max-width: 480px) {
     .forgot-logo {
         width: 60%;
