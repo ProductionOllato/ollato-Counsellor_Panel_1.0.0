@@ -15,9 +15,7 @@ import {
 function CustomCalendar({ date, onDateChange }) {
   const [currentWeek, setCurrentWeek] = useState(startOfWeek(new Date()));
 
-  // const handleDateClick = (selectedDate) => {
-  //   onDateChange(selectedDate);
-  // };
+
 
   const handleDateClick = (selectedDate) => {
     // Convert selectedDate to YYYY-MM-DD format before passing it
@@ -45,22 +43,12 @@ function CustomCalendar({ date, onDateChange }) {
         >
           <IoIosArrowDropleftCircle size={24} />
         </button>
-        {/* <h2 className="text-sm font-semibold text-gray-800">
-          {`${format(currentWeek, "MMMM d")} - ${format(
-            addDays(currentWeek, 6),
-            "MMMM d, yyyy"
-          )}`}
-        </h2> */}
+
         <div className="text-center min-h-4 min-w-6">
           <h2 className="text-md font-bold text-gray-800">
             {format(currentWeek, "dd MMMM yyyy")}
           </h2>
-          {/* <h4 className="text-sm font-semibold text-gray-700">
-            {`${format(currentWeek, "MMMM d")} - ${format(
-              addDays(currentWeek, 6),
-              "MMMM d, yyyy"
-            )}`}
-          </h4> */}
+
         </div>
         <button
           type="button"
@@ -91,13 +79,12 @@ function CustomCalendar({ date, onDateChange }) {
               type="button"
               key={day}
               onClick={() => handleDateClick(day)}
-              className={`p-1 min-w-10 rounded-md text-center border ${
-                isSelected
+              className={`p-1 min-w-10 rounded-md text-center border ${isSelected
                   ? "bg-[#433878] text-white"
                   : isToday
-                  ? "bg-[#659287] text-[#ffffff]"
-                  : "bg-white text-gray-700"
-              } hover:bg-[#433878] hover:text-[#f4f2fc] border-[#433878]`}
+                    ? "bg-[#659287] text-[#ffffff]"
+                    : "bg-white text-gray-700"
+                } hover:bg-[#433878] hover:text-[#f4f2fc] border-[#433878]`}
             >
               {format(day, "d")}
             </button>

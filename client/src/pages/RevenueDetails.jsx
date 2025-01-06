@@ -127,14 +127,6 @@ const RevenueDetails = () => {
   const earnAmount = paymentDetails.length * 500; // Example logic for dispatched
   const pendingAmount = totalRevenue - earnAmount;
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
-
   return (
     <>
       <div className="flex-1 h-full w-full mt-4 pt-2">

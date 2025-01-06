@@ -76,12 +76,12 @@ exports.requestPasswordReset = async (req, res) => {
 exports.validateResetToken = async (req, res) => {
   const { token } = req.params;
 
-  console.log("Received token:", token);
+  
 
   try {
     // Hash the provided token for comparison
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-    console.log("Hashed token for validation:", hashedToken);
+
     // Check if the token exists and has not expired
     const [user] = await db.query(
       "SELECT email FROM personal_details WHERE reset_token = ? AND reset_token_expiry > NOW()",

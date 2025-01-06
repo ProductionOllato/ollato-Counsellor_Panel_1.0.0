@@ -167,8 +167,6 @@ const requestCancellationByStudent = async (req, res) => {
 };
 
 const cancelBookingByCounsellor = async (req, res) => {
-  console.log("Received data cancel booking by counsellor: ", req.body);
-
   // Validate request body
   await body("session_id")
     .isInt()
@@ -304,9 +302,6 @@ const rescheduleBooking = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-
-  console.log("Received data reschedule booking: ", req.body);
-
   const { session_id, new_r_time, new_r_date, new_r_duration, new_r_mode } =
     req.body;
 
@@ -365,9 +360,9 @@ const rescheduleBooking = async (req, res) => {
 };
 
 const getCounsellorAllSessions = async (req, res) => {
-  try {
-    const { counsellor_id } = req.query;
+  const { counsellor_id } = req.query;
 
+  try {
     if (!counsellor_id) {
       return res.status(400).json({ message: "Counsellor ID is required" });
     }
@@ -377,7 +372,7 @@ const getCounsellorAllSessions = async (req, res) => {
       [counsellor_id]
     );
 
-    if (sessions.length === 0) {
+    if (!sessions || sessions.length === 0) {
       return res
         .status(404)
         .json({ message: "No sessions found for this counsellor" });
@@ -385,8 +380,14 @@ const getCounsellorAllSessions = async (req, res) => {
 
     res.status(200).json(sessions);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error fetching sessions for counsellor:", {
+      counsellor_id,
+      error: error.message,
+    });
+
+    res.status(500).json({
+      message: "Internal server error. Please try again later.",
+    });
   }
 };
 
@@ -460,11 +461,6 @@ const getCounsellorAllSessions = async (req, res) => {
 
 const acceptStudentBookingRequestByCounsellor = async (req, res) => {
   const { session_id } = req.body;
-  console.log(
-    "Received data accept student booking request by counsellor: ",
-    req.body
-  );
-
   try {
     const [booking] = await db.query(
       `SELECT * FROM counsellor_booking WHERE session_id = ?`,

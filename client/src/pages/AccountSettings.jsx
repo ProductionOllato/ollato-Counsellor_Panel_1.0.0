@@ -67,7 +67,7 @@ const AccountSettings = () => {
   const getUserDetails = async () => {
     try {
       const response = await axios.get(
-        `${ApiURL}/get/personal-info/${user.user_id}`
+        `${ApiURL}/get-counsellors/personal-info/${user.user_id}`
       );
       if (response.status === 200) {
         const userData = response.data.data;
@@ -94,7 +94,7 @@ const AccountSettings = () => {
   const getProfessionDetails = async () => {
     try {
       const response = await axios.get(
-        `${ApiURL}/get/professional-info/${user.user_id}`
+        `${ApiURL}/get-counsellors/professional-info/${user.user_id}`
       );
 
       if (response.status === 200) {
@@ -185,15 +185,11 @@ const AccountSettings = () => {
 
     const payload = new FormData();
     payload.append("profile_pic", profilePicture);
-
-    console.log("Payload:", payload);
-
     try {
       const response = await axios.put(
         `${ApiURL}/update/documents-details/profile-pic/${user.user_id}`,
         payload
       );
-      console.log("Response profile pic:", response.data);
 
       if (response.status >= 200 && response.status < 300) {
         triggerNotification("Profile picture updated successfully!", "success");
@@ -206,73 +202,6 @@ const AccountSettings = () => {
       triggerNotification(error.message, "error");
     }
   };
-
-  // API call for updating personal details
-  // const updatePersonalDetails = async (event) => {
-  //   event.preventDefault();
-
-  //   const {
-  //     first_name,
-  //     last_name,
-  //     email,
-  //     phone_number,
-  //     currentPassword,
-  //     newPassword,
-  //     confirmNewPassword,
-  //   } = personalDetails;
-
-  //   // Password Validation
-  //   if (newPassword) {
-  //     if (currentPassword === newPassword) {
-  //       triggerNotification(
-  //         "New password cannot be the same as the current password.",
-  //         "error"
-  //       );
-  //       return;
-  //     }
-  //     if (newPassword !== confirmNewPassword) {
-  //       triggerNotification("New passwords do not match.", "error");
-  //       return;
-  //     }
-  //   }
-
-  //   const { confirmNewPassword: _, ...filteredPersonalDeatils } =
-  //     personalDetails;
-
-  //   // Remove keys with empty, null, or undefined values
-  //   const cleanedPersonalDetails = Object.fromEntries(
-  //     Object.entries(filteredPersonalDeatils).filter(([_, value]) => value)
-  //   );
-  //   // Check if data to update exists
-  //   if (Object.keys(cleanedPersonalDetails).length === 0) {
-  //     // Optionally trigger a notification for no data to send
-  //     // triggerNotification("No changes to update.", "info");
-  //     return;
-  //   }
-
-  //   console.log("cleanedPersonalDetails:", cleanedPersonalDetails);
-
-  //   try {
-  //     const response = await axios.put(
-  //       `${ApiURL}/update/personal-details/${user.user_id}`,
-  //       cleanedPersonalDetails
-  //     );
-  //     console.log("Response personal details:", response);
-
-  //     if (response.status === 200) {
-  //       triggerNotification(
-  //         "Personal details updated successfully!",
-  //         "success"
-  //       );
-  //     } else {
-  //       throw new Error(
-  //         response.statusText || "Failed to update personal details."
-  //       );
-  //     }
-  //   } catch (error) {
-  //     triggerNotification(error.message, "error");
-  //   }
-  // };
 
   const updatePersonalDetails = async (event) => {
     event.preventDefault();
@@ -392,7 +321,6 @@ const AccountSettings = () => {
     const nonEmptyFields = Object.fromEntries(
       Object.entries(professionalDetails).filter(([_, value]) => value !== "")
     );
-    console.log("nonEmptyFields:", nonEmptyFields);
 
     try {
       const response = await axios.put(
@@ -424,8 +352,6 @@ const AccountSettings = () => {
 
   const updateDocuments = async (event) => {
     event.preventDefault()
-    console.log("documents:", document);
-
 
     try {
       const response = await axios.put(
@@ -530,50 +456,6 @@ const AccountSettings = () => {
       triggerNotification("Error sending OTP. Please try again.", "error");
     }
   };
-
-  // const handleOtpVerification = async (type) => {
-  //   if (!otp || otp.length !== 4) {
-  //     triggerNotification("Please enter a valid 4-digit OTP.", "error");
-  //     return;
-  //   }
-
-  //   const endpoint =
-  //     type === "email" ? "/otp/verify-email-otp" : "/otp/verify-mobile-otp";
-
-  //   try {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_APP_API_ENDPOINT_URL}${endpoint}`,
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({
-  //           enteredOtp: otp,
-  //           ...(type === "email"
-  //             ? { email: profileData.email }
-  //             : { phoneNumber: profileData.phone_number }),
-  //         }),
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       triggerNotification(
-  //         `${type === "email" ? "Email" : "Phone"} verified successfully!`,
-  //         "success"
-  //       );
-  //       type === "email" ? setIsEmailVerified(true) : setIsPhoneVerified(true);
-  //       setOtpModal(false);
-  //     } else {
-  //       const errorData = await response.json();
-  //       triggerNotification(
-  //         errorData.message || "Failed to verify OTP.",
-  //         "error"
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("OTP verification error:", error);
-  //     triggerNotification("Error verifying OTP. Please try again.", "error");
-  //   }
-  // };
 
   // OTP Verification Handling
   const handleOtpVerification = async (type) => {

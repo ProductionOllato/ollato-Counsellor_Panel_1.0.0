@@ -5,7 +5,7 @@ import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import OtpModal from "../components/OtpModal";
 import InputField from "../components/InputField";
-import statesAndDistricts from "../../public/states-and-districts.json";
+import statesAndDistricts from "../data/states-and-districts.json";
 import { useNotification } from "../context/NotificationContext";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
 import axios from "axios";

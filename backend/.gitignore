@@ -1,24 +1,39 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
 # Logs
-logs
+logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+*.log.*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Environment variables
+.env
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Build directories
+build/
+dist/
+
+# React build output
+client/build/
+client/node_modules/
+
+# IDE/editor specific
+.vscode/
+.idea/
+
+# OS-specific files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Dependency directories for backend (optional, based on your structure)
+backend/node_modules/
+backend/package-lock.json
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+*.tmp

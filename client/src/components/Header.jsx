@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 import "../styles/Header.css";
-import { Typography, Dialog } from "@material-tailwind/react";
 import ConfirmationDialog from "./ConfirmationDialog";
 
 function Header({ sidebarOpen, setSidebarOpen }) {

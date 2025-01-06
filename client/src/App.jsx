@@ -37,8 +37,13 @@ function App() {
   return (
     <>
       <UserProvider>
-        <NotificationProvider>
-          <BrowserRouter>
+        <NotificationProvider >
+          <BrowserRouter
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true,
+            }}
+          >
             <Routes>
               {/* public routes */}
               <Route path="/" element={<Login />} errorElement={<ErrorPage />} />

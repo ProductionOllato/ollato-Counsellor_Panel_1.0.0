@@ -170,8 +170,7 @@ const upload = multer({
 module.exports.upload = upload;
 
 exports.supportForm = async (req, res) => {
-  // console.log("req-body",req.body);
-  
+
   const {
     counsellor_id, // Required
     session_id = "",

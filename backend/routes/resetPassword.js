@@ -6,20 +6,13 @@ const {
   resetPassword,
 } = require("../controllers/resetPasswordController");
 
-const checkmeddle = (req, res, next) => {
-  console.log("checkmeddle->", req.body);
-  console.log("checkmeddle->", req.params);
-
-  next();
-};
-
 // Request a password reset
-router.post("/request-password-reset", checkmeddle, requestPasswordReset);
+router.post("/request-password-reset", requestPasswordReset);
 
 // Validate reset token
-router.get("/reset-password/:token", checkmeddle, validateResetToken);
+router.get("/reset-password/:token", validateResetToken);
 
 // Reset password
-router.post("/reset-password/:token", checkmeddle, resetPassword);
+router.post("/reset-password/:token", resetPassword);
 
 module.exports = router;

@@ -113,7 +113,6 @@ const RegistrationDetails = () => {
       return;
     }
     const user_id = user?.user_id;
-    // console.log("User ID:", user_id);
 
     if (!user_id) {
       triggerNotification("User id  is missing. Please log in again.", "error");
@@ -143,8 +142,6 @@ const RegistrationDetails = () => {
           body: JSON.stringify(payload),
         }
       );
-      console.log("Professional Response:", response);
-
       if (response.ok) {
         updateCompletedSteps(1);
         triggerNotification(

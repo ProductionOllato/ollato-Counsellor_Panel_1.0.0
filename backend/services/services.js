@@ -222,8 +222,6 @@ exports.sendOtp = async (req, res) => {
 
   // Save OTP in memory
   otpStore[normalizedPhoneNumber] = { otp, expiresAt };
-  console.log("Stored OTP for phoneNumber:", normalizedPhoneNumber, otp);
-  console.log("All OTPs in otpStore:", otpStore);
   try {
     // Send OTP using MSG91
     await axios.post("https://control.msg91.com/api/v5/flow/", {

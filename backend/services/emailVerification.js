@@ -22,7 +22,6 @@ const transporter = nodemailer.createTransport({
 // Send OTP to email
 exports.sendEmailOtp = async (req, res) => {
   const { email } = req.body;
-  console.log("email", email);
 
   if (!email) {
     return res.status(400).json({ message: "Email is required." });
@@ -62,8 +61,6 @@ exports.sendEmailOtp = async (req, res) => {
 // Verify Email OTP
 exports.verifyEmailOtp = (req, res) => {
   const { email, enteredOtp } = req.body;
-  console.log("email", email);
-  console.log("enteredOtp", enteredOtp);
 
   if (!email || !enteredOtp) {
     return res.status(400).json({ message: "Email and OTP are required." });
@@ -95,4 +92,3 @@ exports.verifyEmailOtp = (req, res) => {
     return res.status(400).json({ message: "Invalid OTP. Please try again." });
   }
 };
-

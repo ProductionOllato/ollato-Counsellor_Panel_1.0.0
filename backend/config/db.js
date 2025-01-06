@@ -15,7 +15,6 @@ const db = mysql.createPool({
   try {
     // Execute a simple query to test the connection
     await db.query("SELECT 1");
-    console.log("Database connected successfully.");
     console.log(
       "Connected to DB:",
       process.env.DB_NAME || "local database counsellors"
