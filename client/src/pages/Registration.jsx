@@ -6,9 +6,9 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import OtpModal from "../components/OtpModal";
 import InputField from "../components/InputField";
 import statesAndDistricts from "../data/states-and-districts.json";
+import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
-import axios from "axios";
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -78,7 +78,7 @@ const Registration = () => {
   };
 
   // OTP related functions
-  const handleVerifyEmail = async () => {
+  const handleVerifyEmail = () => {
     if (!formData.email) {
       triggerNotification("Please enter an email address.", "error");
       return;
@@ -87,22 +87,19 @@ const Registration = () => {
       triggerNotification("Please enter a valid email address.", "error");
       return;
     }
-    await sendOtp("email", formData.email);
+    sendOtp("email", formData.email);
   };
 
-  const handleVerifyPhone = async () => {
+  const handleVerifyPhone = () => {
     if (!formData.phone_number) {
       triggerNotification("Please enter a phone number.", "error");
       return;
     }
     if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification(
-        "Please enter a valid 10-digit phone number.",
-        "error"
-      );
+      triggerNotification("Please enter a valid 10-digit phone number.", "error");
       return;
     }
-    await sendOtp("phone", formData.phone_number);
+    sendOtp("phone", formData.phone_number);
   };
 
   const sendOtp = async (type, identifier) => {
@@ -153,8 +150,9 @@ const Registration = () => {
       setOtp("");
       otpType === "email" ? setIsEmailVerified(true) : setIsPhoneVerified(true);
     } catch (error) {
-      console.error("Error verifying OTP:", error);
-      triggerNotification("An error occurred during OTP verification.", "error");
+      const errorMessage =
+        error.response?.data?.message || "Invalid OTP. Please try again.";
+      triggerNotification(errorMessage, "error");
     } finally {
       setIsVerifying(false);
     }
@@ -190,10 +188,7 @@ const Registration = () => {
     }
 
     if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification(
-        "Please enter a valid 10-digit phone number.",
-        "error"
-      );
+      triggerNotification("Please enter a valid 10-digit phone number.", "error");
       return;
     }
 
@@ -211,18 +206,12 @@ const Registration = () => {
     }
 
     if (!isEmailVerified) {
-      triggerNotification(
-        "Please verify your email address before registering.",
-        "error"
-      );
+      triggerNotification("Please verify your email address before registering.", "error");
       return;
     }
 
     if (!isPhoneVerified) {
-      triggerNotification(
-        "Please verify your phone number before registering.",
-        "error"
-      );
+      triggerNotification("Please verify your phone number before registering.", "error");
       return;
     }
 
@@ -235,12 +224,12 @@ const Registration = () => {
       if (error.response && error.response.status === 409) {
         triggerNotification("This email is already registered. Please use a different email.", "error");
       } else {
-        const errorData = await response.json();
-        triggerNotification(errorData.message || "Registration failed.", "error");
+        const errorMessage =
+          error.response?.data?.message || "An error occurred during registration.";
+        triggerNotification(errorMessage, "error");
       }
     }
   };
-
 
   return (
     <>
