@@ -75,7 +75,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   useEffect(() => {
     // Listen to window resize events and update the state for mobile screen size
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 910);
+      setIsMobile(window.innerWidth < 767);
     };
 
     window.addEventListener("resize", handleResize);
@@ -197,7 +197,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </button>
 
               {/* Sidebar Content */}
-              <div className="flex flex-col h-full p-6 space-y-4 px-1 mt-10">
+              <div className="flex flex-col h-full p-6 space-y-2 px-1 mt-10">
                 {sidebarItems.map(({ label, icon, path }) => (
                   <NavLink
                     key={path}
