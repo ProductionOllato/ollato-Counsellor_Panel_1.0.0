@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Keep the directory structure but ignore files
+/uploads/aadhar_card_back/*
+/uploads/aadhar_card_front/*
+/uploads/degree_certificate/*
+/uploads/pan_card/*
+/uploads/profile_pic/*
+/uploads/resume/*
+/uploads/signature/*
