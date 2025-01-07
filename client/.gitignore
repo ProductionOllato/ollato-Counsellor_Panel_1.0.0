@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Dependency directories
+/node_modules/*
+/package-lock.json
+
 # Keep the directory structure but ignore files
 /uploads/aadhar_card_back/*
 /uploads/aadhar_card_front/*
