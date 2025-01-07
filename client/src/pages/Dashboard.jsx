@@ -15,9 +15,9 @@ export default function Dashboard() {
   const [sessions, setSessions] = useState([]);
 
   // Call approveProfile only once - testing
-  useEffect(() => {
-    approveProfile();
-  }, [approveProfile]);
+  // useEffect(() => {
+  //   approveProfile();
+  // }, [approveProfile]);
 
   const completeProfile = () => {
     navigate("/registration-complete");
@@ -28,40 +28,41 @@ export default function Dashboard() {
     {
       status: "Completed Session",
       count: 50,
-      color: "green",
+      color: getStatusColor("Completed Session"),
       icon: "https://via.placeholder.com/50",
     },
     {
       status: "Ongoing Session",
       count: 10,
-      color: "blue",
+      color: getStatusColor("Ongoing Session"),
       icon: "https://via.placeholder.com/50",
     },
     {
       status: "Pending Session",
       count: 19,
-      color: "yellow",
+      color: getStatusColor("Pending Session"),
       icon: "https://via.placeholder.com/50",
     },
     {
       status: "Rescheduled Session",
       count: 15,
-      color: "orange",
+      color: getStatusColor("Rescheduled Session"),
       icon: "https://via.placeholder.com/50",
     },
     {
       status: "Cancelled Session",
       count: 10,
-      color: "red",
+      color: getStatusColor("Cancelled Session"),
       icon: "https://via.placeholder.com/50",
     },
     {
       status: "Accept Session",
       count: 30,
-      color: "green",
+      color: getStatusColor("Accept Session"),
       icon: "https://via.placeholder.com/50",
     },
   ];
+
 
   useEffect(() => {
     async function fetchUserDetails() {
@@ -279,21 +280,22 @@ export default function Dashboard() {
               {sessions.map((session, index) => (
                 <div
                   key={index}
-                  className={`flex flex-col justify-between items-center p-4 border-2 cursor-pointer bg-white rounded-lg shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ${session.color === "green" ? "border-green-500" : ""
-                    } ${session.color === "blue" ? "border-blue-500" : ""} ${session.color === "yellow" ? "border-yellow-500" : ""
-                    } ${session.color === "orange" ? "border-orange-500" : ""} ${session.color === "red" ? "border-red-500" : ""
-                    }`}
+                  className={`flex flex-col justify-between items-center p-4 border-2 cursor-pointer bg-white rounded-lg shadow hover:shadow-lg transform hover:scale-105 transition duration-200 ease-in-out`}
+                  style={{
+                    borderColor: session.color, // Apply border color dynamically
+                  }}
                 >
                   {/* Content Section */}
                   <div className="flex-1 w-full text-center">
                     <h3
-                      className={`text-${session.color}-700 font-semibold text-base sm:text-lg md:text-xl lg:text-2xl truncate`}
+                      className={`font-semibold text-base sm:text-lg md:text-xl lg:text-2xl truncate`}
+                      style={{
+                        color: session.color, // Dynamically set text color
+                      }}
                     >
                       {session.status}
                     </h3>
-                    <p className="text-lg sm:text-xl md:text-2xl font-bold">
-                      {session.count}
-                    </p>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold">{session.count}</p>
                   </div>
 
                   {/* Icon Section */}
@@ -311,5 +313,25 @@ export default function Dashboard() {
         </div>
       </>
     );
+  }
+}
+
+// Function to assign colors based on status
+function getStatusColor(status) {
+  switch (status) {
+    case "Completed Session":
+      return "#578E7E"; // Greenish gray
+    case "Ongoing Session":
+      return "#008000"; // Green
+    case "Pending Session":
+      return "#F05A7E"; // Light brown
+    case "Rescheduled Session":
+      return "#CB6040"; // Orange
+    case "Cancelled Session":
+      return "#A31D1D"; // Red
+    case "Accept Session":
+      return "#3A6D8C"; // Blue
+    default:
+      return "#808080"; // Default gray for unknown statuses
   }
 }

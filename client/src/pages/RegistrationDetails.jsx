@@ -49,8 +49,8 @@ const RegistrationDetails = () => {
 
   // Progress bar steps
   const steps = [
-    { id: 1, title: "Professional Information" },
-    { id: 2, title: "Documentation Profile" },
+    { id: 1, title: "Professional Details" },
+    { id: 2, title: "Documentation Details" },
   ];
 
   // Calculate progress percentage
