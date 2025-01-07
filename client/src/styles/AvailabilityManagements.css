@@ -203,13 +203,14 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .availability-table {
     display: none; /* Hide table on mobile */
   }
 
   .mobile-card-view {
-    display: flex; /* Show mobile view */
+    display: flex; 
+    flex-direction: column;
   }
 }
 

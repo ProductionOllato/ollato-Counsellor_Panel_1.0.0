@@ -287,7 +287,7 @@ function MyActivity() {
                   type="button"
                   onClick={() => setFeedbackSession(null)}
                   className="cancel-btn-myactivity"
-                >
+                > 
                   Cancel
                 </button>
                 <button type="submit" className="submit-btn-myactivity">
