@@ -70,17 +70,12 @@ const AvailabilityForm = ({ onSubmit }) => {
   };
 
   return (
-    <div className="w-full p-6 border rounded-md shadow-md bg-gray-50">
-      <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">
-        Add Availability
-      </h2>
+    <div className="availability-form-container">
+      <h2 className="availability-form-title">Add Availability</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6 w-full">
+      <form onSubmit={handleSubmit} className="availability-form">
         {/* Date Fields */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
-            Date:
-          </label>
           <CustomCalendar
             date={formData.date}
             onDateChange={handleDateChange}
@@ -88,16 +83,14 @@ const AvailabilityForm = ({ onSubmit }) => {
         </div>
 
         {/* Time Fields */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Start Time:
-            </label>
+        <div className="availability-form-grid availability-form-grid-sm">
+          <div className="availability-form-grid-item custom-select-container">
+            <label className="availability-form-label">Start Time:</label>
             <select
               name="start_time"
               value={formData.start_time}
               onChange={handleInputChange}
-              className="custom-select"
+              className="availability-form-select custom-select"
             >
               {Array.from({ length: 48 }, (_, i) => {
                 const hours = String(Math.floor(i / 2)).padStart(2, "0");
@@ -111,15 +104,13 @@ const AvailabilityForm = ({ onSubmit }) => {
               })}
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              End Time:
-            </label>
+          <div className="availability-form-grid-item custom-select-container">
+            <label className="availability-form-label">End Time:</label>
             <select
               name="end_time"
               value={formData.end_time}
               onChange={handleInputChange}
-              className="custom-select"
+              className="availability-form-select custom-select"
             >
               {Array.from({ length: 48 }, (_, i) => {
                 const hours = String(Math.floor(i / 2)).padStart(2, "0");
@@ -136,31 +127,30 @@ const AvailabilityForm = ({ onSubmit }) => {
         </div>
 
         {/* Mode and Duration */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Mode:
-            </label>
+        <div className="availability-form-grid availability-form-grid-sm ">
+          <div className="availability-form-grid-item custom-select-container">
+            <label className="availability-form-label">Mode:</label>
             <select
               name="mode"
               value={formData.mode}
               onChange={handleInputChange}
-              className="custom-select"
+              className="availability-form-select custom-select"
             >
               <option value="video">Video</option>
               <option value="in-person">In-Person</option>
+              <option value="call">Call</option>
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
+          <div className="availability-form-grid-item custom-select-container">
+            <label className="availability-form-label">
               Duration (minutes):
             </label>
             <select
               name="duration"
               value={formData.duration}
               onChange={handleInputChange}
-              className="custom-select "
+              className="availability-form-select custom-select"
             >
               <option value="45 Minutes">45 Minutes</option>
               <option value="60 Minutes">60 Minutes</option>
@@ -169,16 +159,13 @@ const AvailabilityForm = ({ onSubmit }) => {
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-[#1E3E62] text-base hover:bg-[#0a1c31] text-white py-2 px-6 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-[#1E3E62]/50"
-          >
+        <div className="availability-form-button">
+          <button type="submit" className="availability-form-submit">
             Add Availability
           </button>
         </div>
-      </form >
-    </div >
+      </form>
+    </div>
   );
 };
 

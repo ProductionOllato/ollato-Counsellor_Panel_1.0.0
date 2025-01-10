@@ -6,7 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Notification from "../components/Notification/Notification";
 import { useAuth } from "../context/UserContext.jsx";
 import { useNotification } from "../context/NotificationContext.jsx";
-import "../styles/Login.css"
+import "../styles/Login.css";
 import axios from "axios";
 
 function Login() {
@@ -43,8 +43,8 @@ function Login() {
         password: formData.password,
       });
 
-      if (response.data.user) {
-        login(response.data.user);
+      if (response.data) {
+        login(response.data);
         triggerNotification("Login successful! Redirecting...", "success");
         navigate("/dashboard");
       } else {
@@ -126,14 +126,18 @@ function Login() {
   const handleVerifyOtpTOLogin = async () => {
     setLoading(true);
     try {
-      const response = await axios.post(`${apiEndpointURL}/otp/login-with-otp`, {
-        phoneNumber: formData.phoneNumber,
-        enteredOtp: formData.otp,
-      });
-
-      login(response.data.user);
-      triggerNotification("Login successful!", "success");
-      navigate("/dashboard");
+      const response = await axios.post(
+        `${apiEndpointURL}/otp/login-with-otp`,
+        {
+          phoneNumber: formData.phoneNumber,
+          enteredOtp: formData.otp,
+        }
+      );
+      if (response.data) {
+        login(response.data);
+        triggerNotification("Login successful! Redirecting...", "success");
+        navigate("/dashboard");
+      }
     } catch (error) {
       if (error.response) {
         triggerNotification(
@@ -211,7 +215,11 @@ function Login() {
                   className={`form-button ${loading ? "disabled" : ""}`}
                   disabled={loading || (!otpSent && !formData.phoneNumber)}
                 >
-                  {loading ? "Processing..." : otpSent ? "Verify OTP" : "Send OTP"}
+                  {loading
+                    ? "Processing..."
+                    : otpSent
+                    ? "Verify OTP"
+                    : "Send OTP"}
                 </button>
               </div>
               {otpSent && (
@@ -271,7 +279,8 @@ function Login() {
                 >
                   {showOtpLogin ? "Back to Email Login" : "Login with OTP"}
                 </button>
-              </div><br />
+              </div>
+              <br />
               <div className="form-action">
                 <button
                   type="submit"

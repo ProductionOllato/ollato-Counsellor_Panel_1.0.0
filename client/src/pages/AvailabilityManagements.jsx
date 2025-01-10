@@ -47,7 +47,7 @@ const AvailabilityManagements = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${APIURL}/counsellor/get-availability/${user.user_id}`,
+          `${APIURL}/counsellor/get-availability/${user.user_id}`
         );
 
         if (response.status === 200 && response.data.data) {
@@ -155,7 +155,6 @@ const AvailabilityManagements = () => {
     setSelectedSlot(slot);
     setShowEditModal(true);
   };
-
 
   const handleUpdateSlot = async (e) => {
     e.preventDefault();
@@ -266,8 +265,8 @@ const AvailabilityManagements = () => {
           ? 1
           : -1
         : aValue < bValue
-          ? 1
-          : -1;
+        ? 1
+        : -1;
     });
 
   const handleSort = (key) => {
@@ -291,7 +290,7 @@ const AvailabilityManagements = () => {
   };
 
   return (
-    <div className="availability-management-container w-full bg-white shadow-lg rounded-lg mt-10 pt-2 h-full">
+    <div className="availability-management-container w-full bg-white rounded-lg mt-10 pt-2 h-full">
       <div className="availability-header flex justify-center items-center mb-6 px-4 sm:px-6">
         <h1 className="availability-title text-xl sm:text-2xl font-semibold text-gray-700 text-center">
           Availability Management
@@ -378,16 +377,30 @@ const AvailabilityManagements = () => {
                           { key: "duration", label: "Duration" },
                           { key: "status", label: "Status" },
                         ].map((col) => (
-                          <th key={col.key} className="p-2 text-base font-normal leading-none text-slate-500 border-b border-slate-300" onClick={() => handleSort(col.key)}>
+                          <th
+                            key={col.key}
+                            className="p-2 text-base font-normal leading-none text-slate-500 border-b border-slate-300"
+                            onClick={() => handleSort(col.key)}
+                          >
                             {col.label}
                             {sortConfig.key === col.key && (
-                              <span className={`ml-2 ${sortConfig.direction === "ascending" ? "text-blue-500" : "text-red-500"} text-sm`}>
-                                {sortConfig.direction === "ascending" ? "▲" : "▼"}
+                              <span
+                                className={`ml-2 ${
+                                  sortConfig.direction === "ascending"
+                                    ? "text-blue-500"
+                                    : "text-red-500"
+                                } text-sm`}
+                              >
+                                {sortConfig.direction === "ascending"
+                                  ? "▲"
+                                  : "▼"}
                               </span>
                             )}
                           </th>
                         ))}
-                        <th className="p-2 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">Actions</th>
+                        <th className="p-2 text-sm font-normal leading-none text-slate-500 border-b border-slate-300">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -397,20 +410,42 @@ const AvailabilityManagements = () => {
                             <td className="py-4 text-center border-b border-slate-200">
                               {(currentPage - 1) * slotsPerPage + index + 1}
                             </td>
-                            <td className="py-4 text-center border-b border-slate-200">{slot.date}</td>
-                            <td className="py-4 text-center border-b border-slate-200">{slot.start_time} to {slot.end_time}</td>
-                            <td className="py-4 text-center border-b border-slate-200">{slot.mode}</td>
-                            <td className="py-4 text-center border-b border-slate-200">{slot.duration}</td>
                             <td className="py-4 text-center border-b border-slate-200">
-                              <span className={`py-1 text-center px-2 rounded text-white text-sm ${slot.status === "available" ? "bg-[#347928]" : "bg-gray-500"}`}>
+                              {slot.date}
+                            </td>
+                            <td className="py-4 text-center border-b border-slate-200">
+                              {slot.start_time} to {slot.end_time}
+                            </td>
+                            <td className="py-4 text-center border-b border-slate-200">
+                              {slot.mode}
+                            </td>
+                            <td className="py-4 text-center border-b border-slate-200">
+                              {slot.duration}
+                            </td>
+                            <td className="py-4 text-center border-b border-slate-200">
+                              <span
+                                className={`py-1 text-center px-2 rounded text-white text-sm ${
+                                  slot.status === "available"
+                                    ? "bg-[#347928]"
+                                    : "bg-gray-500"
+                                }`}
+                              >
                                 {slot.status}
                               </span>
                             </td>
                             <td className="py-2 border-b border-slate-200 flex justify-center">
-                              <button onClick={() => handleEditSlot(slot)} className="action-edit-button bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm">
+                              <button
+                                onClick={() => handleEditSlot(slot)}
+                                className="action-edit-button bg-[#FFBD73] hover:bg-yellow-600 text-[#001F3F] font-medium py-1 px-3 rounded mr-2 flex items-center text-sm"
+                              >
                                 <CiEdit />
                               </button>
-                              <button onClick={() => handleDeleteSlot(slot.sr_no, slot)} className="action-delete-button bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm">
+                              <button
+                                onClick={() =>
+                                  handleDeleteSlot(slot.sr_no, slot)
+                                }
+                                className="action-delete-button bg-[#AE445A] hover:bg-[#FF4545] text-[#001F3F] font-medium py-1 px-3 rounded flex items-center text-sm"
+                              >
                                 <MdDeleteForever />
                               </button>
                             </td>
@@ -418,7 +453,10 @@ const AvailabilityManagements = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="7" className="text-center p-4 text-gray-500 font-medium">
+                          <td
+                            colSpan="7"
+                            className="text-center p-4 text-gray-500 font-medium"
+                          >
                             No sessions found.
                           </td>
                         </tr>
@@ -430,7 +468,10 @@ const AvailabilityManagements = () => {
                   <div className="mobile-card-view grid grid-cols-1 sm:grid-cols-2 lg:hidden gap-4 mt-6">
                     {availability.length > 0 ? (
                       paginatedData.map((slot, index) => (
-                        <div key={slot.sr_no} className="session-card bg-white border border-gray-200 rounded-lg p-4 shadow-md">
+                        <div
+                          key={slot.sr_no}
+                          className="session-card bg-white border border-gray-200 rounded-lg p-4 shadow-md"
+                        >
                           <div className="flex justify-between">
                             <span className="font-semibold">Session ID:</span>
                             <span>{slot.session_id}</span>
@@ -441,7 +482,9 @@ const AvailabilityManagements = () => {
                           </div>
                           <div className="flex justify-between">
                             <span className="font-semibold">Time:</span>
-                            <span>{slot.start_time} to {slot.end_time}</span>
+                            <span>
+                              {slot.start_time} to {slot.end_time}
+                            </span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-semibold">Mode:</span>
@@ -453,7 +496,13 @@ const AvailabilityManagements = () => {
                           </div>
                           <div className="flex justify-between">
                             <span className="font-semibold">Status:</span>
-                            <span className={`py-1 px-2 rounded text-white text-sm ${slot.status === "available" ? "bg-[#347928]" : "bg-gray-500"}`}>
+                            <span
+                              className={`py-1 px-2 rounded text-white text-sm ${
+                                slot.status === "available"
+                                  ? "bg-[#347928]"
+                                  : "bg-gray-500"
+                              }`}
+                            >
                               {slot.status}
                             </span>
                           </div>
@@ -601,7 +650,9 @@ const AvailabilityManagements = () => {
                             <button
                               type="submit"
                               disabled={loading}
-                              className={`modal-save-button text-base bg-[#7047A3] hover:bg-[#4b3368] text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                              className={`modal-save-button text-base bg-[#7047A3] hover:bg-[#4b3368] text-white font-medium py-2 px-4 rounded-md transition duration-150 ease-in-out ${
+                                loading ? "opacity-50 cursor-not-allowed" : ""
+                              }`}
                             >
                               {loading ? "Updating..." : "Update"}
                             </button>
@@ -615,7 +666,9 @@ const AvailabilityManagements = () => {
                   {totalPages > 1 && (
                     <div className="pagination-controls flex justify-center mt-4 text-base">
                       <button
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        onClick={() =>
+                          setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        }
                         disabled={currentPage === 1}
                         className="pagination-prev bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-l text-base"
                       >
@@ -626,7 +679,9 @@ const AvailabilityManagements = () => {
                       </span>
                       <button
                         onClick={() =>
-                          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                          setCurrentPage((prev) =>
+                            Math.min(prev + 1, totalPages)
+                          )
                         }
                         disabled={currentPage === totalPages}
                         className="pagination-next bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-r text-base"
@@ -642,7 +697,7 @@ const AvailabilityManagements = () => {
         </div>
       )}
     </div>
-  )
+  );
 };
 
 export default AvailabilityManagements;

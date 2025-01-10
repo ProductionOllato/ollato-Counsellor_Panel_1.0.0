@@ -1,36 +1,125 @@
-.custom-select {
-  appearance: none;
-  -webkit-appearance: none;
-  background-color: white;
-  color: #020202;
-  border: 1px solid #d1d5db;
+.availability-form-container {
+  width: 100%;
+  padding: 1.5rem;
+  border: 1px solid;
   border-radius: 0.375rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  height: 36px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #f9fafb;
 }
 
-.custom-select option {
+.availability-form-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+}
+
+.availability-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.availability-form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.availability-form-select {
+  width: 100%;
   padding: 0.5rem;
-  font-size: 0.875rem;
-  background-color: #4c585b;
-  color: #d1d5db;
 }
 
-.custom-select option:hover {
-  background-color: #3a4346;
+.availability-form-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
 }
-.custom-select.active .custom-select option.active {
-  background-color: #497f8d;
-  color: #020202;
+
+.availability-form-grid-item {
+  margin-top: 0.5rem;
 }
-.custom-select:focus {
+
+.availability-form-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.availability-form-submit {
+  background-color: #1e3e62;
+  font-size: 1rem;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
+}
+
+.availability-form-submit:hover {
+  background-color: #0a1c31;
+}
+
+.availability-form-submit:focus {
   outline: none;
-  border-color: #1e3e62;
   box-shadow: 0 0 0 2px rgba(30, 62, 98, 0.5);
 }
 
-.custom-select:hover {
-  border-color: #053683;
+/* Responsive adjustments */
+@media (min-width: 640px) {
+  .availability-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .availability-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .availability-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.custom-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  background-color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Style the dropdown using a pseudo-element for the arrow */
+.custom-select-container::after {
+  font-size: 12px;
+  position: absolute;
+  right: 10px;
+  top: calc(50% - 8px);
+  pointer-events: none;
+}
+
+/* Option styles won't be effective in native select but can use this for wider custom solutions */
+.custom-select option {
+  padding: 10px; /* This won't actually affect options in a native select */
 }

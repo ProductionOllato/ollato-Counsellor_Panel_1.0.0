@@ -15,9 +15,9 @@ export default function Dashboard() {
   const [sessions, setSessions] = useState([]);
 
   // Call approveProfile only once - testing
-  // useEffect(() => {
-  //   approveProfile();
-  // }, [approveProfile]);
+  useEffect(() => {
+    approveProfile();
+  }, [approveProfile]);
 
   const completeProfile = () => {
     navigate("/registration-complete");
@@ -63,13 +63,13 @@ export default function Dashboard() {
     },
   ];
 
-
   useEffect(() => {
     async function fetchUserDetails() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get-counsellors/personal-info/${user.user_id
-          }`
+          `${
+            import.meta.env.VITE_APP_API_ENDPOINT_URL
+          }/get-counsellors/personal-info/${user.user_id}`
         );
         const userData = response.data?.data || {};
 
@@ -90,8 +90,9 @@ export default function Dashboard() {
     async function fetchProfessionDetails() {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_ENDPOINT_URL}/get-counsellors/professional-info/${user.user_id
-          }`
+          `${
+            import.meta.env.VITE_APP_API_ENDPOINT_URL
+          }/get-counsellors/professional-info/${user.user_id}`
         );
         const userData = response.data?.data || {};
         setUserDetails((prev) => ({
@@ -295,7 +296,9 @@ export default function Dashboard() {
                     >
                       {session.status}
                     </h3>
-                    <p className="text-lg sm:text-xl md:text-2xl font-bold">{session.count}</p>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold">
+                      {session.count}
+                    </p>
                   </div>
 
                   {/* Icon Section */}

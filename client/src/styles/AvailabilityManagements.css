@@ -46,13 +46,15 @@
 .search-input {
   width: 100%;
   background-color: transparent;
-  placeholder-color: #aaacb9;
   color: #495057;
-  text-sm: inherit;
   border: 1px solid #d3f1df;
   padding-left: 2.5rem;
   padding-right: 3rem;
   transition: border-color 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: #aaacb9;
 }
 
 /* Search Icon */
@@ -147,8 +149,6 @@
 
 .form-label-availability {
   display: inline-block;
-  text-sm: inherit;
-  font-medium: inherit;
   color: #333;
 }
 
@@ -209,7 +209,7 @@
   }
 
   .mobile-card-view {
-    display: flex; 
+    display: flex;
     flex-direction: column;
   }
 }

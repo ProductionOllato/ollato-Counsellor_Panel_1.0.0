@@ -3,19 +3,25 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 // Create the User Context
 const UserContext = createContext({
   user: null,
+  token: null,
   profileComplete: false,
   profileStatus: "pending",
   completedSteps: [],
-  login: () => { },
-  logout: () => { },
-  updateProfileStatus: () => { },
-  updateCompletedSteps: () => { },
+  login: () => {},
+  logout: () => {},
+  updateProfileStatus: () => {},
+  updateCompletedSteps: () => {},
 });
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
+  });
+
+  const [token, setToken] = useState(() => {
+    const storedToken = localStorage.getItem("token");
+    return storedToken ? JSON.parse(storedToken) : null;
   });
 
   // three options: "pending",waiting_approval ,"approved" for profileStatus
@@ -50,6 +56,11 @@ export const UserProvider = ({ children }) => {
   }, [user]);
 
   useEffect(() => {
+    if (token) localStorage.setItem("token", JSON.stringify(token));
+    else localStorage.removeItem("token");
+  }, [token]);
+
+  useEffect(() => {
     setProfileComplete(profileStatus === "approved");
     localStorage.setItem("profileStatus", profileStatus);
   }, [profileStatus]);
@@ -58,10 +69,11 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem("completedSteps", JSON.stringify(completedSteps));
   }, [completedSteps]);
 
-  const login = (user) => {
-    setUser(user);
-    setProfileStatus(user.profileStatus || "pending");
-    setCompletedSteps(user.completedSteps || []);
+  const login = (userData) => {
+    setUser(userData.user);
+    setToken(userData.token);
+    setProfileStatus(userData.profileStatus || "pending");
+    setCompletedSteps(userData.completedSteps || []);
   };
 
   const logout = () => {
@@ -70,6 +82,7 @@ export const UserProvider = ({ children }) => {
     setProfileStatus("incomplete");
     setCompletedSteps([]);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     localStorage.removeItem("completedSteps");
     localStorage.removeItem("profileStatus");
   };
@@ -96,6 +109,7 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
+        token,
         profileComplete,
         profileStatus,
         completedSteps,
