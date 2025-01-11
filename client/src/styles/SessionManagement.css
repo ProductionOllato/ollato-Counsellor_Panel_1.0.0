@@ -1,170 +1,141 @@
-@media (min-width: 320px) and (max-width: 767px) {
-  .session-status-filter {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+/* Add your custom styles below */
 
-  .session-status-filter button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .filter-dropdown {
-    display: none;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-left: 1rem;
-  }
-
-  .filter-dropdown.active {
-    display: flex;
-  }
-
-  .session-table-container {
-    padding: 0.5rem;
-  }
-
-  .session-table {
-    display: none;
-  }
-
-  .session-table-header,
-  .session-table-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .session-table-header tr,
-  .session-table-body tr {
-    display: flex;
-    flex-direction: column;
-    border-bottom: 1px solid #ccc;
-    padding: 1rem 0;
-  }
+/* Wrapper styles */
+.expert-session-management {
+  width: 100%;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
-  .session-status-filter {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .session-table-container {
-    padding: 1rem;
-  }
-
-  .session-table {
-    table-layout: auto;
-    width: 100%;
-  }
+.session-heading {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-@media (min-width: 1024px) {
-  .session-status-filter {
-    flex-direction: row;
-    gap: 1rem;
-  }
+.session-heading h1 {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
 
-  .session-table-container {
-    padding: 1.5rem;
-  }
+.session-heading p {
+  font-size: 0.875rem;
+  color: #7f8c8d;
+}
 
-  .session-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.5rem;
-  }
-
-  .session-table th,
-  .session-table td {
-    padding: 0.5rem 1rem;
-  }
-
-  .session-table-header {
-    background-color: #f3f4f6;
-  }
+/* Status Filter */
+.session-status-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .desktop-filter {
-  display: none;
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
 }
 
-@media (min-width: 1070px) {
-  .desktop-filter {
-    display: flex;
-  }
-  .mobile-filter {
-    display: none;
-  }
-}
-/* 
-@media (min-width: 320px) and (max-width: 767px) {
-  .session-status-filter {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .session-status-filter button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .filter-dropdown {
-    display: none;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-left: 1rem;
-  }
-
-  .filter-dropdown.active {
-    display: flex;
-  }
-
-  .session-table-container {
-    padding: 0.5rem;
-  }
-
-  .session-table {
-    display: block;
-  }
-
-  .session-table-header,
-  .session-table-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .session-table-header tr,
-  .session-table-body tr {
-    display: flex;
-    flex-direction: column;
-    border-bottom: 1px solid #ccc;
-    padding: 1rem 0;
-  }
+.filter-button {
+  color: black;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  background-color: #ecf0f1;
+  transition: all 0.3s ease;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
-  .session-status-filter {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .session-table-container {
-    padding: 1rem;
-  }
-
-  .session-table {
-    table-layout: auto;
-    width: 100%;
-  }
+.filter-button.active {
+  background-color: #7047a3;
+  color: white;
 }
 
- */
+.filter-button:hover {
+  background-color: #bdc3c7;
+}
+
+/* Mobile Filter */
+.mobile-filter {
+  display: flex;
+  width: 100%;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 100%;
+  margin-top: 0.5rem;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  z-index: 10;
+}
+
+.filter-dropdown button {
+  display: block;
+  color: black;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.filter-dropdown button.active {
+  background-color: #7047a3;
+  color: white;
+}
+
+.filter-dropdown button:hover {
+  background-color: #bdc3c7;
+}
+
+.filter-dropdown button:first-child {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+/* Modal Styles */
+.modal-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  /* focus:ring: 2px solid #3498db; */
+}
+
+.modal-input {
+  padding: 0.5rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.375rem;
+  width: 100%;
+  /* focus:ring: 2px solid #3498db; */
+}
+
+.modal-select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.375rem;
+  /* focus:ring: 2px solid #3498db; */
+}
+
+.modal-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}

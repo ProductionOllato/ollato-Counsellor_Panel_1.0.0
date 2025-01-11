@@ -8,9 +8,8 @@ import {
   useRouteError,
 } from "react-router-dom";
 
-import { UserProvider } from "./context/UserContext.jsx";
 import { NotificationProvider } from "./context/NotificationContext";
-import { useAuth } from "./context/UserContext.jsx";
+import { useAuth, UserProvider } from "./context/UserContext.jsx";
 
 const Registration = lazy(() => import("./pages/Registration"));
 const Login = lazy(() => import("./pages/Login"));

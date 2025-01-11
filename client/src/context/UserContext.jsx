@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Create the User Context
 const UserContext = createContext({
   user: null,
   token: null,
@@ -13,42 +12,27 @@ const UserContext = createContext({
   updateCompletedSteps: () => {},
 });
 
+const safeParse = (key) => {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  } catch {
+    return null;
+  }
+};
+
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-
-  const [token, setToken] = useState(() => {
-    const storedToken = localStorage.getItem("token");
-    return storedToken ? JSON.parse(storedToken) : null;
-  });
-
-  // three options: "pending",waiting_approval ,"approved" for profileStatus
+  const [user, setUser] = useState(() => safeParse("user"));
+  const [token, setToken] = useState(() => safeParse("token"));
   const [profileStatus, setProfileStatus] = useState(() => {
     return localStorage.getItem("profileStatus") || "pending";
   });
-
-  // completedSteps is an array of strings representing completed steps in the registration process
-  const [completedSteps, setCompletedSteps] = useState(() => {
-    const storedSteps = localStorage.getItem("completedSteps");
-    return storedSteps ? JSON.parse(storedSteps) : [];
-  });
-
-  // profileComplete is a boolean indicating whether the user's profile is complete
-  const [profileComplete, setProfileComplete] = useState(() => {
-    return profileStatus === "approved";
-  });
-
-  // const isDashboardAccessible =
-  //   profileStatus === "approved" &&
-  //   completedSteps.includes("emailVerified") &&
-  //   completedSteps.includes("phoneVerified");
-
-  //helper functions to update states - testing
-  const approveProfile = () => {
-    updateProfileStatus("approved");
-  };
+  const [completedSteps, setCompletedSteps] = useState(
+    () => safeParse("completedSteps") || []
+  );
+  const [profileComplete, setProfileComplete] = useState(
+    profileStatus === "approved"
+  );
 
   useEffect(() => {
     if (user) localStorage.setItem("user", JSON.stringify(user));
@@ -78,22 +62,14 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    setProfileComplete(false);
-    setProfileStatus("incomplete");
+    setToken(null);
+    setProfileStatus("pending");
     setCompletedSteps([]);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("completedSteps");
-    localStorage.removeItem("profileStatus");
+    localStorage.clear();
   };
 
   const updateProfileStatus = (newStatus) => {
     setProfileStatus(newStatus);
-    if (newStatus === "approved") {
-      setProfileComplete(true);
-    } else {
-      setProfileComplete(false);
-    }
     localStorage.setItem("profileStatus", newStatus);
   };
 
@@ -101,8 +77,11 @@ export const UserProvider = ({ children }) => {
     if (!completedSteps.includes(step)) {
       const updatedSteps = [...completedSteps, step];
       setCompletedSteps(updatedSteps);
-      localStorage.setItem("completedSteps", JSON.stringify(updatedSteps));
     }
+  };
+
+  const approveProfile = () => {
+    updateProfileStatus("approved");
   };
 
   return (
