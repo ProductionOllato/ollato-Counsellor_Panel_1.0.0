@@ -63,9 +63,6 @@ function SessionManagement() {
             "error"
           );
           console.error(data.message);
-        } else if (status === 404) {
-          triggerNotification("No sessions found for this counsellor.", "info");
-          console.error(data.message);
         } else {
           triggerNotification(
             data.message || "An unexpected error occurred.",
@@ -257,7 +254,7 @@ function SessionManagement() {
       {/* Status Filter */}
       <div className="session-status-filter flex flex-wrap justify-around mb-6 relative">
         {/* Desktop Status Bar */}
-        <div className="desktop-filter w-full gap-4 justify-center items-center">
+        <div className="w-full gap-4 justify-center items-center">
           <button
             onClick={() => setActiveStatus("")}
             className={`text-black px-6 py-2 text-base font-semibold rounded-lg ${
@@ -284,7 +281,7 @@ function SessionManagement() {
         </div>
 
         {/* Mobile Dropdown Filter */}
-        <div className="mobile-filter flex w-full">
+        <div className="flex w-full">
           <button
             onClick={toggleFilterVisibility}
             className="flex items-center px-6 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm font-semibold w-full"
@@ -501,19 +498,23 @@ const SessionTable = ({
               <th className="text-base">Action</th>
             </tr>
           </thead>
-          <tbody className="session-table-body bg-white divide-y divide-gray-200 text-center">
-            {sessions.map((session, index) => (
-              <SessionRow
-                key={session.session_id}
-                session={session}
-                index={index}
-                handleAcceptRequest={handleAcceptRequest}
-                handleDeclineRequest={handleDeclineRequest}
-                openCancelModal={openCancelModal}
-                openRescheduleModal={openRescheduleModal}
-              />
-            ))}
-          </tbody>
+          {loading ? (
+            <div>Loading sessions...</div>
+          ) : (
+            <tbody className="session-table-body bg-white divide-y divide-gray-200 text-center">
+              {sessions.map((session, index) => (
+                <SessionRow
+                  key={session.session_id}
+                  session={session}
+                  index={index}
+                  handleAcceptRequest={handleAcceptRequest}
+                  handleDeclineRequest={handleDeclineRequest}
+                  openCancelModal={openCancelModal}
+                  openRescheduleModal={openRescheduleModal}
+                />
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
     </div>
@@ -522,9 +523,7 @@ const SessionTable = ({
 
 const SessionCard = ({
   session,
-  index,
   handleAcceptRequest,
-  handleDeclineRequest,
   openCancelModal,
   openRescheduleModal,
 }) => (
@@ -574,7 +573,6 @@ const SessionRow = ({
   session,
   index,
   handleAcceptRequest,
-  handleDeclineRequest,
   openCancelModal,
   openRescheduleModal,
 }) => (
