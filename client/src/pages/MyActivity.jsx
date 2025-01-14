@@ -24,16 +24,16 @@ function MyActivity() {
         );
         setActivityLogs(response.data);
       } catch (error) {
-        triggerNotification("Error fetching activity logs", "error");
+        console.error(error);
       }
     };
 
     fetchActivityLogs();
-  }, [counsellor_id, APIURL, triggerNotification]);
+  }, []);
 
   const handleGiveFeedback = async (e) => {
     e.preventDefault();
-  
+
     if (!rating || !feedbackText.trim()) {
       triggerNotification("Please provide a rating and feedback.", "error");
       return;
@@ -72,7 +72,6 @@ function MyActivity() {
     setRating(value);
   };
 
-
   const determineStatus = (sessionDate, feedbackGiven, isCanceled) => {
     const currentTime = new Date();
     const sessionTime = new Date(sessionDate);
@@ -85,14 +84,14 @@ function MyActivity() {
 
   const filteredLogs = showHistory
     ? activityLogs.filter((session) =>
-      ["Completed", "Canceled"].includes(
-        determineStatus(
-          session.r_date || session.b_date,
-          session.feedbackGiven,
-          session.cancelled_r_counsellor
+        ["Completed", "Canceled"].includes(
+          determineStatus(
+            session.r_date || session.b_date,
+            session.feedbackGiven,
+            session.cancelled_r_counsellor
+          )
         )
       )
-    )
     : activityLogs;
 
   return (
@@ -239,8 +238,10 @@ function MyActivity() {
 
       {/* Feedback Modal */}
       {feedbackSession && (
-        <div className="modal-overlay-myactivity"
-          onClick={() => setFeedbackSession(null)}>
+        <div
+          className="modal-overlay-myactivity"
+          onClick={() => setFeedbackSession(null)}
+        >
           <div
             className="modal-content-myactivity"
             onClick={(e) => e.stopPropagation()}
@@ -253,17 +254,22 @@ function MyActivity() {
             <form className="feedback-form" onSubmit={handleGiveFeedback}>
               <div className="form-group">
                 <label htmlFor="rating">Rating:</label>
-                <div className="star-rating" aria-label="Select a rating from 1 to 5">
+                <div
+                  className="star-rating"
+                  aria-label="Select a rating from 1 to 5"
+                >
                   {[1, 2, 3, 4, 5].map((value) => (
                     <span
                       key={value}
-                      className={`star ${value <= rating ? 'filled' : ''}`}
+                      className={`star ${value <= rating ? "filled" : ""}`}
                       onClick={() => handleRating(value)}
                       onMouseEnter={() => setHoverRating(value)}
                       onMouseLeave={() => setHoverRating(0)}
                       role="button"
                       tabIndex="0"
-                      onKeyDown={(e) => e.key === 'Enter' && handleRating(value)}
+                      onKeyDown={(e) =>
+                        e.key === "Enter" && handleRating(value)
+                      }
                     >
                       ★
                     </span>
@@ -287,7 +293,7 @@ function MyActivity() {
                   type="button"
                   onClick={() => setFeedbackSession(null)}
                   className="cancel-btn-myactivity"
-                > 
+                >
                   Cancel
                 </button>
                 <button type="submit" className="submit-btn-myactivity">
@@ -297,7 +303,6 @@ function MyActivity() {
             </form>
           </div>
         </div>
-
       )}
     </div>
   );

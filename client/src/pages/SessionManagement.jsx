@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useMemo } from "react";
 import { useNotification } from "../context/NotificationContext";
 import axios from "axios";
@@ -59,17 +58,23 @@ function SessionManagement() {
       if (err.response) {
         const { status, data } = err.response;
         if (status === 400) {
-          triggerNotification("Invalid request. Counsellor ID is required.", "error");
-          console.error(data.message);
-        } else if (status === 404) {
-          triggerNotification("No sessions found for this counsellor.", "info");
+          triggerNotification(
+            "Invalid request. Counsellor ID is required.",
+            "error"
+          );
           console.error(data.message);
         } else {
-          triggerNotification(data.message || "An unexpected error occurred.", "error");
+          triggerNotification(
+            data.message || "An unexpected error occurred.",
+            "error"
+          );
           console.error(data.message);
         }
       } else {
-        triggerNotification("Failed to fetch sessions. Please check your connection.", "error");
+        triggerNotification(
+          "Failed to fetch sessions. Please check your connection.",
+          "error"
+        );
         console.error(data.message);
       }
     } finally {
@@ -77,14 +82,13 @@ function SessionManagement() {
     }
   };
 
-
   // Handle status filtering
   const filteredSessions = useMemo(() => {
     return activeStatus === ""
       ? sessions
       : sessions.filter(
-        (session) => session.status_for_counsellor === activeStatus
-      );
+          (session) => session.status_for_counsellor === activeStatus
+        );
   }, [activeStatus, sessions]);
 
   // Handle session actions (accept, decline, cancel)
@@ -215,11 +219,11 @@ function SessionManagement() {
           prevSessions.map((session) =>
             session.session_id === rescheduleSession.session_id
               ? {
-                ...session,
-                b_date: newDate,
-                b_time_slot: `${newTimeSlot.start_time} to ${newTimeSlot.end_time}`,
-                b_mode: newMode,
-              }
+                  ...session,
+                  b_date: newDate,
+                  b_time_slot: `${newTimeSlot.start_time} to ${newTimeSlot.end_time}`,
+                  b_mode: newMode,
+                }
               : session
           )
         );
@@ -250,11 +254,14 @@ function SessionManagement() {
       {/* Status Filter */}
       <div className="session-status-filter flex flex-wrap justify-around mb-6 relative">
         {/* Desktop Status Bar */}
-        <div className="desktop-filter w-full gap-4 justify-center items-center">
+        <div className="w-full gap-4 justify-center items-center">
           <button
             onClick={() => setActiveStatus("")}
-            className={`text-black px-6 py-2 text-base font-semibold rounded-lg ${activeStatus === "" ? "bg-[#7047A3] text-white" : "bg-gray-200 hover:bg-gray-300"
-              }`}
+            className={`text-black px-6 py-2 text-base font-semibold rounded-lg ${
+              activeStatus === ""
+                ? "bg-[#7047A3] text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
           >
             All
           </button>
@@ -262,8 +269,11 @@ function SessionManagement() {
             <button
               key={status}
               onClick={() => setActiveStatus(status)}
-              className={`text-black px-6 py-2 text-base font-semibold rounded-lg ${activeStatus === status ? "bg-[#7047A3] text-white" : "bg-gray-200 hover:bg-gray-300"
-                }`}
+              className={`text-black px-6 py-2 text-base font-semibold rounded-lg ${
+                activeStatus === status
+                  ? "bg-[#7047A3] text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
             >
               {status}
             </button>
@@ -271,7 +281,7 @@ function SessionManagement() {
         </div>
 
         {/* Mobile Dropdown Filter */}
-        <div className="mobile-filter flex w-full">
+        <div className="flex w-full">
           <button
             onClick={toggleFilterVisibility}
             className="flex items-center px-6 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm font-semibold w-full"
@@ -293,8 +303,11 @@ function SessionManagement() {
                   setActiveStatus("");
                   setFilterVisible(false);
                 }}
-                className={`block text-black w-full text-left px-6 py-2 text-sm font-semibold rounded-t-lg transition-all ${activeStatus === "" ? "bg-[#7047A3] text-white" : "bg-gray-200 hover:bg-gray-300"
-                  }`}
+                className={`block text-black w-full text-left px-6 py-2 text-sm font-semibold rounded-t-lg transition-all ${
+                  activeStatus === ""
+                    ? "bg-[#7047A3] text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
               >
                 All
               </button>
@@ -305,8 +318,11 @@ function SessionManagement() {
                     setActiveStatus(status);
                     setFilterVisible(false);
                   }}
-                  className={`block text-black w-full text-left px-6 py-2 text-sm font-semibold transition-all ${activeStatus === status ? "bg-[#7047A3] text-white" : "bg-gray-200 hover:bg-gray-300"
-                    }`}
+                  className={`block text-black w-full text-left px-6 py-2 text-sm font-semibold transition-all ${
+                    activeStatus === status
+                      ? "bg-[#7047A3] text-white"
+                      : "bg-gray-200 hover:bg-gray-300"
+                  }`}
                 >
                   {status}
                 </button>
@@ -315,7 +331,6 @@ function SessionManagement() {
           )}
         </div>
       </div>
-
 
       {/* Sessions Table */}
       <SessionTable
@@ -383,7 +398,10 @@ function SessionManagement() {
               const hours = String(Math.floor(i / 2)).padStart(2, "0");
               const minutes = i % 2 === 0 ? "00" : "30";
               return (
-                <option key={`${hours}:${minutes}`} value={`${hours}:${minutes}`}>
+                <option
+                  key={`${hours}:${minutes}`}
+                  value={`${hours}:${minutes}`}
+                >
                   {`${hours}:${minutes}`}
                 </option>
               );
@@ -407,7 +425,10 @@ function SessionManagement() {
               const hours = String(Math.floor(i / 2)).padStart(2, "0");
               const minutes = i % 2 === 0 ? "00" : "30";
               return (
-                <option key={`${hours}:${minutes}`} value={`${hours}:${minutes}`}>
+                <option
+                  key={`${hours}:${minutes}`}
+                  value={`${hours}:${minutes}`}
+                >
                   {`${hours}:${minutes}`}
                 </option>
               );
@@ -477,26 +498,35 @@ const SessionTable = ({
               <th className="text-base">Action</th>
             </tr>
           </thead>
-          <tbody className="session-table-body bg-white divide-y divide-gray-200 text-center">
-            {sessions.map((session, index) => (
-              <SessionRow
-                key={session.session_id}
-                session={session}
-                index={index}
-                handleAcceptRequest={handleAcceptRequest}
-                handleDeclineRequest={handleDeclineRequest}
-                openCancelModal={openCancelModal}
-                openRescheduleModal={openRescheduleModal}
-              />
-            ))}
-          </tbody>
+          {loading ? (
+            <div>Loading sessions...</div>
+          ) : (
+            <tbody className="session-table-body bg-white divide-y divide-gray-200 text-center">
+              {sessions.map((session, index) => (
+                <SessionRow
+                  key={session.session_id}
+                  session={session}
+                  index={index}
+                  handleAcceptRequest={handleAcceptRequest}
+                  handleDeclineRequest={handleDeclineRequest}
+                  openCancelModal={openCancelModal}
+                  openRescheduleModal={openRescheduleModal}
+                />
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
     </div>
   );
 };
 
-const SessionCard = ({ session, index, handleAcceptRequest, handleDeclineRequest, openCancelModal, openRescheduleModal }) => (
+const SessionCard = ({
+  session,
+  handleAcceptRequest,
+  openCancelModal,
+  openRescheduleModal,
+}) => (
   <div className="border border-gray-400 rounded-lg p-4 mb-4 shadow-md bg-white">
     <div className="flex justify-between mb-2 lg:text-base">
       <strong>Session ID:</strong> {session.session_id}
@@ -508,7 +538,10 @@ const SessionCard = ({ session, index, handleAcceptRequest, handleDeclineRequest
       <strong>Time Slot:</strong> {session.b_time_slot}
     </div>
     <div className="flex justify-between mb-2 lg:text-base">
-      <strong>Status:</strong> <span className={getStatusColor(session.status_for_counsellor)}>{session.status_for_counsellor}</span>
+      <strong>Status:</strong>{" "}
+      <span className={getStatusColor(session.status_for_counsellor)}>
+        {session.status_for_counsellor}
+      </span>
     </div>
     <div className="flex justify-end gap-2">
       {session.status_for_counsellor === "Requested" && (
@@ -536,12 +569,20 @@ const SessionCard = ({ session, index, handleAcceptRequest, handleDeclineRequest
   </div>
 );
 
-const SessionRow = ({ session, index, handleAcceptRequest, handleDeclineRequest, openCancelModal, openRescheduleModal }) => (
+const SessionRow = ({
+  session,
+  index,
+  handleAcceptRequest,
+  openCancelModal,
+  openRescheduleModal,
+}) => (
   <tr className="mt-4 text-base">
     <td className="text-base">{index + 1}</td>
     <td className="text-base">{session.session_id}</td>
     <td className="text-base">{session.b_mode}</td>
-    <td className="text-base">{new Date(session.b_date).toLocaleDateString()}</td>
+    <td className="text-base">
+      {new Date(session.b_date).toLocaleDateString()}
+    </td>
     <td className="text-base">{session.b_time_slot}</td>
     <td className={getStatusColor(session.status_for_counsellor)}>
       {session.status_for_counsellor}
@@ -620,4 +661,3 @@ const Modal = ({ title, onClose, onConfirm, confirmText, children }) => (
 );
 
 export default SessionManagement;
-
