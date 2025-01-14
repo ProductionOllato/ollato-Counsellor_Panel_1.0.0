@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 import { RiHome8Line } from "react-icons/ri";
@@ -13,6 +13,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { BiSupport } from "react-icons/bi";
 import { CiLock } from "react-icons/ci";
 import { RxHamburgerMenu } from "react-icons/rx";
+import LOGO from "../assets/Ollato_Logo_CC-03.png";
 
 import {
   Card,
@@ -97,8 +98,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     <>
       {/* Sidebar for large screens */}
       <Card
-        className={`h-[calc(100vh)] ${sidebarOpen ? "w-64" : "w-20"
-          } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#eecdc0] rounded-none pt-8 backdrop-blur-lg bg-opacity-40 md:block hidden`}
+        className={`h-[calc(100vh)] ${
+          sidebarOpen ? "w-64" : "w-20"
+        } fixed top-0 left-0 z-40 shadow-lg transition-all duration-300 bg-[#eecdc0] rounded-none pt-8 backdrop-blur-lg bg-opacity-40 md:block hidden`}
         style={{ zIndex: 40 }}
       >
         <hr className="mb-12 border-gray-300 opacity-40" />
@@ -112,9 +114,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 if (!profileComplete) e.preventDefault();
               }}
               className={({ isActive }) =>
-                `block rounded-lg transition-all duration-300 ${isActive
-                  ? "bg-[#584976] bg-opacity-30 backdrop-blur-lg text-white shadow"
-                  : "hover:bg-pink-100 text-[#000000]"
+                `block rounded-lg transition-all duration-300 ${
+                  isActive
+                    ? "bg-[#584976] bg-opacity-30 backdrop-blur-lg text-white shadow"
+                    : "hover:bg-pink-100 text-[#000000]"
                 } ${!profileComplete ? "cursor-not-allowed opacity-70" : ""}`
               }
               aria-disabled={!profileComplete}
@@ -158,8 +161,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         {/* Sidebar Toggle Button (Desktop) */}
         <button
           onClick={() => setSidebarOpen((prev) => !prev)}
-          className={`absolute bottom-8 sm:bottom-1.5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${!isMobile ? "block z-50" : "hidden"
-            }`}
+          className={`absolute bottom-8 sm:bottom-1.5 sm:left-auto sm:right-5 p-3 bg-[#000000] text-[#E1F1DD] rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 ${
+            !isMobile ? "block z-50" : "hidden"
+          }`}
           style={{ zIndex: 50 }}
         >
           {sidebarOpen ? <IoIosArrowBack /> : <IoIosArrowForward />}
@@ -187,7 +191,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
           {/* Sidebar */}
           {isSidebarVisible && (
-            <div className="fixed top-0 left-0 w-[40%] h-full bg-[#fbf5f3] shadow-lg z-50 transition-transform transform duration-300">
+            <div className="fixed top-0 left-0 w-[70%] sm:w-[60%] md:w-[50%] h-full bg-[#fbf5f3] shadow-lg z-50 transition-transform transform duration-300">
+              <Link
+                to="/dashboard"
+                className="flex items-center justify-center p-8"
+              >
+                <img src={LOGO} alt="Logo" className="w-1/3 h-auto" />
+              </Link>
+
               {/* Close Button */}
               <button
                 onClick={() => setIsSidebarVisible(false)}
@@ -197,7 +208,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </button>
 
               {/* Sidebar Content */}
-              <div className="flex flex-col h-full p-6 space-y-2 px-1 mt-10">
+              <div className="flex flex-col h-full p-6 space-y-2 px-1 mt-4">
                 {sidebarItems.map(({ label, icon, path }) => (
                   <NavLink
                     key={path}
@@ -207,12 +218,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       setIsSidebarVisible(false);
                     }}
                     className={({ isActive }) =>
-                      `flex items-center space-x-2 px-2 py-2 rounded-md font-semibold text-[#17202a] transition-all duration-300 ${isActive
-                        ? "bg-[#5e4d7e] bg-opacity-30 backdrop-blur-lg text-[#17202a] shadow-md"
-                        : "hover:bg-pink-100 hover:text-pink-500"
-                      } ${!profileComplete
-                        ? "cursor-not-allowed opacity-70 pointer-events-none"
-                        : ""
+                      `flex items-center space-x-2 px-2 py-2 rounded-md font-semibold text-[#17202a] transition-all duration-300 ${
+                        isActive
+                          ? "bg-[#5e4d7e] bg-opacity-30 backdrop-blur-lg text-[#17202a] shadow-md"
+                          : "hover:bg-pink-100 hover:text-pink-500"
+                      } ${
+                        !profileComplete
+                          ? "cursor-not-allowed opacity-70 pointer-events-none"
+                          : ""
                       }`
                     }
                   >
