@@ -176,6 +176,7 @@ function Login() {
         </h1>
         <form onSubmit={handleSubmit}>
           {showOtpLogin ? (
+            // login with otp
             <>
               <button
                 type="button"
@@ -236,6 +237,7 @@ function Login() {
               )}
             </>
           ) : (
+            // login with email
             <>
               <div className="form-group">
                 <label className="form-label">Email *</label>
@@ -274,6 +276,7 @@ function Login() {
                   Forgot Password?
                 </button>
                 <button
+                  type="button"
                   className="toggle-login-method-link"
                   onClick={toggleLoginMethod}
                 >
