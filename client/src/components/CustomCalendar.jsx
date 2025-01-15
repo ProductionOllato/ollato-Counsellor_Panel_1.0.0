@@ -56,8 +56,8 @@ function CustomCalendar({ date, onDateChange }) {
       </div>
       {/* Days of the Week- mobile */}
       <div className="days-of-week-mobile">
-        {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
-          <div key={day} className="day">
+        {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+          <div key={`${day}-${index}`} className="day">
             {day}
           </div>
         ))}
@@ -65,14 +65,14 @@ function CustomCalendar({ date, onDateChange }) {
 
       {/* Dates of the Week */}
       <div className="dates-of-week">
-        {weekDates.map((day) => {
+        {weekDates.map((day, index) => {
           const isSelected = isSameDay(day, date);
           const isToday = isSameDay(day, new Date());
 
           return (
             <button
               type="button"
-              key={day}
+              key={`${day}-${index}`}
               onClick={() => handleDateClick(day)}
               className={`date-button ${
                 isSelected ? "selected" : isToday ? "today" : ""

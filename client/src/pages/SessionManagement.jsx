@@ -33,12 +33,9 @@ function SessionManagement() {
 
   const [filterVisible, setFilterVisible] = useState(false);
 
-  const toggleFilterVisibility = () => setFilterVisible((prev) => !prev);
-
-  // Fetch sessions from backend API
-  useEffect(() => {
-    fetchSessions();
-  }, [counsellor_id]);
+  const toggleFilterVisibility = () => {
+    setFilterVisible((prevState) => !prevState);
+  };
 
   const fetchSessions = async () => {
     setLoading(true);
@@ -240,27 +237,27 @@ function SessionManagement() {
     }
   };
 
+  // Fetch sessions from backend API
+  useEffect(() => {
+    fetchSessions();
+  }, [counsellor_id, APIURL]);
   return (
-    <div className="w-full mt-4 pt-2 bg-white shadow-lg rounded-lg">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-extrabold text-slate-800 mb-2">
-          Expert Session Management
-        </h1>
-        <p className="text-sm text-slate-600">
+    <div className="session-container">
+      <div className="session-header">
+        <h1 className="session-title">Expert Session Management</h1>
+        <p className="session-subtitle">
           Manage and organize your counselling sessions effectively.
         </p>
       </div>
 
       {/* Status Filter */}
-      <div className="session-status-filter flex flex-wrap justify-around mb-6 relative">
+      <div className="session-status-filter">
         {/* Desktop Status Bar */}
-        <div className="w-full gap-4 justify-center items-center">
+        <div className="session-status-buttons">
           <button
             onClick={() => setActiveStatus("")}
-            className={`text-black px-6 py-2 text-base font-semibold rounded-lg ${
-              activeStatus === ""
-                ? "bg-[#7047A3] text-white"
-                : "bg-gray-200 hover:bg-gray-300"
+            className={`session-button ${
+              activeStatus === "" ? "session-button-active" : ""
             }`}
           >
             All
@@ -269,10 +266,8 @@ function SessionManagement() {
             <button
               key={status}
               onClick={() => setActiveStatus(status)}
-              className={`text-black px-6 py-2 text-base font-semibold rounded-lg ${
-                activeStatus === status
-                  ? "bg-[#7047A3] text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
+              className={`session-button ${
+                activeStatus === status ? "session-button-active" : ""
               }`}
             >
               {status}
@@ -281,32 +276,27 @@ function SessionManagement() {
         </div>
 
         {/* Mobile Dropdown Filter */}
-        <div className="flex w-full">
+        <div className="session-mobile-filter">
           <button
             onClick={toggleFilterVisibility}
-            className="flex items-center px-6 py-2 rounded-lg bg-gray-200 text-gray-800 text-sm font-semibold w-full"
+            className="session-dropdown-button"
             aria-expanded={filterVisible}
             aria-controls="filterDropdown"
           >
             {activeStatus || "Filter by Status"}
-            <span className="ml-2 transform transition-transform duration-200">
+            <span className="session-dropdown-icon">
               {filterVisible ? "▲" : "▼"}
             </span>
           </button>
           {filterVisible && (
-            <div
-              id="filterDropdown"
-              className="absolute top-full mt-2 w-full bg-white shadow-md rounded-lg z-10"
-            >
+            <div id="filterDropdown" className="session-dropdown">
               <button
                 onClick={() => {
                   setActiveStatus("");
                   setFilterVisible(false);
                 }}
-                className={`block text-black w-full text-left px-6 py-2 text-sm font-semibold rounded-t-lg transition-all ${
-                  activeStatus === ""
-                    ? "bg-[#7047A3] text-white"
-                    : "bg-gray-200 hover:bg-gray-300"
+                className={`session-dropdown-item ${
+                  activeStatus === "" ? "session-button-active" : ""
                 }`}
               >
                 All
@@ -318,10 +308,8 @@ function SessionManagement() {
                     setActiveStatus(status);
                     setFilterVisible(false);
                   }}
-                  className={`block text-black w-full text-left px-6 py-2 text-sm font-semibold transition-all ${
-                    activeStatus === status
-                      ? "bg-[#7047A3] text-white"
-                      : "bg-gray-200 hover:bg-gray-300"
+                  className={`session-dropdown-item ${
+                    activeStatus === status ? "session-button-active" : ""
                   }`}
                 >
                   {status}
@@ -342,7 +330,7 @@ function SessionManagement() {
         loading={loading}
       />
 
-      {/* Cancel Modal */}
+      {/* Modals */}
       {cancelSession && (
         <Modal
           title="Cancel Session"
@@ -350,12 +338,12 @@ function SessionManagement() {
           onConfirm={handleCancelRequest}
           confirmText="Confirm"
         >
-          <p className="text-gray-700 mb-4">
+          <p className="session-modal-text">
             Are you sure you want to cancel this session? Please provide a
             reason below:
           </p>
           <textarea
-            className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 mb-4"
+            className="session-textarea"
             rows="4"
             placeholder="Enter reason for cancellation..."
             value={cancelReason}
@@ -364,7 +352,6 @@ function SessionManagement() {
         </Modal>
       )}
 
-      {/* Reschedule Modal */}
       {rescheduleSession && (
         <Modal
           title="Reschedule Session"
@@ -372,18 +359,14 @@ function SessionManagement() {
           onConfirm={handleRescheduleSave}
           confirmText="Reschedule"
         >
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Select Date:
-          </label>
+          <label className="session-label">Select Date:</label>
           <input
             type="date"
             value={newDate}
             onChange={(e) => setNewDate(e.target.value)}
-            className="p-2 border border-gray-300 rounded-md w-full focus:ring-2 focus:ring-blue-400"
+            className="session-input"
           />
-          <label className="block text-sm font-semibold text-gray-700 mb-2 mt-4">
-            Select Start Time:
-          </label>
+          <label className="session-label">Select Start Time:</label>
           <select
             value={newTimeSlot.start_time}
             onChange={(e) =>
@@ -392,25 +375,20 @@ function SessionManagement() {
                 start_time: e.target.value,
               }))
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+            className="session-input"
           >
             {Array.from({ length: 48 }, (_, i) => {
               const hours = String(Math.floor(i / 2)).padStart(2, "0");
               const minutes = i % 2 === 0 ? "00" : "30";
+              const time = `${hours}:${minutes}`;
               return (
-                <option
-                  key={`${hours}:${minutes}`}
-                  value={`${hours}:${minutes}`}
-                >
-                  {`${hours}:${minutes}`}
+                <option key={time} value={time}>
+                  {time}
                 </option>
               );
             })}
           </select>
-
-          <label className="block text-sm font-semibold text-gray-700 mb-2 mt-4">
-            Select End Time:
-          </label>
+          <label className="session-label">Select End Time:</label>
           <select
             value={newTimeSlot.end_time}
             onChange={(e) =>
@@ -419,29 +397,24 @@ function SessionManagement() {
                 end_time: e.target.value,
               }))
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+            className="session-input"
           >
             {Array.from({ length: 48 }, (_, i) => {
               const hours = String(Math.floor(i / 2)).padStart(2, "0");
               const minutes = i % 2 === 0 ? "00" : "30";
+              const time = `${hours}:${minutes}`;
               return (
-                <option
-                  key={`${hours}:${minutes}`}
-                  value={`${hours}:${minutes}`}
-                >
-                  {`${hours}:${minutes}`}
+                <option key={time} value={time}>
+                  {time}
                 </option>
               );
             })}
           </select>
-
-          <label className="block text-sm font-semibold text-gray-700 mb-2 mt-4">
-            Select Mode:
-          </label>
+          <label className="session-label">Select Mode:</label>
           <select
             value={newMode}
             onChange={(e) => setNewMode(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400"
+            className="session-input"
           >
             <option value="video">Video</option>
             <option value="in-person">In-person</option>
@@ -465,13 +438,11 @@ const SessionTable = ({
   }
 
   return (
-    <div className="session-table-container bg-white rounded-lg shadow-md relative p-4">
-      <h1 className="session-table-title text-2xl font-bold mb-6 text-[#7047A3]">
-        Sessions
-      </h1>
-      <div className="session-table-content-container overflow-x-auto">
+    <div className="session-table-container">
+      <h1 className="session-table-title">Sessions</h1>
+      <div className="session-table-content-container">
         {/* Card view for mobile devices */}
-        <div className="block lg:hidden">
+        <div className="session-card-container">
           {sessions.map((session, index) => (
             <SessionCard
               key={session.session_id}
@@ -486,22 +457,22 @@ const SessionTable = ({
         </div>
 
         {/* Table view for larger devices */}
-        <table className="session-table hidden lg:table min-w-full table-auto border-collapse border border-gray-300">
-          <thead className="session-table-header bg-[#F3F4F6] text-[#7047A3]">
+        <table className="session-table">
+          <thead>
             <tr>
-              <th className="text-base">#</th>
-              <th className="text-base">Session ID</th>
-              <th className="text-base">Mode</th>
-              <th className="text-base">Date</th>
-              <th className="text-base">Time Slot</th>
-              <th className="text-base">Status</th>
-              <th className="text-base">Action</th>
+              <th>#</th>
+              <th>Session ID</th>
+              <th>Mode</th>
+              <th>Date</th>
+              <th>Time Slot</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           {loading ? (
             <div>Loading sessions...</div>
           ) : (
-            <tbody className="session-table-body bg-white divide-y divide-gray-200 text-center">
+            <tbody className="session-table-body">
               {sessions.map((session, index) => (
                 <SessionRow
                   key={session.session_id}
@@ -527,34 +498,36 @@ const SessionCard = ({
   openCancelModal,
   openRescheduleModal,
 }) => (
-  <div className="border border-gray-400 rounded-lg p-4 mb-4 shadow-md bg-white">
-    <div className="flex justify-between mb-2 lg:text-base">
+  <div className="session-card-container">
+    <div className="session-detail">
       <strong>Session ID:</strong> {session.session_id}
     </div>
-    <div className="flex justify-between mb-2 lg:text-base">
+    <div className="session-detail">
       <strong>Date:</strong> {new Date(session.b_date).toLocaleDateString()}
     </div>
-    <div className="flex justify-between mb-2 lg:text-base">
+    <div className="session-detail">
       <strong>Time Slot:</strong> {session.b_time_slot}
     </div>
-    <div className="flex justify-between mb-2 lg:text-base">
-      <strong>Status:</strong>{" "}
-      <span className={getStatusColor(session.status_for_counsellor)}>
+    <div className="session-detail">
+      <strong>Status:</strong>
+      <span
+        className={`status ${getStatusColor(session.status_for_counsellor)}`}
+      >
         {session.status_for_counsellor}
       </span>
     </div>
-    <div className="flex justify-end gap-2">
+    <div className="session-actions">
       {session.status_for_counsellor === "Requested" && (
         <>
           <ActionButton
             label="Accept"
             onClick={() => handleAcceptRequest(session.session_id)}
-            colorClass="bg-green-500 hover:bg-green-600"
+            colorClass="accept-button"
           />
           <ActionButton
             label="Decline"
             onClick={() => openCancelModal(session)}
-            colorClass="bg-red-500 hover:bg-red-600"
+            colorClass="decline-button"
           />
         </>
       )}
@@ -562,7 +535,7 @@ const SessionCard = ({
         <ActionButton
           label="Reschedule"
           onClick={() => openRescheduleModal(session)}
-          colorClass="bg-yellow-500 hover:bg-yellow-600"
+          colorClass="reschedule-button"
         />
       )}
     </div>
@@ -576,30 +549,30 @@ const SessionRow = ({
   openCancelModal,
   openRescheduleModal,
 }) => (
-  <tr className="mt-4 text-base">
-    <td className="text-base">{index + 1}</td>
-    <td className="text-base">{session.session_id}</td>
-    <td className="text-base">{session.b_mode}</td>
-    <td className="text-base">
+  <tr className="session-row">
+    <td className="session-data">{index + 1}</td>
+    <td className="session-data">{session.session_id}</td>
+    <td className="session-data">{session.b_mode}</td>
+    <td className="session-data">
       {new Date(session.b_date).toLocaleDateString()}
     </td>
-    <td className="text-base">{session.b_time_slot}</td>
-    <td className={getStatusColor(session.status_for_counsellor)}>
+    <td className="session-data">{session.b_time_slot}</td>
+    <td className={`status ${getStatusColor(session.status_for_counsellor)}`}>
       {session.status_for_counsellor}
     </td>
-    <td>
-      <div className="flex gap-2">
+    <td className="session-actions">
+      <div className="action-buttons">
         {session.status_for_counsellor === "Requested" && (
           <>
             <ActionButton
               label="Accept"
               onClick={() => handleAcceptRequest(session.session_id)}
-              colorClass="bg-green-500 hover:bg-green-600"
+              colorClass="accept-button"
             />
             <ActionButton
               label="Decline"
               onClick={() => openCancelModal(session)}
-              colorClass="bg-red-500 hover:bg-red-600"
+              colorClass="decline-button"
             />
           </>
         )}
@@ -607,7 +580,7 @@ const SessionRow = ({
           <ActionButton
             label="Reschedule"
             onClick={() => openRescheduleModal(session)}
-            colorClass="bg-yellow-500 hover:bg-yellow-600"
+            colorClass="reschedule-button"
           />
         )}
       </div>
@@ -616,10 +589,7 @@ const SessionRow = ({
 );
 
 const ActionButton = ({ label, onClick, colorClass }) => (
-  <button
-    onClick={onClick}
-    className={`px-2 py-1 text-white rounded text-sm ${colorClass} hover:opacity-80`}
-  >
+  <button onClick={onClick} className={`action-button ${colorClass}`}>
     {label}
   </button>
 );
@@ -627,31 +597,28 @@ const ActionButton = ({ label, onClick, colorClass }) => (
 const getStatusColor = (status) => {
   switch (status) {
     case "Booked":
-      return "text-green-500";
+      return "status-booked";
     case "Requested":
-      return "text-yellow-500";
+      return "status-requested";
     case "Cancelled":
-      return "text-red-500";
+      return "status-cancelled";
     default:
-      return "text-gray-700";
+      return "status-default";
   }
 };
 
 const Modal = ({ title, onClose, onConfirm, confirmText, children }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg relative w-full max-w-md">
-      <h2 className="font-bold text-lg mb-4 text-[#7047A3]">{title}</h2>
+  <div className="modal-overlay">
+    <div className="modal-container">
+      <h2 className="modal-title">{title}</h2>
       {children}
-      <div className="flex justify-end gap-4 mt-4">
-        <button
-          onClick={onClose}
-          className="bg-[#CDC1FF] text-[#213555] py-2 px-6 rounded-md transition hover:scale-105"
-        >
+      <div className="modal-actions">
+        <button onClick={onClose} className="modal-button modal-button-close">
           Close
         </button>
         <button
           onClick={onConfirm}
-          className="bg-[#7047A3] text-white py-2 px-6 rounded-md transition hover:scale-105"
+          className="modal-button modal-button-confirm"
         >
           {confirmText}
         </button>

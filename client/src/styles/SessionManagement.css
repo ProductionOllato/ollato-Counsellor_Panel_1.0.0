@@ -1,0 +1,793 @@
+/* General Styles */
+.session-container {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.session-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.session-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.session-subtitle {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Filter Bar */
+.session-status-filter {
+  margin-bottom: 20px;
+  position: relative; /* Ensure dropdown is positioned correctly */
+  overflow: hidden;
+}
+
+/* Desktop Filter Bar */
+.session-status-buttons {
+  display: none;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.session-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: none;
+  background-color: #e0e0e0;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  white-space: nowrap; /* Prevent buttons from breaking into multiple lines */
+  text-align: center;
+}
+
+.session-button:hover {
+  background-color: #d6d6d6;
+  transform: scale(1.05);
+}
+
+.session-button-active {
+  background-color: #7047a3;
+  color: #fff;
+}
+
+/* Mobile Filter Bar */
+.session-mobile-filter {
+  display: flex;
+  width: 100%;
+  position: relative; /* Positioning for the absolute dropdown */
+}
+
+.session-dropdown-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 24px; /* px-6 py-2 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background-color: #e0e0e0; /* bg-gray-200 */
+  color: #333; /* text-gray-800 */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600; /* font-semibold */
+  width: 100%;
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s; /* Smooth transition for hover */
+}
+
+.session-dropdown-icon {
+  margin-left: 0.5rem; /* ml-2 */
+  transform: transition; /* ensure transformation matches on click */
+  transition: transform 0.2s;
+}
+
+/* Styles for showing dropdown */
+.session-dropdown {
+  position: absolute; /* absolute position below the button */
+  top: 100%; /* align below the button */
+  margin-top: 8px; /* mt-2 */
+  width: 100%; /* w-full */
+  background-color: #fff; /* bg-white */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* shadow-md */
+  border-radius: 0.5rem; /* rounded-lg */
+  z-index: 10; /* z-10 */
+}
+
+/* Dropdown item styles */
+.session-dropdown-item {
+  display: block;
+  width: 100%; /* w-full */
+  padding: 10px 24px; /* px-6 py-2 */
+  text-align: left; /* text-left */
+  color: black; /* text-black */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600; /* font-semibold */
+  transition: background-color 0.2s; /* smooth transition */
+  cursor: pointer; /* Pointer cursor */
+}
+
+/* Active state styling */
+.session-button-active {
+  background-color: #7047a3; /* Active background color */
+  color: white; /* Active text color */
+}
+
+/* Hover effect */
+.session-dropdown-item:hover {
+  background-color: #f5f5f5; /* lighter gray on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .session-dropdown-item {
+    padding: 12px 20px; /* Adjust padding for smaller devices if necessary */
+  }
+}
+
+/* Modal container for responsiveness */
+.modal-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .modal-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+  }
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  /* Show desktop filter bar */
+  .session-status-buttons {
+    display: flex;
+  }
+
+  /* Hide mobile filter bar */
+  .session-mobile-filter {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .session-status-buttons {
+    display: none; /* Hide desktop bar on small screens */
+  }
+  .session-status-buttons {
+    gap: 6px; /* Reduce gap for smaller screens */
+  }
+
+  .session-button {
+    padding: 4px 10px; /* Further reduce padding */
+    font-size: 12px; /* Smaller font size */
+  }
+
+  .session-dropdown {
+    width: 90%; /* Ensure dropdown doesn't exceed screen width */
+    left: 5%; /* Center dropdown horizontally */
+  }
+}
+
+@media (max-width: 1024px) {
+  .session-status-buttons {
+    gap: 8px; /* Reduce gap for smaller screens */
+  }
+
+  .session-button {
+    padding: 6px 12px; /* Reduce padding */
+    font-size: 13px; /* Slightly smaller font size */
+  }
+}
+
+/* Session Card */
+
+/* General Session Card */
+.session-card {
+  border: 1px solid #d1d5db; /* Light gray border */
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+/* Session Detail */
+.session-detail {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.session-detail strong {
+  font-weight: bold;
+}
+
+/* Status */
+.status {
+  font-weight: bold;
+}
+
+/* Color classes for status */
+.status.booked {
+  color: green;
+}
+.status.ongoing {
+  color: blue;
+}
+.status.requested {
+  color: orange;
+}
+.status.completed {
+  color: gray;
+}
+.status.cancelled {
+  color: red;
+}
+
+/* Session Actions (Buttons) */
+.session-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.accept-button {
+  background-color: #28a745;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.accept-button:hover {
+  background-color: #218838;
+}
+
+.decline-button {
+  background-color: #dc3545;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.decline-button:hover {
+  background-color: #c82333;
+}
+
+.reschedule-button {
+  background-color: #b38706;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reschedule-button:hover {
+  background-color: #e0a800;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .session-card {
+    padding: 12px;
+  }
+
+  .session-detail {
+    font-size: 12px;
+  }
+
+  .session-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .session-actions .accept-button,
+  .session-actions .decline-button,
+  .session-actions .reschedule-button {
+    width: 50%;
+    margin-bottom: 8px;
+    margin: auto;
+  }
+}
+
+/* Action Button Styles */
+.action-button {
+  padding: 8px 16px;
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.action-button:hover {
+  opacity: 0.8;
+}
+
+/* Button color classes based on status */
+.action-button.status-booked {
+  background-color: #28a745; /* Green */
+}
+
+.action-button.status-requested {
+  background-color: #dda853; /* Yellow */
+}
+
+.action-button.status-cancelled {
+  background-color: #dc3545; /* Red */
+}
+
+.action-button.status-default {
+  background-color: #6c757d; /* Gray */
+}
+
+/* Status Text Classes */
+.status-booked {
+  color: #28a745; /* Green */
+}
+
+.status-requested {
+  color: #dda853; /* Yellow */
+}
+
+.status-cancelled {
+  color: #dc3545; /* Red */
+}
+
+.status-default {
+  color: #6c757d; /* Gray */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* Reduce padding for smaller screens */
+  .action-button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Modal */
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+/* Modal Container */
+.modal-container {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modal Title */
+.modal-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: #7047a3;
+  margin-bottom: 16px;
+}
+
+/* Modal Action Buttons Container */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* Modal Buttons */
+.modal-button {
+  padding: 12px 24px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.modal-button:hover {
+  transform: scale(1.05);
+}
+
+/* Close Button */
+.modal-button-close {
+  background-color: #cdc1ff;
+  color: #213555;
+  border: none;
+}
+
+.modal-button-close:hover {
+  background-color: #b8aef4;
+}
+
+/* Confirm Button */
+.modal-button-confirm {
+  background-color: #7047a3;
+  color: white;
+  border: none;
+}
+
+.modal-button-confirm:hover {
+  background-color: #5a3e88;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-container {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .modal-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .modal-button {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+
+  .modal-actions {
+    gap: 8px;
+  }
+}
+
+/* Session Table */
+/* General Table and Card Styling */
+.session-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.session-table-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #7047a3;
+}
+
+.session-table-content-container {
+  overflow-x: auto;
+}
+
+/* Card view for mobile */
+.session-card-container {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .session-card-container {
+    display: none;
+  }
+}
+
+/* Table view for larger screens */
+.session-table {
+  width: 100%;
+  border-collapse: collapse;
+  display: none;
+}
+
+.session-table th,
+.session-table td {
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.session-table th {
+  background-color: #f3f4f6;
+  color: #7047a3;
+}
+
+.session-table-body {
+  background-color: white;
+}
+
+@media (min-width: 1024px) {
+  .session-table {
+    display: table;
+  }
+}
+
+/* Styling for table rows */
+.session-table-body tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.session-table-body tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .session-table-container {
+    padding: 15px;
+  }
+
+  .session-table-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .session-table th,
+  .session-table td {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .session-table-body tr {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .session-table-title {
+    font-size: 18px;
+  }
+}
+
+/* session card */
+
+/* Session Card Styling */
+.session-card-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.session-detail {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.session-detail strong {
+  font-weight: bold;
+}
+
+.status {
+  font-weight: bold;
+}
+
+.status.booked {
+  color: green;
+}
+
+.status.requested {
+  color: yellow;
+}
+
+.status.cancelled {
+  color: red;
+}
+
+.session-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Action button styling */
+.accept-button {
+  background-color: green;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.decline-button {
+  background-color: red;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reschedule-button {
+  background-color: #dda853;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Hover effects for action buttons */
+.accept-button:hover {
+  background-color: darkgreen;
+}
+
+.decline-button:hover {
+  background-color: darkred;
+}
+
+.reschedule-button:hover {
+  background-color: gold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .session-card-container {
+    padding: 15px;
+  }
+
+  .session-detail {
+    font-size: 14px;
+  }
+
+  .session-actions {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .session-actions button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .session-card-container {
+    padding: 10px;
+  }
+
+  .session-detail {
+    font-size: 12px;
+  }
+}
+
+/* Session Row */
+
+/* Table Styling */
+.session-row {
+  text-align: left;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.session-data {
+  padding: 8px;
+}
+
+.status {
+  font-weight: bold;
+}
+
+.status.booked {
+  color: green;
+}
+
+.status.requested {
+  color: yellow;
+}
+
+.status.cancelled {
+  color: red;
+}
+
+.session-actions {
+  padding: 8px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.action-buttons button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Action Button Styling */
+.accept-button {
+  background-color: green;
+  color: white;
+  border-radius: 4px;
+  padding: 8px 16px;
+}
+
+.decline-button {
+  background-color: red;
+  color: white;
+  border-radius: 4px;
+  padding: 8px 16px;
+}
+
+.reschedule-button {
+  background-color: #dda853;
+  color: white;
+  border-radius: 4px;
+  padding: 8px 16px;
+}
+
+/* Hover Effects */
+.accept-button:hover {
+  background-color: darkgreen;
+}
+
+.decline-button:hover {
+  background-color: darkred;
+}
+
+.reschedule-button:hover {
+  background-color: rgb(187, 160, 7);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .session-row {
+    font-size: 14px;
+  }
+
+  .session-data {
+    padding: 6px;
+  }
+
+  .session-actions {
+    padding: 6px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .session-row {
+    font-size: 12px;
+  }
+
+  .session-data {
+    padding: 4px;
+  }
+}

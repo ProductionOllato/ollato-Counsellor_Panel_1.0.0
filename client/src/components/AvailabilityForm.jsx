@@ -10,7 +10,7 @@ const AvailabilityForm = ({ onSubmit }) => {
     date: "",
     start_time: "",
     end_time: "",
-    mode: "video",
+    mode: "",
     duration: "",
   });
 
@@ -92,6 +92,9 @@ const AvailabilityForm = ({ onSubmit }) => {
               onChange={handleInputChange}
               className="availability-form-select custom-select"
             >
+              <option value="" disabled>
+                Choose Start Time
+              </option>
               {Array.from({ length: 48 }, (_, i) => {
                 const hours = String(Math.floor(i / 2)).padStart(2, "0");
                 const minutes = i % 2 === 0 ? "00" : "30";
@@ -112,6 +115,9 @@ const AvailabilityForm = ({ onSubmit }) => {
               onChange={handleInputChange}
               className="availability-form-select custom-select"
             >
+              <option value="" disabled>
+                Choose End Time
+              </option>
               {Array.from({ length: 48 }, (_, i) => {
                 const hours = String(Math.floor(i / 2)).padStart(2, "0");
                 const minutes = i % 2 === 0 ? "00" : "30";
@@ -136,6 +142,9 @@ const AvailabilityForm = ({ onSubmit }) => {
               onChange={handleInputChange}
               className="availability-form-select custom-select"
             >
+              <option value="" disabled>
+                Select Mode
+              </option>
               <option value="video">Video</option>
               <option value="in-person">In-Person</option>
               <option value="call">Call</option>
@@ -152,6 +161,9 @@ const AvailabilityForm = ({ onSubmit }) => {
               onChange={handleInputChange}
               className="availability-form-select custom-select"
             >
+              <option value="" disabled>
+                Select Duration
+              </option>
               <option value="45 Minutes">45 Minutes</option>
               <option value="60 Minutes">60 Minutes</option>
             </select>

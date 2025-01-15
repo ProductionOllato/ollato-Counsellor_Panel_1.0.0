@@ -1,237 +1,474 @@
 /* General Container */
 .availability-management-container {
-  margin: 2.5rem auto;
-  padding: 1rem;
-  background-color: #f9f9f9; /* Soft gray background */
-  min-height: 100vh;
-  box-sizing: border-box;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  margin-top: 2.5rem;
+  padding-top: 0.5rem;
+  height: 100%;
 }
 
-/* Header */
 .availability-header {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0 1rem;
 }
 
 .availability-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 1.5rem;
-}
-
-/* Button Styles */
-.availability-add-button,
-.availability-show-button {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  color: #fff;
-  background-color: #6c5ce7; /* Vibrant purple */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.availability-add-button:hover,
-.availability-show-button:hover {
-  background-color: #8e7fff;
-}
-
-/* Loading Text */
-.availability-loading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #4b5563; /* Gray color */
   text-align: center;
 }
 
-/* Search Input */
+.availability-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.availability-add-button,
+.availability-show-button {
+  background-color: #213555;
+  color: #fff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.375rem;
+  text-align: center;
+  width: fit-content;
+}
+.availability-add-button:hover,
+.availability-show-button:hover {
+  background-color: #3e5879;
+}
+.availability-loading {
+  text-align: center;
+  color: #4b5563; /* Gray color */
+  font-weight: 600;
+}
+
+/* Table styles */
+.availability-table-section {
+  background-color: #fff;
+}
+
+.availability-search-container {
+  position: relative;
+  border: 1px solid #85a98f;
+  border-radius: 0.125rem;
+}
+
 .search-input {
   width: 100%;
-  background-color: transparent;
-  color: #495057;
+  background: transparent;
+  padding: 0.5rem 2rem;
   border: 1px solid #d3f1df;
-  padding-left: 2.5rem;
-  padding-right: 3rem;
   transition: border-color 0.3s ease;
 }
 
-.search-input::placeholder {
-  color: #aaacb9;
+.search-input:focus {
+  outline: none;
+  border-color: #4b5563;
 }
 
-/* Search Icon */
 .search-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #aaacb9;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-/* Table Styles */
+/* Table responsive styles (additional classes can be created to ensure responsiveness) */
 .availability-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  border: 1px solid #d3d3d3;
 }
 
-.availability-table thead {
-  background-color: #f1f1f1;
+.availability-table-header {
+  background-color: #f8fafc; /* Light gray for header */
+  text-align: center;
+}
+
+.availability-table-row:hover {
+  background-color: #f9fafb; /* Hover style for rows */
+}
+
+.status-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.125rem;
+  color: white;
+}
+
+.status-badge.available {
+  color: #347928; /* Available */
+}
+
+.status-badge.unavailable {
+  color: #ae445a; /* Unavailable */
+}
+
+.action-edit-button {
+  background-color: #16404d;
+  color: #fff;
+  padding: 0.1rem;
+  border-radius: 0.375rem;
+  text-align: center;
+  margin-right: 0.2rem;
+}
+
+.action-delete-button {
+  background-color: #ae445a;
+  color: #fff;
+  padding: 0.1rem;
+  border-radius: 0.375rem;
+  text-align: center;
+  margin-right: 0.2rem;
 }
 
 .availability-table th,
 .availability-table td {
-  padding: 1rem 0.5rem;
-  text-align: left;
-  font-size: 1rem;
-  color: #444;
-  border-bottom: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .availability-table th {
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  font-weight: normal;
 }
 
 .availability-table tbody tr:hover {
-  background-color: #f9f9f9;
+  background-color: #f1f1f1;
 }
 
-/* Mobile Card View */
+.availability-table .status {
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.availability-table .status.available {
+  background-color: #347928;
+  color: white;
+}
+
+.availability-table .status.unavailable {
+  background-color: #ae445a;
+  color: white;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.pagination-prev,
+.pagination-next {
+  background-color: #d3d3d3;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.pagination-prev:hover,
+.pagination-next:hover {
+  background-color: #a888b5;
+}
+
 .mobile-card-view {
-  display: none; /* Hide by default */
-  flex-direction: column;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem; /* Space between cards */
   margin-top: 1rem;
 }
 
 .session-card {
-  padding: 1rem;
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #d1d5db; /* Light gray */
+  border-radius: 0.375rem; /* Rounded corners */
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+  transition: box-shadow 0.3s;
 }
 
 .session-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Elevate the card on hover */
 }
 
-/* Modal Styles */
-.modal-overlay-availability {
+.session-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem; /* Space between each row */
+}
+
+.session-info-label {
+  font-weight: bold;
+  color: #1f2937; /* Dark gray */
+}
+
+.session-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  color: #fff; /* White text */
+}
+
+.status-available {
+  background-color: #4caf50; /* Green */
+}
+
+.status-unavailable {
+  background-color: #f44336; /* Red */
+}
+
+.session-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.action-button {
+  background: none;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.edit-button {
+  color: #814e00;
+}
+
+.delete-button {
+  color: #ae445a;
+}
+
+.no-sessions {
+  text-align: center;
+  font-weight: bold;
+  color: #9a9a9a; /* Light gray for no sessions found */
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .mobile-card-view {
+    grid-template-columns: 1fr; /* Single column on smaller screens */
+  }
+}
+
+/* Responsive Design -  */
+@media (max-width: 768px) {
+  .availability-header {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .availability-title {
+    font-size: 20px;
+  }
+
+  .availability-actions {
+    gap: 12px;
+  }
+
+  .availability-add-button,
+  .availability-show-button {
+    width: fit-content;
+    text-align: center;
+  }
+
+  .availability-table {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .mobile-card-view {
+    display: none;
+  }
+}
+
+/* Edit Modal */
+/* Modal Overlay */
+.modal-availability-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: opacity 0.3s ease;
 }
 
-.modal-content-availability {
-  background-color: #fff;
-  padding: 1.5rem;
+/* Modal Content */
+.modal-availability-content {
+  background-color: white;
+  padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  width: 90%;
-  max-width: 500px;
-}
-
-/* Form Styles */
-.modal-form-availability {
-  margin: 0;
-}
-
-.form-label-availability {
-  display: inline-block;
-  color: #333;
-}
-
-.form-input-availability,
-.form-select-availability {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
+  max-width: 600px;
+  transition: all 0.3s ease;
+}
+
+/* Modal Title */
+.modal-availability-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Container */
+.modal-availability-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.modal-availability-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-availability-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.modal-availability-input,
+.modal-availability-select {
   padding: 10px;
-  margin-top: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 16px;
-  transition: border-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.form-input-availability:focus,
-.form-select-availability:focus {
-  outline: none;
-  border-color: #03152b; /* Change border color on focus */
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5); /* Add shadow on focus */
+/* Buttons */
+.modal-availability-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
 }
 
-/* Actions */
-.action-edit-button,
-.action-delete-button {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
+.modal-availability-cancel {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-}
-
-/* Pagination Controls */
-.pagination-controls {
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-.pagination-prev,
-.pagination-next {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  color: #fff;
-  background-color: #6c5ce7; /* Vibrant purple */
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-/* Pagination Info */
-.pagination-info {
-  margin: 0 1rem;
+.modal-availability-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.modal-availability-save {
+  background-color: #7047a3;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
+
+.modal-availability-save:hover {
+  background-color: #4b3368;
+}
+
+.modal-availability-save-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
-  .availability-table {
-    display: none; /* Hide table on mobile */
-  }
-
-  .mobile-card-view {
-    display: flex;
-    flex-direction: column;
+@media (min-width: 576px) {
+  .modal-availability-form {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 576px) {
-  .session-card {
-    flex-direction: column; /* Stack items vertically */
+  .modal-availability-content {
+    padding: 15px;
+    max-width: 90%;
   }
 }
 
-/* Dropdown Styles */
-select {
-  appearance: none; /* Remove default arrow */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5H5z" fill="%23333"/></svg>'); /* Custom arrow */
-  background-repeat: no-repeat;
-  background-position: right 10px center; /* Position the arrow */
-  background-size: 12px; /* Size of the arrow */
+@media (max-width: 768px) {
+  .modal-availability-content {
+    max-width: 80%;
+  }
 }
 
-/* Focus Styles */
-select:focus {
+/* Time Dropdown */
+/* Time Dropdown Container */
+.time-dropdown-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Time Dropdown Label */
+.time-dropdown-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+/* Time Dropdown Select */
+.time-dropdown-select {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+/* Focus effect */
+.time-dropdown-select:focus {
   outline: none;
-  border-color: #03152b; /* Change border color on focus */
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5); /* Add shadow on focus */
+  border-color: #7047a3;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .time-dropdown-container {
+    margin-bottom: 16px;
+  }
+
+  .time-dropdown-select {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .time-dropdown-container {
+    margin-bottom: 18px;
+  }
 }
