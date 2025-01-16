@@ -15,9 +15,9 @@ export default function Dashboard() {
   const [sessions, setSessions] = useState([]);
 
   // Call approveProfile only once - testing
-  useEffect(() => {
-    approveProfile();
-  }, [approveProfile]);
+  // useEffect(() => {
+  //   approveProfile();
+  // }, [approveProfile]);
 
   const completeProfile = () => {
     navigate("/registration-complete");
@@ -152,7 +152,8 @@ export default function Dashboard() {
 
             <div className="flex flex-col items-center">
               <p className="text-[#b640b0] text-center text-base sm:text-lg font-semibold shadow">
-                Access Denied! Please complete your registration to get started.
+                Access Denied! Please complete the registration process to
+                proceed.
               </p>
 
               <button

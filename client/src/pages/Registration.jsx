@@ -6,10 +6,9 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import OtpModal from "../components/OtpModal";
 import InputField from "../components/InputField";
 import statesAndDistricts from "../data/states-and-districts.json";
-import { useAuth } from "../context/UserContext";
 import { useNotification } from "../context/NotificationContext";
 import LOGO from "../assets/Ollato_Logo_CC-03.png";
-import axios from 'axios';
+import axios from "axios";
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -97,7 +96,10 @@ const Registration = () => {
       return;
     }
     if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification("Please enter a valid 10-digit phone number.", "error");
+      triggerNotification(
+        "Please enter a valid 10-digit phone number.",
+        "error"
+      );
       return;
     }
     sendOtp("phone", formData.phone_number);
@@ -108,7 +110,6 @@ const Registration = () => {
     const payloadKey = type === "email" ? "email" : "phoneNumber";
 
     try {
-
       const response = await axios.post(`${API_URL}/${endpoint}`, {
         [payloadKey]: identifier,
       });
@@ -119,7 +120,8 @@ const Registration = () => {
     } catch (error) {
       // Extract and handle the error
       const errorMessage =
-        error.response?.data?.message || "Failed to send OTP. Please try again.";
+        error.response?.data?.message ||
+        "Failed to send OTP. Please try again.";
       triggerNotification(errorMessage, "error");
     }
   };
@@ -158,7 +160,6 @@ const Registration = () => {
     }
   };
 
-
   const handleResendOtp = async () => {
     try {
       if (otpType === "email") {
@@ -169,7 +170,8 @@ const Registration = () => {
       triggerNotification("OTP resent successfully!", "success");
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message || "Failed to resend OTP. Please try again.";
+        error.response?.data?.message ||
+        "Failed to resend OTP. Please try again.";
       triggerNotification(errorMessage, "error");
     }
   };
@@ -188,7 +190,10 @@ const Registration = () => {
     }
 
     if (!isValidPhoneNumber(formData.phone_number)) {
-      triggerNotification("Please enter a valid 10-digit phone number.", "error");
+      triggerNotification(
+        "Please enter a valid 10-digit phone number.",
+        "error"
+      );
       return;
     }
 
@@ -206,26 +211,39 @@ const Registration = () => {
     }
 
     if (!isEmailVerified) {
-      triggerNotification("Please verify your email address before registering.", "error");
+      triggerNotification(
+        "Please verify your email address before registering.",
+        "error"
+      );
       return;
     }
 
     if (!isPhoneVerified) {
-      triggerNotification("Please verify your phone number before registering.", "error");
+      triggerNotification(
+        "Please verify your phone number before registering.",
+        "error"
+      );
       return;
     }
 
     try {
-      const response = await axios.post(`${API_URL}/auth/upload-personal-details`, formData);
+      const response = await axios.post(
+        `${API_URL}/auth/upload-personal-details`,
+        formData
+      );
 
       triggerNotification("Registration successful!", "success");
       navigate("/");
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        triggerNotification("This email is already registered. Please use a different email.", "error");
+        triggerNotification(
+          "This email is already registered. Please use a different email.",
+          "error"
+        );
       } else {
         const errorMessage =
-          error.response?.data?.message || "An error occurred during registration.";
+          error.response?.data?.message ||
+          "An error occurred during registration.";
         triggerNotification(errorMessage, "error");
       }
     }
@@ -233,20 +251,34 @@ const Registration = () => {
 
   return (
     <>
-      <div className="registration-container min-h-screen bg-gradient-to-r from-blue-500 to-pink-500">
+      <div className="registration-container min-h-screen bg-gradient-to-r from-blue-500 to-pink-500 ">
         <div className="container mx-auto flex justify-center items-center py-10">
           {/* Logo Section */}
-          <div className="registration-logo-container w-full md:w-1/2 flex justify-center items-center">
+          <div className="registration-logo-container w-full md:w-1/2 flex flex-col justify-center items-center">
             <img
               src={LOGO}
               alt="Logo"
               className="registration-logo w-3/4 max-w-md"
             />
+
+            {/* Login Link */}
+            <div className="registration-login-link-container flex justify-center mt-6 text-white">
+              <p className="registration-login-text text-sm">
+                Already have an account?
+              </p>
+              <button
+                onClick={() => navigate("/")}
+                className="registration-login-button flex items-center text-blue-600 ml-2 "
+              >
+                <FaArrowRightFromBracket className="mr-2 text-white" />
+                Login
+              </button>
+            </div>
           </div>
 
           {/* Form Section */}
-          <div className="registration-form-container w-full md:w-1/2 p-1">
-            <div className="registration-form-section bg-white p-8 rounded-lg shadow-xl">
+          <div className="registration-form-container w-full md:w-1/2 p-1 ">
+            <div className="registration-form-section bg-white p-8 rounded-lg shadow-xl max-h-[80vh] overflow-y-auto scrollbar-custom">
               {/* Registration Form */}
               <form onSubmit={handlePersonalDetailsSubmit}>
                 {/* Header */}
@@ -447,20 +479,6 @@ const Registration = () => {
                   </button>
                 </div>
               </form>
-
-              {/* Login Link */}
-              <div className="registration-login-link-container flex justify-center mt-6">
-                <p className="registration-login-text text-sm">
-                  Already have an account?
-                </p>
-                <button
-                  onClick={() => navigate("/")}
-                  className="registration-login-button flex items-center text-blue-600 ml-2"
-                >
-                  <FaArrowRightFromBracket className="mr-2" />
-                  Login
-                </button>
-              </div>
             </div>
           </div>
         </div>

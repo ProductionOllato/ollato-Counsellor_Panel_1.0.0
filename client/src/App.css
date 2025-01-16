@@ -38,15 +38,48 @@
 }
 
 /* Loading spinner */
-.loader {
-  border: 8px solid #f3f3f3; /* Light grey */
-  border-top: 8px solid #0e3a7a; /* Blue */
-  border-radius: 50%;
-  width: 50px; /* Size of the spinner */
-  height: 50px; /* Size of the spinner */
-  animation: spin 1s linear infinite; /* Rotate animation */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
+.loader-container-inner {
+  position: relative;
+}
+
+.loader {
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid #63020f;
+  border-radius: 50%;
+  width: 50px; /* Spinner size */
+  height: 50px; /* Spinner size */
+  animation: spin 1s linear infinite; /* Rotate animation */
+  position: relative; /* Position for centering the image */
+  margin: 0 auto; /* Center the spinner */
+}
+
+.logo-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4rem; /* Adjust the logo size */
+  height: 4rem; /* Ensure consistent size */
+  object-fit: contain; /* Maintain aspect ratio */
+}
+
+.spinner-text {
+  font-size: 1rem; /* Responsive font size */
+  font-weight: 500;
+  color: #0e3a7a; /* Consistent color theme */
+  text-align: center;
+  margin-top: 1.5rem; /* Space between the spinner and text */
+  padding: 0 1rem; /* Add padding for smaller devices */
+}
+/* Spinner Animation */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -55,3 +88,5 @@
     transform: rotate(360deg);
   }
 }
+
+

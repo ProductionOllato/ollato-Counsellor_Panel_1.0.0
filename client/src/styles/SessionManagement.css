@@ -27,7 +27,7 @@
 /* Filter Bar */
 .session-status-filter {
   margin-bottom: 20px;
-  position: relative; /* Ensure dropdown is positioned correctly */
+  position: relative;
   overflow: hidden;
 }
 
@@ -65,71 +65,52 @@
 
 /* Mobile Filter Bar */
 .session-mobile-filter {
-  display: flex;
+  display: none;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-filter-toggle {
   width: 100%;
-  position: relative; /* Positioning for the absolute dropdown */
+  padding: 8px;
+  background-color: #7047a3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
 }
 
-.session-dropdown-button {
+.mobile-filter-toggle:hover {
+  background-color: #5a3e88;
+}
+
+.mobile-filter-options {
+  margin-top: 10px;
   display: flex;
-  align-items: center;
-  padding: 10px 24px; /* px-6 py-2 */
-  border-radius: 0.5rem; /* rounded-lg */
-  background-color: #e0e0e0; /* bg-gray-200 */
-  color: #333; /* text-gray-800 */
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 600; /* font-semibold */
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-filter-options .session-button {
   width: 100%;
-  cursor: pointer; /* Pointer cursor */
-  transition: background-color 0.3s; /* Smooth transition for hover */
+  text-align: left;
 }
 
-.session-dropdown-icon {
-  margin-left: 0.5rem; /* ml-2 */
-  transform: transition; /* ensure transformation matches on click */
-  transition: transform 0.2s;
-}
-
-/* Styles for showing dropdown */
-.session-dropdown {
-  position: absolute; /* absolute position below the button */
-  top: 100%; /* align below the button */
-  margin-top: 8px; /* mt-2 */
-  width: 100%; /* w-full */
-  background-color: #fff; /* bg-white */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* shadow-md */
-  border-radius: 0.5rem; /* rounded-lg */
-  z-index: 10; /* z-10 */
-}
-
-/* Dropdown item styles */
-.session-dropdown-item {
-  display: block;
-  width: 100%; /* w-full */
-  padding: 10px 24px; /* px-6 py-2 */
-  text-align: left; /* text-left */
-  color: black; /* text-black */
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 600; /* font-semibold */
-  transition: background-color 0.2s; /* smooth transition */
-  cursor: pointer; /* Pointer cursor */
-}
-
-/* Active state styling */
-.session-button-active {
-  background-color: #7047a3; /* Active background color */
-  color: white; /* Active text color */
-}
-
-/* Hover effect */
-.session-dropdown-item:hover {
-  background-color: #f5f5f5; /* lighter gray on hover */
-}
-
-/* Responsive styles */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .session-dropdown-item {
-    padding: 12px 20px; /* Adjust padding for smaller devices if necessary */
+  /* Show mobile filter bar */
+  .session-mobile-filter {
+    display: block;
+  }
+
+  /* Hide desktop filter bar */
+  .session-status-buttons {
+    display: none;
   }
 }
 
@@ -163,31 +144,36 @@
 
 @media (max-width: 768px) {
   .session-status-buttons {
-    display: none; /* Hide desktop bar on small screens */
-  }
-  .session-status-buttons {
-    gap: 6px; /* Reduce gap for smaller screens */
+    gap: 6px;
   }
 
   .session-button {
-    padding: 4px 10px; /* Further reduce padding */
-    font-size: 12px; /* Smaller font size */
+    padding: 4px 10px;
+    font-size: 12px;
   }
 
   .session-dropdown {
-    width: 90%; /* Ensure dropdown doesn't exceed screen width */
-    left: 5%; /* Center dropdown horizontally */
+    width: 90%;
+    left: 5%;
+  }
+
+  .session-dropdown-item {
+    padding: 12px 20px;
+  }
+
+  .session-dropdown-button {
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 1024px) {
   .session-status-buttons {
-    gap: 8px; /* Reduce gap for smaller screens */
+    gap: 8px;
   }
 
   .session-button {
-    padding: 6px 12px; /* Reduce padding */
-    font-size: 13px; /* Slightly smaller font size */
+    padding: 6px 12px;
+    font-size: 13px;
   }
 }
 
@@ -195,7 +181,7 @@
 
 /* General Session Card */
 .session-card {
-  border: 1px solid #d1d5db; /* Light gray border */
+  border: 1px solid #d1d5db;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
@@ -297,7 +283,7 @@
   }
 
   .session-actions {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
   }
 
@@ -657,7 +643,7 @@
   }
 
   .session-actions {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-end;
   }
 

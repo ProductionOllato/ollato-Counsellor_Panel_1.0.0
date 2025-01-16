@@ -10,6 +10,7 @@ import {
 
 import { NotificationProvider } from "./context/NotificationContext";
 import { useAuth, UserProvider } from "./context/UserContext.jsx";
+import LOGO from "./assets/Ollato_Logo_CC-03.png";
 
 const Registration = lazy(() => import("./pages/Registration"));
 const Login = lazy(() => import("./pages/Login"));
@@ -30,9 +31,12 @@ const AccountSettings = lazy(() => import("./pages/AccountSettings.jsx"));
 const ResetPassword = lazy(() => import("./components/ResetPassword.jsx"));
 
 const LoadingSpinner = () => (
-  <div className="flex flex-col items-center justify-center h-screen">
-    <div className="loader" />
-    <p className="mt-4 text-center font-bold text-2xl">Loading...</p>
+  <div className="loader-container">
+    <div className="loader-container-inner">
+      <div className="loader"></div>
+      <img src={LOGO} alt="Loading..." className="logo-spinner" />
+    </div>
+    <p className="spinner-text">Loading...</p>
   </div>
 );
 

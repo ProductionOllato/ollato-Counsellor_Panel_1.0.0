@@ -34,7 +34,7 @@ function SessionManagement() {
   const [filterVisible, setFilterVisible] = useState(false);
 
   const toggleFilterVisibility = () => {
-    setFilterVisible((prevState) => !prevState);
+    setFilterVisible((prev) => !prev);
   };
 
   const fetchSessions = async () => {
@@ -275,27 +275,24 @@ function SessionManagement() {
           ))}
         </div>
 
-        {/* Mobile Dropdown Filter */}
+        {/* Mobile Filter Bar */}
         <div className="session-mobile-filter">
           <button
+            className="mobile-filter-toggle"
             onClick={toggleFilterVisibility}
-            className="session-dropdown-button"
             aria-expanded={filterVisible}
-            aria-controls="filterDropdown"
           >
-            {activeStatus || "Filter by Status"}
-            <span className="session-dropdown-icon">
-              {filterVisible ? "▲" : "▼"}
-            </span>
+            {activeStatus ? `${activeStatus}` : "Filter by Status"}{" "}
+            {filterVisible ? "▲" : "▼"}
           </button>
           {filterVisible && (
-            <div id="filterDropdown" className="session-dropdown">
+            <div className="mobile-filter-options">
               <button
                 onClick={() => {
                   setActiveStatus("");
-                  setFilterVisible(false);
+                  toggleFilterVisibility();
                 }}
-                className={`session-dropdown-item ${
+                className={`session-button ${
                   activeStatus === "" ? "session-button-active" : ""
                 }`}
               >
@@ -306,9 +303,9 @@ function SessionManagement() {
                   key={status}
                   onClick={() => {
                     setActiveStatus(status);
-                    setFilterVisible(false);
+                    toggleFilterVisibility();
                   }}
-                  className={`session-dropdown-item ${
+                  className={`session-button ${
                     activeStatus === status ? "session-button-active" : ""
                   }`}
                 >
