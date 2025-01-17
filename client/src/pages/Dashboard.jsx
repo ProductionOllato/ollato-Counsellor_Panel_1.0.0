@@ -15,9 +15,9 @@ export default function Dashboard() {
   const [sessions, setSessions] = useState([]);
 
   // Call approveProfile only once - testing
-  // useEffect(() => {
-  //   approveProfile();
-  // }, [approveProfile]);
+  useEffect(() => {
+    approveProfile();
+  }, [approveProfile]);
 
   const completeProfile = () => {
     navigate("/registration-complete");

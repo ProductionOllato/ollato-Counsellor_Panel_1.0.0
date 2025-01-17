@@ -78,6 +78,18 @@
   background-color: #f9f9f9;
 }
 
+/* join button */
+.join-btn-myactivity {
+  background-color: #8e7fff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
 /* Feedback Button */
 .feedback-btn-myactivity {
   padding: 0.5rem 1rem;
@@ -411,4 +423,70 @@
 
 .star.filled {
   color: rgb(167, 142, 5); /* Color for filled stars */
+}
+
+.modal-overlay-myactivity {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+.modal-content-myactivity {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 480px;
+}
+
+.modal-title-myactivity {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.modal-text-myactivity {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.modal-actions-myactivity {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn-myactivity,
+.join-btn-myactivity {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cancel-btn-myactivity {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-btn-myactivity:hover {
+  background-color: #bbb;
+}
+
+.join-btn-myactivity {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.join-btn-myactivity:hover {
+  background-color: #218838; /* Darker green */
 }

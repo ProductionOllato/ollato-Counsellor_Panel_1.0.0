@@ -260,7 +260,7 @@ const Registration = () => {
               alt="Logo"
               className="registration-logo w-3/4 max-w-md"
             />
-
+  
             {/* Login Link */}
             <div className="registration-login-link-container flex justify-center mt-6 text-white">
               <p className="registration-login-text text-sm">

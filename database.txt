@@ -1,0 +1,92 @@
+DATABASE NAME : expert_panel
+
+REGISTRATION :
+
+ personal_details:
+ - expert_id
+ - first_name
+ - last_name
+ - email
+ - phone_number
+ - gender
+ - date_of_birth
+ - state
+ - distrcit
+ - password
+ - token
+ - reset_token
+ - reset_token_expirty
+ - profile_status
+
+ professional_details:
+ - expert_id
+ - licence_number
+ - qualification
+ - specification
+ - experiance
+ - professional_expertise
+ - profile_status
+
+ documents_details:
+ - expert_id
+ - profile_picture
+ - degree_certification
+ - resume
+ - aadhar_card_number
+ - aadhar_card_front
+ - aadhar_card_back
+ - panCard_number
+ - panCard_picture
+ - signature
+ - profile_status
+ 
+
+AVAILABILITY MANAGEMENT:
+  - expert_id
+  - avilability_date
+  - avilability_start_time
+  - avilability_end_time
+  - avilability_mode
+  - avilability_duration
+  - avilability_status
+
+SESSION MANAGEMENT:
+  - expert_id
+  - session_id
+  - client_id
+  - session_booking_date
+  - session_booking_start_time
+  - session_booking_end_time
+  - session_mode
+  - session_duration
+  - session_status_expert
+  - session_status_student
+  - reason_of_cancellation
+
+MY ACTIVITY:
+  - expert_id
+  - session_id
+  - 
+
+REVENUE DETAILS:
+  - expert_id
+  - session_id
+  - client_id
+  - payment_date
+  - payment_amount
+
+SUPPORT FORM:
+  - expert_id
+  - session_id
+  - name
+  - query_type
+  - screenshot
+  - description
+
+  FEED BACK FORM:
+  - expert_id
+  - session_id
+  - rating_from_client
+  - rating_from_expert
+  - comments_from_client
+  - comments_from_expert

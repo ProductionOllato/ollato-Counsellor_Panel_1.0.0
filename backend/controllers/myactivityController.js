@@ -38,6 +38,7 @@ const getMyActivity = async (req, res) => {
     if (rows.length === 0) {
       return res.status(404).json({ error: "No activity found" });
     }
+    console.log(rows);
 
     res.status(200).json(rows);
   } catch (error) {
